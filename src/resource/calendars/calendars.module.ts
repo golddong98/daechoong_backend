@@ -1,12 +1,12 @@
-import { calendarsProviders } from './calendars.providers';
-import { DatabaseModule } from './../../database/database.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Calendar } from 'src/database/entities/calendars.entity';
 import { CalendarsController } from './calendars.controller';
 import { CalendarsService } from './calendars.service';
 import { Module } from '@nestjs/common';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [TypeOrmModule.forFeature([Calendar])],
   controllers: [CalendarsController],
-  providers: [...calendarsProviders, CalendarsService],
+  providers: [CalendarsService],
 })
 export class CalendarsModule {}

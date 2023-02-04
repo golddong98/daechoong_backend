@@ -1,12 +1,12 @@
-import { mediumCatesProviders } from './medium-cates.providers';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MediumCate } from './../../database/entities/medium-cates.entity';
 import { MediumCatesService } from './medium-cates.service';
 import { MediumCatesController } from './medium-cates.controller';
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [TypeOrmModule.forFeature([MediumCate])],
   controllers: [MediumCatesController],
-  providers: [...mediumCatesProviders, MediumCatesService],
+  providers: [MediumCatesService],
 })
 export class MediumCatesModule {}

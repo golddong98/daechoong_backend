@@ -1,12 +1,12 @@
-import { DatabaseModule } from '../../database/database.module';
+import { LargeCate } from './../../database/entities/large-cates.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { LargeCatesController } from './large-cates.controller';
 import { LargeCatesService } from './large-cates.service';
 import { Module } from '@nestjs/common';
-import { largeCatesProviders } from './large-cates.providers';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [TypeOrmModule.forFeature([LargeCate])],
   controllers: [LargeCatesController],
-  providers: [...largeCatesProviders, LargeCatesService],
+  providers: [LargeCatesService],
 })
 export class LargeCatesModule {}
