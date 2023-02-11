@@ -10,6 +10,7 @@ import { MediumCatesModule } from './medium-cates/medium-cates.module';
 import { LargeCatesModule } from './large-cates/large-cates.module';
 import { CalendarsModule } from './calendars/calendars.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UsersModule } from './users/users.module';
     LargeCatesModule,
     CalendarsModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
