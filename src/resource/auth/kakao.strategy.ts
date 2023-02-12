@@ -23,14 +23,14 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   ) {
     // console.log('accessToken'+accessToken)
     // console.log('refreshToken'+refreshToken)
-    // console.log(profile)
+    // console.log(profile);
     // console.log(profile._json.kakao_account.email)
 
     const profileJson = profile._json;
     const kakao_account = profileJson.kakao_account;
     const payload: UserKakaoDTO = {
+      // id: profileJson.id,
       name: kakao_account.profile.nickname,
-      kakaoId: profileJson.id,
       email:
         kakao_account.has_email && !kakao_account.email_needs_agreement
           ? kakao_account.email

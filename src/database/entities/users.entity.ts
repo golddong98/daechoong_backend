@@ -10,19 +10,19 @@ export class User extends Common {
   @Column({ length: 100 })
   email: string;
 
-  @Column({ length: 50 })
+  @Column({ nullable: true, length: 50 })
   schoolName: string;
 
-  @Column('int')
+  @Column({ nullable: true })
   studentNumber: number;
 
-  @Column({ length: 50 })
+  @Column({ nullable: true, length: 50 })
   major1: string;
 
-  @Column({ length: 50 })
+  @Column({ nullable: true, length: 50 })
   major2: string;
 
-  @Column('text')
+  @Column({ nullable: true })
   profileImgUrl: string;
 
   @OneToMany(() => Note, (note) => note.user)

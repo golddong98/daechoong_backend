@@ -1,7 +1,8 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, Req, UseGuards, Post } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
+// import { AfterSocialSignUpDTO } from './dtos/user-after-sign-up.dto';
 
 interface IOAuthUser {
   //interface 설정
@@ -35,9 +36,18 @@ export class AuthController {
   @UseGuards(AuthGuard('kakao'))
   async loginKakao(
     @Req() req: Request & IOAuthUser, //
-    // @Res() res: Response,
   ) {
-    // this.authService.OAuthLogin({ req, res });
     return this.authService.kakaoLogin({ req });
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('sign-up')
+  async signUp(
+    @Req() req: Request,
+    @Res() res: Response,
+    // @Body() afterSocialSignUpDTO: AfterSocialSignUpDTO,
+  ) {
+    this.authService.afterSocialSignUp({ req });
+    res.status(200).send();
   }
 }

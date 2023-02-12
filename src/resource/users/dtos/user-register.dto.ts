@@ -1,7 +1,11 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 // import { User } from 'src/database/entities/users.entity';
 
 export class UserRegisterDTO {
+  @IsNumber()
+  @IsNotEmpty({ message: '아이디가 존재하지 않습니다.' })
+  readonly id: number;
+
   @IsString()
   @IsNotEmpty({ message: '이메일을 작성해주세요.' })
   readonly email: string;

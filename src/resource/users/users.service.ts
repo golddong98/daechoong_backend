@@ -18,7 +18,7 @@ export class UsersService {
   async getUserByEmail(email: string) {
     try {
       const user = await this.usersRepository.findOneBy({ email });
-      if (!user) throw new Error();
+      // if (!user) throw new Error();
       return user;
     } catch (error) {
       throw new BadRequestException('해당하는 사용자를 찾을 수 없습니다.');
@@ -35,6 +35,7 @@ export class UsersService {
     }
   }
 
+  // 에러처리하기
   async registerUser(userRegisterDTO: UserRegisterDTO) {
     const { email } = userRegisterDTO;
     const user = await this.usersRepository.findOneBy({ email });
@@ -45,5 +46,17 @@ export class UsersService {
       ...userRegisterDTO,
     });
     return newUser;
+  }
+
+  // id, afterSignUpUpdateUserDTO에 타입주기, 에러처리하기
+  async afterSignUpUpdateUser(id, afterSignUpUpdateUserDTO) {
+    const updateUser = await this.usersRepository.findOneBy(id);
+    updateUser.schoolName = afterSignUpUpdateUserDTO.schoolName;
+    updateUser.studentNumber = afterSignUpUpdateUserDTO.studentNumber;
+    updateUser.major1 = afterSignUpUpdateUserDTO.major1;
+    updateUser.major2 = afterSignUpUpdateUserDTO.major2;
+    updateUser.profileImgUrl = afterSignUpUpdateUserDTO.profileImgUrl;
+
+    return await this.usersRepository.save(updateUser);
   }
 }
