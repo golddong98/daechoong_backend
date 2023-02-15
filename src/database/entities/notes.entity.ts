@@ -1,8 +1,8 @@
 import { SmallCate } from './small-cates.entity';
 import { File } from './files.entity';
-import { User } from 'src/database/entities/users.entity';
 import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Common } from './common.entity';
+import { User } from './users.entity';
 
 @Entity()
 export class Note extends Common {

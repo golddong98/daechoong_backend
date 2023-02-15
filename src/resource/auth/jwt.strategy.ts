@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { UserPayloadDTO } from './dtos/user-payload.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -13,11 +14,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
+  // userpayloadDTO 타입만들어야 됨
   async validate(payload: any) {
-    return {
+    const user: UserPayloadDTO = {
       userId: payload.kakaoId,
       userName: payload.name,
       userEmail: payload.email,
     };
+    return user;
   }
 }

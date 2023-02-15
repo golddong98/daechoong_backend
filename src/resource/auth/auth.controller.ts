@@ -49,5 +49,6 @@ export class AuthController {
   ) {
     this.authService.afterSocialSignUp({ req });
     res.status(200).send();
+    return;
   }
 }

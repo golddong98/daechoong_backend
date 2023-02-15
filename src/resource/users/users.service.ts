@@ -17,7 +17,7 @@ export class UsersService {
 
   async getUserByEmail(email: string) {
     try {
-      const user = await this.usersRepository.findOneBy({ email });
+      const user = await this.usersRepository.findOne({ email });
       // if (!user) throw new Error();
       return user;
     } catch (error) {
@@ -27,7 +27,7 @@ export class UsersService {
 
   async getUserById(id: number) {
     try {
-      const user = await this.usersRepository.findOneBy({ id });
+      const user = await this.usersRepository.findOne({ id });
       if (!user) throw new Error();
       return user;
     } catch (error) {
@@ -38,7 +38,7 @@ export class UsersService {
   // 에러처리하기
   async registerUser(userRegisterDTO: UserRegisterDTO) {
     const { email } = userRegisterDTO;
-    const user = await this.usersRepository.findOneBy({ email });
+    const user = await this.usersRepository.findOne({ email });
     if (user) {
       throw new UnauthorizedException('해당하는 이메일은 이미 존재합니다.');
     }
@@ -50,7 +50,7 @@ export class UsersService {
 
   // id, afterSignUpUpdateUserDTO에 타입주기, 에러처리하기
   async afterSignUpUpdateUser(id, afterSignUpUpdateUserDTO) {
-    const updateUser = await this.usersRepository.findOneBy(id);
+    const updateUser = await this.usersRepository.findOne(id);
     updateUser.schoolName = afterSignUpUpdateUserDTO.schoolName;
     updateUser.studentNumber = afterSignUpUpdateUserDTO.studentNumber;
     updateUser.major1 = afterSignUpUpdateUserDTO.major1;
