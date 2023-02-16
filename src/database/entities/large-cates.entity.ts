@@ -1,5 +1,6 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Common } from './common.entity';
+import { MediumCate } from './medium-cates.entity';
 import { User } from './users.entity';
 
 @Entity()
@@ -9,4 +10,7 @@ export class LargeCate extends Common {
 
   @ManyToOne(() => User, (user) => user.largeCates)
   user: User;
+
+  @OneToMany(() => MediumCate, (mediumCate) => mediumCate.largeCate)
+  mediumCates: MediumCate[];
 }

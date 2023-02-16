@@ -1,5 +1,5 @@
 import { User } from 'src/database/entities/users.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LargeCate } from 'src/database/entities/large-cates.entity';
 import { Repository } from 'typeorm';
@@ -31,5 +31,15 @@ export class LargeCatesService {
     await this.largeCatesRepository.insert(largeCate2);
     await this.largeCatesRepository.insert(largeCate3);
     return;
+  }
+
+  async getLargeCateById(id: number) {
+    try {
+      const largeCate = await this.largeCatesRepository.findOne({ id });
+      if (!largeCate) throw new Error();
+      return largeCate;
+    } catch (error) {
+      throw new BadRequestException('해당하는 대분류를 찾을 수 없습니다.');
+    }
   }
 }

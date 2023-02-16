@@ -2,6 +2,7 @@ import { LargeCate } from './large-cates.entity';
 import { Note } from './notes.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
 import { Common } from './common.entity';
+import { MediumCate } from './medium-cates.entity';
 
 @Entity()
 export class User extends Common {
@@ -31,4 +32,7 @@ export class User extends Common {
 
   @OneToMany(() => LargeCate, (largeCate) => largeCate.user)
   largeCates: LargeCate[];
+
+  @OneToMany(() => MediumCate, (mediumCate) => mediumCate.user)
+  mediumCates: MediumCate[];
 }
