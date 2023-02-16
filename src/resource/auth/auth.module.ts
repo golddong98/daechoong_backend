@@ -6,10 +6,12 @@ import { KakaoStrategy } from './kakao.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from '../users/users.module';
+import { LargeCatesModule } from '../large-cates/large-cates.module';
 
 @Module({
   imports: [
     UsersModule,
+    LargeCatesModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -1,3 +1,4 @@
+import { LargeCate } from './large-cates.entity';
 import { Note } from './notes.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
 import { Common } from './common.entity';
@@ -27,4 +28,7 @@ export class User extends Common {
 
   @OneToMany(() => Note, (note) => note.user)
   notes: Note[];
+
+  @OneToMany(() => LargeCate, (largeCate) => largeCate.user)
+  largeCates: LargeCate[];
 }

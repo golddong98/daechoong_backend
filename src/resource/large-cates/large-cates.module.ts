@@ -8,5 +8,6 @@ import { Module } from '@nestjs/common';
   imports: [TypeOrmModule.forFeature([LargeCate])],
   controllers: [LargeCatesController],
   providers: [LargeCatesService],
+  exports: [LargeCatesService, TypeOrmModule],
 })
 export class LargeCatesModule {}
