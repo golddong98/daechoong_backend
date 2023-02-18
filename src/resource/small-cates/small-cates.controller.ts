@@ -9,11 +9,13 @@ import {
   Req,
   Res,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from '../users/users.service';
 import { SmallCateCreateDTO } from './dtos/small-cate-create.dto';
 import { Request, Response } from 'express';
+import { SmallCateNameUpdateDTO } from './dtos/small-cate-name-update.dto';
 
 @Controller('small-cates')
 export class SmallCatesController {
@@ -44,6 +46,27 @@ export class SmallCatesController {
       param,
       smallCateCreateDTO,
       user: confirmedUser,
+    });
+    res.status(200).send();
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Put(':smallCateId')
+  async updateSmallCate(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('smallCateId', ParseIntPipe) param: number,
+    @Body() smallCateNameUpdateDTO: SmallCateNameUpdateDTO,
+  ) {
+    await this.usersService.checkPermissionSmallCate({
+      userId: req.user.id,
+      smallCateId: param,
+    });
+
+    await this.smallCatesService.updateSmallCates({
+      param,
+      smallCateNameUpdateDTO,
     });
     res.status(200).send();
     return;

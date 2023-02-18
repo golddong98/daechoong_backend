@@ -66,7 +66,7 @@ export class MediumCatesController {
 
     await this.mediumCatesService.updateMediumCates({
       param,
-      mediumCateCreateDTO: mediumCateCreateDTO,
+      mediumCateCreateDTO,
     });
     res.status(200).send();
     return;

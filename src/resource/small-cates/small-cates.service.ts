@@ -27,4 +27,11 @@ export class SmallCatesService {
     });
     return await this.smallCatesRepository.insert(smallCate);
   }
+
+  async updateSmallCates({ param, smallCateNameUpdateDTO }) {
+    const mediumCate = this.smallCatesRepository.create({
+      name: smallCateNameUpdateDTO.smallCateName,
+    });
+    return await this.smallCatesRepository.update(param, mediumCate);
+  }
 }
