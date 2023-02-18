@@ -10,6 +10,7 @@ import {
   Res,
   UseGuards,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from '../users/users.service';
@@ -68,6 +69,26 @@ export class SmallCatesController {
       param,
       smallCateNameUpdateDTO,
     });
+    res.status(200).send();
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':smallCateId')
+  async deleteSmallCate(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('smallCateId', ParseIntPipe) param: number,
+  ) {
+    await this.usersService.checkPermissionSmallCate({
+      userId: req.user.id,
+      smallCateId: param,
+    });
+
+    await this.smallCatesService.deleteSmallCates({
+      param,
+    });
+
     res.status(200).send();
     return;
   }

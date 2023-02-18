@@ -34,4 +34,8 @@ export class SmallCatesService {
     });
     return await this.smallCatesRepository.update(param, mediumCate);
   }
+
+  async deleteSmallCates({ param }) {
+    return await this.smallCatesRepository.delete(param);
+  }
 }
