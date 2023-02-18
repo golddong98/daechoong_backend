@@ -10,6 +10,7 @@ import {
   Body,
   ParseIntPipe,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
@@ -30,7 +31,7 @@ export class MediumCatesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post(':largeCateId')
-  async createMediumCates(
+  async createMediumCate(
     @Req() req: Request,
     @Res() res: Response,
     @Param('largeCateId', ParseIntPipe) param: number,
@@ -52,7 +53,7 @@ export class MediumCatesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':mediumCateId')
-  async updateMediumCates(
+  async updateMediumCate(
     @Req() req: Request,
     @Res() res: Response,
     @Param('mediumCateId', ParseIntPipe) param: number,
@@ -67,6 +68,26 @@ export class MediumCatesController {
       param,
       mediumCateCreateDTO: mediumCateCreateDTO,
     });
+    res.status(200).send();
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':mediumCateId')
+  async deleteMediumCate(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('mediumCateId', ParseIntPipe) param: number,
+  ) {
+    await this.usersService.checkPermissionMediumCate({
+      userId: req.user.id,
+      mediumCateId: param,
+    });
+
+    await this.mediumCatesService.deleteMediumCates({
+      param,
+    });
+
     res.status(200).send();
     return;
   }

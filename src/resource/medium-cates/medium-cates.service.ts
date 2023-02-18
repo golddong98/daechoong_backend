@@ -32,4 +32,8 @@ export class MediumCatesService {
     });
     return await this.mediumCatesRepository.update(param, mediumCate);
   }
+
+  async deleteMediumCates({ param }) {
+    return await this.mediumCatesRepository.delete(param);
+  }
 }
