@@ -40,4 +40,8 @@ export class SmallCatesService {
   async deleteSmallCates({ smallCateId }) {
     return await this.smallCatesRepository.delete(smallCateId);
   }
+
+  async getSmallCateById({ smallCateId }) {
+    return await this.smallCatesRepository.findOne({ id: smallCateId });
+  }
 }

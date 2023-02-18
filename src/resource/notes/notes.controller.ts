@@ -5,17 +5,29 @@ import {
   Post,
   Req,
   Res,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
+  Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Request, Response } from 'express';
+import { Express, Request, Response } from 'express';
 import { CreateNoteBodyDTO } from './dtos/create-note-body-dto';
-import { CreateNoteDTO } from './dtos/create-note.dto';
 import { NotesService } from './notes.service';
+import { FilesInterceptor } from '@nestjs/platform-express/multer';
+import { UsersService } from '../users/users.service';
+import { SmallCatesService } from '../small-cates/small-cates.service';
+import { FilesService } from '../files/files.service';
 
 @Controller('notes')
 export class NotesController {
-  constructor(private readonly notesService: NotesService) {}
+  constructor(
+    private readonly notesService: NotesService,
+    private readonly usersService: UsersService,
+    private readonly smallCatesService: SmallCatesService,
+    private readonly filesService: FilesService,
+  ) {}
 
   @Get()
   getNotes(): string {
@@ -23,18 +35,41 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Post()
-  postNote(
+  @Post(':smallCateId')
+  @UseInterceptors(FilesInterceptor('file', 10))
+  async uploadNote(
     @Req() req: Request,
     @Res() res: Response,
     @Body() createNoteBodyDTO: CreateNoteBodyDTO,
-  ): any {
-    const createNoteDTO: CreateNoteDTO = {
-      id: req.user.userId,
-      body: createNoteBodyDTO,
-    };
-    this.notesService.createNote(createNoteDTO);
+    @Param('smallCateId', ParseIntPipe) param: number,
+    @UploadedFiles()
+    files: Express.MulterS3.File[],
+  ) {
+    const confirmedUser = await this.usersService.checkPermissionSmallCate({
+      userId: req.user.id,
+      smallCateId: param,
+    });
+
+    const confirmedSmallCate = await this.smallCatesService.getSmallCateById({
+      smallCateId: param,
+    });
+
+    const note = await this.notesService.createNote({
+      content: createNoteBodyDTO.content,
+      user: confirmedUser,
+      smallCate: confirmedSmallCate,
+    });
+
+    await this.filesService.uploadFile({
+      note,
+      user: confirmedUser,
+      files,
+    });
+
     res.status(200).send();
     return;
+  }
+  catch(error) {
+    console.log(error);
   }
 }

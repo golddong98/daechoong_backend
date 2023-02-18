@@ -14,5 +14,6 @@ import { MediumCatesModule } from '../medium-cates/medium-cates.module';
   ],
   controllers: [SmallCatesController],
   providers: [SmallCatesService],
+  exports: [SmallCatesService],
 })
 export class SmallCatesModule {}

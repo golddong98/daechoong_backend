@@ -10,7 +10,7 @@ export class Note extends Common {
   content: string;
 
   @OneToMany(() => File, (file) => file.note)
-  files: File[];
+  files: Promise<File[]>;
 
   @ManyToOne(() => User, (user) => user.notes)
   user: User;

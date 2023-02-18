@@ -4,6 +4,7 @@ import { Entity, Column, OneToMany } from 'typeorm';
 import { Common } from './common.entity';
 import { MediumCate } from './medium-cates.entity';
 import { SmallCate } from './small-cates.entity';
+import { File } from './files.entity';
 
 @Entity()
 export class User extends Common {
@@ -29,7 +30,10 @@ export class User extends Common {
   profileImgUrl: string;
 
   @OneToMany(() => Note, (note) => note.user)
-  notes: Note[];
+  notes: Promise<Note[]>;
+
+  @OneToMany(() => File, (file) => file.user)
+  files: Promise<File[]>;
 
   @OneToMany(() => LargeCate, (largeCate) => largeCate.user)
   largeCates: Promise<LargeCate[]>;
