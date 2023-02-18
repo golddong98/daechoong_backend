@@ -9,14 +9,19 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  Put,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { MediumCateCreateDTO } from './dtos/medium-cate-create.dto';
+import { UsersService } from '../users/users.service';
 
 @Controller('medium-cates')
 export class MediumCatesController {
-  constructor(private readonly mediumCatesService: MediumCatesService) {}
+  constructor(
+    private readonly mediumCatesService: MediumCatesService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Get()
   getMediumCates(): string {
@@ -25,16 +30,42 @@ export class MediumCatesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post(':largeCateId')
-  async signUp(
+  async createMediumCates(
     @Req() req: Request,
     @Res() res: Response,
     @Param('largeCateId', ParseIntPipe) param: number,
     @Body() mediumCateCreateDTO: MediumCateCreateDTO,
   ) {
+    const confirmedUser = await this.usersService.checkPermissionLargeCate({
+      userId: req.user.id,
+      largeCateId: param,
+    });
+
     await this.mediumCatesService.createMediumCates({
       param,
       mediumCateCreateDTO: mediumCateCreateDTO,
-      user: req.user,
+      user: confirmedUser,
+    });
+    res.status(200).send();
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Put(':mediumCateId')
+  async updateMediumCates(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('mediumCateId', ParseIntPipe) param: number,
+    @Body() mediumCateCreateDTO: MediumCateCreateDTO,
+  ) {
+    await this.usersService.checkPermissionMediumCate({
+      userId: req.user.id,
+      mediumCateId: param,
+    });
+
+    await this.mediumCatesService.updateMediumCates({
+      param,
+      mediumCateCreateDTO: mediumCateCreateDTO,
     });
     res.status(200).send();
     return;

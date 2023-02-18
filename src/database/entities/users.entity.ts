@@ -31,8 +31,8 @@ export class User extends Common {
   notes: Note[];
 
   @OneToMany(() => LargeCate, (largeCate) => largeCate.user)
-  largeCates: LargeCate[];
+  largeCates: Promise<LargeCate[]>;
 
   @OneToMany(() => MediumCate, (mediumCate) => mediumCate.user)
-  mediumCates: MediumCate[];
+  mediumCates: Promise<MediumCate[]>;
 }

@@ -1,7 +1,16 @@
-import { Controller, Get, Res, Req, UseGuards, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Res,
+  Req,
+  UseGuards,
+  Post,
+  Body,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
+import { AfterSocialSignUpDTO } from './dtos/user-after-sign-up.dto';
 // import { AfterSocialSignUpDTO } from './dtos/user-after-sign-up.dto';
 
 interface IOAuthUser {
@@ -45,9 +54,12 @@ export class AuthController {
   async signUp(
     @Req() req: Request,
     @Res() res: Response,
-    // @Body() afterSocialSignUpDTO: AfterSocialSignUpDTO,
+    @Body() afterSocialSignUpDTO: AfterSocialSignUpDTO,
   ) {
-    this.authService.afterSocialSignUp({ req });
+    this.authService.afterSocialSignUp({
+      userId: req.user.id,
+      afterSocialSignUpDTO,
+    });
     res.status(200).send();
     return;
   }

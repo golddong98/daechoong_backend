@@ -49,14 +49,60 @@ export class UsersService {
   }
 
   // id, afterSignUpUpdateUserDTO에 타입주기, 에러처리하기
-  async afterSignUpUpdateUser(id, afterSignUpUpdateUserDTO) {
-    const updateUser = await this.usersRepository.findOne(id);
-    updateUser.schoolName = afterSignUpUpdateUserDTO.schoolName;
-    updateUser.studentNumber = afterSignUpUpdateUserDTO.studentNumber;
-    updateUser.major1 = afterSignUpUpdateUserDTO.major1;
-    updateUser.major2 = afterSignUpUpdateUserDTO.major2;
-    updateUser.profileImgUrl = afterSignUpUpdateUserDTO.profileImgUrl;
+  async afterSignUpUpdateUser({ userId, afterSocialSignUpDTO }) {
+    const updateUser = await this.usersRepository.findOne({ id: userId });
+    updateUser.schoolName = afterSocialSignUpDTO.schoolName;
+    updateUser.studentNumber = afterSocialSignUpDTO.studentNumber;
+    updateUser.major1 = afterSocialSignUpDTO.major1;
+    updateUser.major2 = afterSocialSignUpDTO.major2;
+    updateUser.profileImgUrl = afterSocialSignUpDTO.profileImgUrl;
 
-    return await this.usersRepository.save(updateUser);
+    return await this.usersRepository.update(userId, updateUser);
+  }
+
+  async checkPermissionLargeCate({ userId, largeCateId }) {
+    try {
+      const userByUserId = await this.usersRepository.findOne({
+        id: userId,
+      });
+
+      const largeCatesFromUser = await userByUserId.largeCates;
+
+      // const largeCatesByUserId = await this.usersService.getLargeCatesByUserId({
+      //   id: userId,
+      // });
+
+      const permission = largeCatesFromUser.some((el) => {
+        largeCateId === el.id;
+      });
+
+      if (permission) {
+        throw new Error();
+      }
+
+      return userByUserId;
+    } catch (error) {
+      throw new BadRequestException('중분류에 항목을 추가할 권한이 없습니다.');
+    }
+  }
+
+  async checkPermissionMediumCate({ userId, mediumCateId }) {
+    try {
+      const userByUserId = await this.usersRepository.findOne({
+        id: userId,
+      });
+
+      const mediumCatesFromUser = await userByUserId.mediumCates;
+
+      const permission = mediumCatesFromUser.some((el) => {
+        mediumCateId === el.id;
+      });
+      if (permission) {
+        throw new Error();
+      }
+      return userByUserId;
+    } catch (error) {
+      throw new BadRequestException('중분류를 변경할 권한이 없습니다.');
+    }
   }
 }

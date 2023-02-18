@@ -15,12 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   // userpayloadDTO 타입만들어야 됨
-  async validate(payload: any) {
-    const user: UserPayloadDTO = {
-      userId: payload.kakaoId,
-      userName: payload.name,
-      userEmail: payload.email,
-    };
-    return user;
+  async validate(payload: UserPayloadDTO) {
+    return payload;
   }
 }

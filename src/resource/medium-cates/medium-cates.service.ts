@@ -25,4 +25,11 @@ export class MediumCatesService {
     });
     return await this.mediumCatesRepository.insert(mediumCate);
   }
+
+  async updateMediumCates({ param, mediumCateCreateDTO }) {
+    const mediumCate = this.mediumCatesRepository.create({
+      name: mediumCateCreateDTO.mediumCateName,
+    });
+    return await this.mediumCatesRepository.update(param, mediumCate);
+  }
 }
