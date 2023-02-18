@@ -3,6 +3,7 @@ import { Note } from './notes.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
 import { Common } from './common.entity';
 import { MediumCate } from './medium-cates.entity';
+import { SmallCate } from './small-cates.entity';
 
 @Entity()
 export class User extends Common {
@@ -35,4 +36,7 @@ export class User extends Common {
 
   @OneToMany(() => MediumCate, (mediumCate) => mediumCate.user)
   mediumCates: Promise<MediumCate[]>;
+
+  @OneToMany(() => SmallCate, (smallCate) => smallCate.user)
+  smallCates: Promise<SmallCate[]>;
 }

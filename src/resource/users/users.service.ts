@@ -105,4 +105,24 @@ export class UsersService {
       throw new BadRequestException('중분류를 변경할 권한이 없습니다.');
     }
   }
+
+  async checkPermissionSmallCate({ userId, smallCateId }) {
+    try {
+      const userByUserId = await this.usersRepository.findOne({
+        id: userId,
+      });
+
+      const smallCatesFromUser = await userByUserId.smallCates;
+
+      const permission = smallCatesFromUser.some((el) => {
+        smallCateId === el.id;
+      });
+      if (permission) {
+        throw new Error();
+      }
+      return userByUserId;
+    } catch (error) {
+      throw new BadRequestException('소분류를 변경할 권한이 없습니다.');
+    }
+  }
 }

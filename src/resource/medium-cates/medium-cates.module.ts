@@ -14,5 +14,6 @@ import { UsersModule } from '../users/users.module';
   ],
   controllers: [MediumCatesController],
   providers: [MediumCatesService],
+  exports: [MediumCatesService],
 })
 export class MediumCatesModule {}

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MediumCate } from 'src/database/entities/medium-cates.entity';
 import { Repository } from 'typeorm';
@@ -35,5 +35,15 @@ export class MediumCatesService {
 
   async deleteMediumCates({ param }) {
     return await this.mediumCatesRepository.delete(param);
+  }
+
+  async getMediumCateById(id: number) {
+    try {
+      const mediumCate = await this.mediumCatesRepository.findOne({ id });
+      if (!mediumCate) throw new Error();
+      return mediumCate;
+    } catch (error) {
+      throw new BadRequestException('해당하는 대분류를 찾을 수 없습니다.');
+    }
   }
 }
