@@ -16,5 +16,5 @@ export class MediumCate extends Common {
   largeCate: LargeCate;
 
   @OneToMany(() => SmallCate, (smallCate) => smallCate.mediumCate)
-  smallCates: SmallCate[];
+  smallCates: Promise<SmallCate[]>;
 }

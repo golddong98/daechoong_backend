@@ -16,8 +16,10 @@ export class SmallCatesService {
     return 'Hello smallCates!';
   }
 
-  async createSmallCates({ param, smallCateCreateDTO, user }) {
-    const mediumCate = await this.mediumCatesService.getMediumCateById(param);
+  async createSmallCates({ mediumCateId, smallCateCreateDTO, user }) {
+    const mediumCate = await this.mediumCatesService.getMediumCateById(
+      mediumCateId,
+    );
     const smallCate = this.smallCatesRepository.create({
       name: smallCateCreateDTO.smallCateName,
       startedAt: smallCateCreateDTO.startedAt,
@@ -28,14 +30,14 @@ export class SmallCatesService {
     return await this.smallCatesRepository.insert(smallCate);
   }
 
-  async updateSmallCates({ param, smallCateNameUpdateDTO }) {
+  async updateSmallCates({ smallCateId, smallCateNameUpdateDTO }) {
     const mediumCate = this.smallCatesRepository.create({
       name: smallCateNameUpdateDTO.smallCateName,
     });
-    return await this.smallCatesRepository.update(param, mediumCate);
+    return await this.smallCatesRepository.update(smallCateId, mediumCate);
   }
 
-  async deleteSmallCates({ param }) {
-    return await this.smallCatesRepository.delete(param);
+  async deleteSmallCates({ smallCateId }) {
+    return await this.smallCatesRepository.delete(smallCateId);
   }
 }

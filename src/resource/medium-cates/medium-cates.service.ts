@@ -46,4 +46,12 @@ export class MediumCatesService {
       throw new BadRequestException('해당하는 대분류를 찾을 수 없습니다.');
     }
   }
+
+  async getSmallCatesByMediumCateId({ id }) {
+    const mediumCateByMediumCateId = await this.mediumCatesRepository.findOne({
+      id,
+    });
+    const mediumCatesFromUser = await mediumCateByMediumCateId.smallCates;
+    return mediumCatesFromUser;
+  }
 }

@@ -17,16 +17,18 @@ import { UsersService } from '../users/users.service';
 import { SmallCateCreateDTO } from './dtos/small-cate-create.dto';
 import { Request, Response } from 'express';
 import { SmallCateNameUpdateDTO } from './dtos/small-cate-name-update.dto';
+import { MediumCatesService } from '../medium-cates/medium-cates.service';
 
 @Controller('small-cates')
 export class SmallCatesController {
   constructor(
     private readonly smallCatesService: SmallCatesService,
     private readonly usersService: UsersService,
+    private readonly mediumCatesService: MediumCatesService,
   ) {}
 
   @Get()
-  getSmallCates(): string {
+  getSmallCatesTest(): string {
     return this.smallCatesService.getSmallCates();
   }
 
@@ -44,7 +46,7 @@ export class SmallCatesController {
     });
 
     await this.smallCatesService.createSmallCates({
-      param,
+      mediumCateId: param,
       smallCateCreateDTO,
       user: confirmedUser,
     });
@@ -66,7 +68,7 @@ export class SmallCatesController {
     });
 
     await this.smallCatesService.updateSmallCates({
-      param,
+      smallCateId: param,
       smallCateNameUpdateDTO,
     });
     res.status(200).send();
@@ -86,10 +88,30 @@ export class SmallCatesController {
     });
 
     await this.smallCatesService.deleteSmallCates({
-      param,
+      smallCateId: param,
     });
 
     res.status(200).send();
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get(':mediumCateId')
+  async getSmallCatesByMediumCateId(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('mediumCateId', ParseIntPipe) param: number,
+  ) {
+    // 왜 async있는데 await를 쓰면 에러가 나지???
+    await this.usersService.checkPermissionMediumCate({
+      userId: req.user.id,
+      mediumCateId: param,
+    });
+    // 왜 async있는데 await를 쓰면 에러가 나지???
+    const result = await this.mediumCatesService.getSmallCatesByMediumCateId({
+      id: param,
+    });
+    res.status(200).json({ smallcates: result });
     return;
   }
 }
