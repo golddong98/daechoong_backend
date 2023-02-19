@@ -125,4 +125,24 @@ export class UsersService {
       throw new BadRequestException('소분류를 변경할 권한이 없습니다.');
     }
   }
+
+  async checkPermissionNotes({ userId, noteId }) {
+    try {
+      const userByUserId = await this.usersRepository.findOne({
+        id: userId,
+      });
+
+      const notesFromUser = await userByUserId.notes;
+
+      const permission = notesFromUser.some((el) => {
+        noteId === el.id;
+      });
+      if (permission) {
+        throw new Error();
+      }
+      return userByUserId;
+    } catch (error) {
+      throw new BadRequestException('노트의 글을 변경할 권한이 없습니다.');
+    }
+  }
 }

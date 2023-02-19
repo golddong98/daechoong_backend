@@ -27,4 +27,11 @@ export class NotesService {
     });
     return await this.notesRepository.insert(note);
   }
+
+  async updateSmallCates({ noteId, updateNoteBodyDTO }) {
+    const updateContentInNote = this.notesRepository.create({
+      content: updateNoteBodyDTO.content,
+    });
+    return await this.notesRepository.update(noteId, updateContentInNote);
+  }
 }

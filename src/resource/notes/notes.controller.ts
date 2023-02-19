@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   Param,
   ParseIntPipe,
+  Put,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Express, Request, Response } from 'express';
@@ -71,5 +72,26 @@ export class NotesController {
   }
   catch(error) {
     console.log(error);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Put('content/:noteId')
+  async updateContentInNote(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('noteId', ParseIntPipe) param: number,
+    @Body() updateNoteBodyDTO: CreateNoteBodyDTO,
+  ) {
+    await this.usersService.checkPermissionNotes({
+      userId: req.user.id,
+      noteId: param,
+    });
+
+    await this.notesService.updateSmallCates({
+      noteId: param,
+      updateNoteBodyDTO,
+    });
+    res.status(200).send();
+    return;
   }
 }

@@ -12,7 +12,6 @@ export class FilesService {
 
   async uploadFile({ user, note, files }) {
     for (const element of files) {
-      console.log(element);
       const file = this.filesRepository.create({
         originalName: element.originalname,
         encoding: element.encoding,
