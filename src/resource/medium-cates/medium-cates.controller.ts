@@ -85,7 +85,7 @@ export class MediumCatesController {
     });
 
     await this.mediumCatesService.deleteMediumCates({
-      param,
+      mediumCateId: param,
     });
 
     res.status(200).send();

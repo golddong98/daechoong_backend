@@ -33,8 +33,8 @@ export class MediumCatesService {
     return await this.mediumCatesRepository.update(param, mediumCate);
   }
 
-  async deleteMediumCates({ param }) {
-    return await this.mediumCatesRepository.delete(param);
+  async deleteMediumCates({ mediumCateId }) {
+    return await this.mediumCatesRepository.delete(mediumCateId);
   }
 
   async getMediumCateById(id: number) {

@@ -11,6 +11,7 @@ import {
   Param,
   ParseIntPipe,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Express, Request, Response } from 'express';
@@ -109,13 +110,31 @@ export class NotesController {
         noteId: param,
       });
 
-    // const confirmedNote = await this.notesService.checkPermi;
-
     await this.filesService.uploadFiles({
       user: confirmedUser,
       note: confirmedNote,
       files,
     });
+    res.status(200).send();
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('files/:fileId')
+  async deleteFileInNote(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('fileId', ParseIntPipe) param: number,
+  ) {
+    await this.usersService.checkPermissionFile({
+      userId: req.user.id,
+      fileId: param,
+    });
+
+    await this.filesService.deleteFileInNote({
+      fileId: param,
+    });
+
     res.status(200).send();
     return;
   }

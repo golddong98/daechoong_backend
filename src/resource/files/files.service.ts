@@ -26,4 +26,8 @@ export class FilesService {
     }
     return;
   }
+
+  async deleteFileInNote({ fileId }) {
+    return await this.filesRepository.delete(fileId);
+  }
 }

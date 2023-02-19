@@ -153,4 +153,26 @@ export class UsersService {
       throw new BadRequestException('노트의 글을 변경할 권한이 없습니다.');
     }
   }
+
+  async checkPermissionFile({ userId, fileId }) {
+    try {
+      const confirmedUser = await this.usersRepository.findOne({
+        id: userId,
+      });
+
+      const filesFromUser = await confirmedUser.files;
+
+      const confirmedFile = filesFromUser.find((el) => {
+        if (fileId === el.id) {
+          return el;
+        }
+      });
+      if (!confirmedFile) {
+        throw new Error();
+      }
+      return { confirmedUser, confirmedFile };
+    } catch (error) {
+      throw new BadRequestException('파일을 변경할 권한이 없습니다.');
+    }
+  }
 }
