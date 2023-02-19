@@ -62,25 +62,27 @@ export class UsersService {
 
   async checkPermissionLargeCate({ userId, largeCateId }) {
     try {
-      const userByUserId = await this.usersRepository.findOne({
+      const confirmedUser = await this.usersRepository.findOne({
         id: userId,
       });
 
-      const largeCatesFromUser = await userByUserId.largeCates;
+      const largeCatesFromUser = await confirmedUser.largeCates;
 
       // const largeCatesByUserId = await this.usersService.getLargeCatesByUserId({
       //   id: userId,
       // });
 
-      const permission = largeCatesFromUser.some((el) => {
-        largeCateId === el.id;
+      const confirmedLargeCate = largeCatesFromUser.find((el) => {
+        if (largeCateId === el.id) {
+          return el;
+        }
       });
 
-      if (permission) {
+      if (confirmedLargeCate) {
         throw new Error();
       }
 
-      return userByUserId;
+      return { confirmedUser, confirmedLargeCate };
     } catch (error) {
       throw new BadRequestException('중분류에 항목을 추가할 권한이 없습니다.');
     }
@@ -88,19 +90,21 @@ export class UsersService {
 
   async checkPermissionMediumCate({ userId, mediumCateId }) {
     try {
-      const userByUserId = await this.usersRepository.findOne({
+      const confirmedUser = await this.usersRepository.findOne({
         id: userId,
       });
 
-      const mediumCatesFromUser = await userByUserId.mediumCates;
+      const mediumCatesFromUser = await confirmedUser.mediumCates;
 
-      const permission = mediumCatesFromUser.some((el) => {
-        mediumCateId === el.id;
+      const confirmedMediumCate = mediumCatesFromUser.find((el) => {
+        if (mediumCateId === el.id) {
+          return el;
+        }
       });
-      if (permission) {
+      if (!confirmedMediumCate) {
         throw new Error();
       }
-      return userByUserId;
+      return { confirmedUser, confirmedMediumCate };
     } catch (error) {
       throw new BadRequestException('중분류를 변경할 권한이 없습니다.');
     }
@@ -108,19 +112,21 @@ export class UsersService {
 
   async checkPermissionSmallCate({ userId, smallCateId }) {
     try {
-      const userByUserId = await this.usersRepository.findOne({
+      const confirmedUser = await this.usersRepository.findOne({
         id: userId,
       });
 
-      const smallCatesFromUser = await userByUserId.smallCates;
+      const smallCatesFromUser = await confirmedUser.smallCates;
 
-      const permission = smallCatesFromUser.some((el) => {
-        smallCateId === el.id;
+      const confirmedSmallCate = smallCatesFromUser.find((el) => {
+        if (smallCateId === el.id) {
+          return el;
+        }
       });
-      if (permission) {
+      if (!confirmedSmallCate) {
         throw new Error();
       }
-      return userByUserId;
+      return { confirmedUser, confirmedSmallCate };
     } catch (error) {
       throw new BadRequestException('소분류를 변경할 권한이 없습니다.');
     }
@@ -128,19 +134,21 @@ export class UsersService {
 
   async checkPermissionNotes({ userId, noteId }) {
     try {
-      const userByUserId = await this.usersRepository.findOne({
+      const confirmedUser = await this.usersRepository.findOne({
         id: userId,
       });
 
-      const notesFromUser = await userByUserId.notes;
+      const notesFromUser = await confirmedUser.notes;
 
-      const permission = notesFromUser.some((el) => {
-        noteId === el.id;
+      const confirmedNote = notesFromUser.find((el) => {
+        if (noteId === el.id) {
+          return el;
+        }
       });
-      if (permission) {
+      if (!confirmedNote) {
         throw new Error();
       }
-      return userByUserId;
+      return { confirmedUser, confirmedNote };
     } catch (error) {
       throw new BadRequestException('노트의 글을 변경할 권한이 없습니다.');
     }

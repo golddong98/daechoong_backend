@@ -40,10 +40,12 @@ export class SmallCatesController {
     @Param('mediumCateId', ParseIntPipe) param: number,
     @Body() smallCateCreateDTO: SmallCateCreateDTO,
   ) {
-    const confirmedUser = await this.usersService.checkPermissionMediumCate({
-      userId: req.user.id,
-      mediumCateId: param,
-    });
+    const { confirmedUser } = await this.usersService.checkPermissionMediumCate(
+      {
+        userId: req.user.id,
+        mediumCateId: param,
+      },
+    );
 
     await this.smallCatesService.createSmallCates({
       mediumCateId: param,
@@ -102,12 +104,10 @@ export class SmallCatesController {
     @Res() res: Response,
     @Param('mediumCateId', ParseIntPipe) param: number,
   ) {
-    // 왜 async있는데 await를 쓰면 에러가 나지???
     await this.usersService.checkPermissionMediumCate({
       userId: req.user.id,
       mediumCateId: param,
     });
-    // 왜 async있는데 await를 쓰면 에러가 나지???
     const result = await this.mediumCatesService.getSmallCatesByMediumCateId({
       id: param,
     });

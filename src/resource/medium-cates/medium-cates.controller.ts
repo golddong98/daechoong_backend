@@ -37,7 +37,7 @@ export class MediumCatesController {
     @Param('largeCateId', ParseIntPipe) param: number,
     @Body() mediumCateCreateDTO: MediumCateCreateDTO,
   ) {
-    const confirmedUser = await this.usersService.checkPermissionLargeCate({
+    const { confirmedUser } = await this.usersService.checkPermissionLargeCate({
       userId: req.user.id,
       largeCateId: param,
     });

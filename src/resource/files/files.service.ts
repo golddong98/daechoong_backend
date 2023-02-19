@@ -26,4 +26,21 @@ export class FilesService {
     }
     return;
   }
+
+  async updateFilesInNote({ user, note, files }) {
+    for (const element of files) {
+      const file = this.filesRepository.create({
+        originalName: element.originalname,
+        encoding: element.encoding,
+        mimeType: element.mimetype,
+        size: element.size,
+        fileUrl: element.location,
+        user,
+        note,
+      });
+
+      await this.filesRepository.insert(file);
+    }
+    return;
+  }
 }
