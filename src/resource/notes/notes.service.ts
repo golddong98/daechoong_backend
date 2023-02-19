@@ -38,4 +38,34 @@ export class NotesService {
   async deleteNote({ noteId }) {
     return await this.notesRepository.delete(noteId);
   }
+
+  async getNotesInSmallCateByCreatedAt({ smallCateId }) {
+    const confirmedNotes = await this.notesRepository.find({
+      relations: ['smallCate'],
+      where: {
+        smallCate: {
+          id: smallCateId,
+        },
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    return confirmedNotes;
+  }
+
+  async getNotesInSmallCateByUpdatedAt({ smallCateId }) {
+    const confirmedNotes = await this.notesRepository.find({
+      relations: ['smallCate'],
+      where: {
+        smallCate: {
+          id: smallCateId,
+        },
+      },
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
+    return confirmedNotes;
+  }
 }

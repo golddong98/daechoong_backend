@@ -19,16 +19,16 @@ import { CreateNoteBodyDTO } from './dtos/create-note-body-dto';
 import { NotesService } from './notes.service';
 import { FilesInterceptor } from '@nestjs/platform-express/multer';
 import { UsersService } from '../users/users.service';
-import { SmallCatesService } from '../small-cates/small-cates.service';
 import { FilesService } from '../files/files.service';
+import { SmallCatesService } from '../small-cates/small-cates.service';
 
 @Controller('notes')
 export class NotesController {
   constructor(
     private readonly notesService: NotesService,
     private readonly usersService: UsersService,
-    private readonly smallCatesService: SmallCatesService,
     private readonly filesService: FilesService,
+    private readonly smallCatesService: SmallCatesService,
   ) {}
 
   @Get()
@@ -151,12 +151,89 @@ export class NotesController {
       noteId: param,
     });
 
-    console.log('hi');
     await this.notesService.deleteNote({
       noteId: param,
     });
 
     res.status(200).send();
+    return;
+  }
+
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('wrt/:largeCateId')
+  // getNotesInLargeCateByCreatedAt(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Param('largeCateId', ParseIntPipe) param: number,
+  // ): string {
+  //   return this.notesService.getNotesInLargeCateByCreatedAt();
+  // }
+
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('mod/:LargeCateId')
+  // getNotesInLargeCateByUpdatedAt(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Param('largeCateId', ParseIntPipe) param: number,
+  // ): string {
+  //   return this.notesService.getNotesInLargeCateByUpdatedAt();
+  // }
+
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('wrt/:mediumCateId')
+  // getNotesInMediumCateByCreatedAt(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Param('mediumCateId', ParseIntPipe) param: number,
+  // ): string {
+  //   return this.notesService.getNotesInMediumCateByCreatedAt();
+  // }
+
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('mod/:mediumCateId')
+  // getNotesInMediumCateByUpdatedAt(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Param('mediumCateId', ParseIntPipe) param: number,
+  // ): string {
+  //   return this.notesService.getNotesInMediumCateByUpdatedAt();
+  // }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('wrt/:smallCateId')
+  async getNotesInSmallCateByCreatedAt(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('smallCateId', ParseIntPipe) param: number,
+  ) {
+    await this.usersService.checkPermissionSmallCate({
+      userId: req.user.id,
+      smallCateId: param,
+    });
+
+    const result = await this.notesService.getNotesInSmallCateByCreatedAt({
+      smallCateId: param,
+    });
+    res.status(200).json({ notes: result });
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('mod/:smallCateId')
+  async getNotesInSmallCateByUpdatedAt(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('smallCateId', ParseIntPipe) param: number,
+  ) {
+    await this.usersService.checkPermissionSmallCate({
+      userId: req.user.id,
+      smallCateId: param,
+    });
+
+    const result = await this.notesService.getNotesInSmallCateByUpdatedAt({
+      smallCateId: param,
+    });
+    res.status(200).json({ notes: result });
     return;
   }
 }
