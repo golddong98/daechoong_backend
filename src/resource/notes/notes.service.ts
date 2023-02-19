@@ -41,7 +41,7 @@ export class NotesService {
 
   async getNotesInSmallCateByCreatedAt({ smallCateId }) {
     const confirmedNotes = await this.notesRepository.find({
-      relations: ['smallCate'],
+      relations: ['smallCate', 'files'],
       where: {
         smallCate: {
           id: smallCateId,
@@ -56,7 +56,7 @@ export class NotesService {
 
   async getNotesInSmallCateByUpdatedAt({ smallCateId }) {
     const confirmedNotes = await this.notesRepository.find({
-      relations: ['smallCate'],
+      relations: ['smallCate', 'files'],
       where: {
         smallCate: {
           id: smallCateId,
