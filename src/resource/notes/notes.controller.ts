@@ -46,6 +46,7 @@ export class NotesController {
     @UploadedFiles()
     files: Express.MulterS3.File[],
   ) {
+    // 다 긁어 오는거 잘못 된듯
     const confirmedUser = await this.usersService.checkPermissionSmallCate({
       userId: req.user.id,
       smallCateId: param,
@@ -55,14 +56,16 @@ export class NotesController {
       smallCateId: param,
     });
 
-    const note = await this.notesService.createNote({
+    const newNote = await this.notesService.createNote({
       content: createNoteBodyDTO.content,
       user: confirmedUser,
       smallCate: confirmedSmallCate,
     });
 
-    await this.filesService.uploadFile({
-      note,
+    console.log(newNote.generatedMaps[0]);
+
+    await this.filesService.uploadFiles({
+      note: newNote.generatedMaps[0],
       user: confirmedUser,
       files,
     });
@@ -87,11 +90,35 @@ export class NotesController {
       noteId: param,
     });
 
-    await this.notesService.updateSmallCates({
+    await this.notesService.updateContentInNote({
       noteId: param,
       updateNoteBodyDTO,
     });
     res.status(200).send();
     return;
   }
+
+  // @UseGuards(AuthGuard('jwt'))
+  // @Put('files/:noteId')
+  // @UseInterceptors(FilesInterceptor('file', 10))
+  // async updateFilesInNote(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Param('noteId', ParseIntPipe) param: number,
+  //   @Body() updateNoteBodyDTO: CreateNoteBodyDTO,
+  //   @UploadedFiles()
+  //   files: Express.MulterS3.File[],
+  // ) {
+  //   await this.usersService.checkPermissionNotes({
+  //     userId: req.user.id,
+  //     noteId: param,
+  //   });
+
+  //   await this.notesService.updateFilesInNote({
+  //     noteId: param,
+  //     updateNoteBodyDTO,
+  //   });
+  //   res.status(200).send();
+  //   return;
+  // }
 }
