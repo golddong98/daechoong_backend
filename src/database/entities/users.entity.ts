@@ -1,6 +1,10 @@
+import { LargeCate } from './large-cates.entity';
 import { Note } from './notes.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
 import { Common } from './common.entity';
+import { MediumCate } from './medium-cates.entity';
+import { SmallCate } from './small-cates.entity';
+import { File } from './files.entity';
 
 @Entity()
 export class User extends Common {
@@ -10,21 +14,33 @@ export class User extends Common {
   @Column({ length: 100 })
   email: string;
 
-  @Column({ length: 50 })
+  @Column({ nullable: true, length: 50 })
   schoolName: string;
 
-  @Column('int')
+  @Column({ nullable: true })
   studentNumber: number;
 
-  @Column({ length: 50 })
+  @Column({ nullable: true, length: 50 })
   major1: string;
 
-  @Column({ length: 50 })
+  @Column({ nullable: true, length: 50 })
   major2: string;
 
-  @Column('text')
+  @Column({ nullable: true })
   profileImgUrl: string;
 
   @OneToMany(() => Note, (note) => note.user)
-  notes: Note[];
+  notes: Promise<Note[]>;
+
+  @OneToMany(() => File, (file) => file.user)
+  files: Promise<File[]>;
+
+  @OneToMany(() => LargeCate, (largeCate) => largeCate.user)
+  largeCates: Promise<LargeCate[]>;
+
+  @OneToMany(() => MediumCate, (mediumCate) => mediumCate.user)
+  mediumCates: Promise<MediumCate[]>;
+
+  @OneToMany(() => SmallCate, (smallCate) => smallCate.user)
+  smallCates: Promise<SmallCate[]>;
 }

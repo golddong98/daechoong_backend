@@ -17,4 +17,55 @@ export class NotesService {
   getNotes(): string {
     return 'Hello Notes!';
   }
+
+  // createNoteDTO type만들기, return type만들기,
+  async createNote({ content, user, smallCate }) {
+    const note = this.notesRepository.create({
+      content,
+      user,
+      smallCate,
+    });
+    return await this.notesRepository.insert(note);
+  }
+
+  async updateContentInNote({ noteId, updateNoteBodyDTO }) {
+    const newContentInNote = this.notesRepository.create({
+      content: updateNoteBodyDTO.content,
+    });
+    return await this.notesRepository.update(noteId, newContentInNote);
+  }
+
+  async deleteNote({ noteId }) {
+    return await this.notesRepository.delete(noteId);
+  }
+
+  async getNotesInSmallCateByCreatedAt({ smallCateId }) {
+    const confirmedNotes = await this.notesRepository.find({
+      relations: ['smallCate'],
+      where: {
+        smallCate: {
+          id: smallCateId,
+        },
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    return confirmedNotes;
+  }
+
+  async getNotesInSmallCateByUpdatedAt({ smallCateId }) {
+    const confirmedNotes = await this.notesRepository.find({
+      relations: ['smallCate'],
+      where: {
+        smallCate: {
+          id: smallCateId,
+        },
+      },
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
+    return confirmedNotes;
+  }
 }

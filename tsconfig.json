@@ -18,5 +18,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true
-  }
+  },
+  "typesRoots": ["./node_module/@types", "./src/common/types"],
+  "seeds": ["src/database/seeds/**/*.seed.ts"]
 }
