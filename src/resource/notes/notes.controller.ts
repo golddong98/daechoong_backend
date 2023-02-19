@@ -111,7 +111,7 @@ export class NotesController {
 
     // const confirmedNote = await this.notesService.checkPermi;
 
-    await this.filesService.updateFilesInNote({
+    await this.filesService.uploadFiles({
       user: confirmedUser,
       note: confirmedNote,
       files,
