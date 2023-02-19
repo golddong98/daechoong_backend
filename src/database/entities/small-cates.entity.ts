@@ -12,10 +12,14 @@ export class SmallCate extends Common {
   @OneToMany(() => Note, (note) => note.smallCate)
   notes: Note[];
 
-  @ManyToOne(() => User, (user) => user.smallCates)
+  @ManyToOne(() => User, (user) => user.smallCates, {
+    onDelete: 'CASCADE',
+  })
   user: User;
 
-  @ManyToOne(() => MediumCate, (mediumCate) => mediumCate.smallCates)
+  @ManyToOne(() => MediumCate, (mediumCate) => mediumCate.smallCates, {
+    onDelete: 'CASCADE',
+  })
   mediumCate: MediumCate;
 
   @Column()

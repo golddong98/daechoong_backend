@@ -20,9 +20,13 @@ export class File extends Common {
   @Column()
   size: number;
 
-  @ManyToOne(() => Note, (note) => note.files)
+  @ManyToOne(() => Note, (note) => note.files, {
+    onDelete: 'CASCADE',
+  })
   note: Note;
 
-  @ManyToOne(() => User, (user) => user.files)
+  @ManyToOne(() => User, (user) => user.files, {
+    onDelete: 'CASCADE',
+  })
   user: User;
 }

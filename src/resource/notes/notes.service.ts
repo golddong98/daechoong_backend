@@ -34,4 +34,8 @@ export class NotesService {
     });
     return await this.notesRepository.update(noteId, newContentInNote);
   }
+
+  async deleteNote({ noteId }) {
+    return await this.notesRepository.delete(noteId);
+  }
 }

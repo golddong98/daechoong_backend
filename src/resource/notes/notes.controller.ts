@@ -138,4 +138,25 @@ export class NotesController {
     res.status(200).send();
     return;
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':noteId')
+  async deleteNote(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('noteId', ParseIntPipe) param: number,
+  ) {
+    await this.usersService.checkPermissionNotes({
+      userId: req.user.id,
+      noteId: param,
+    });
+
+    console.log('hi');
+    await this.notesService.deleteNote({
+      noteId: param,
+    });
+
+    res.status(200).send();
+    return;
+  }
 }

@@ -12,9 +12,13 @@ export class Note extends Common {
   @OneToMany(() => File, (file) => file.note)
   files: Promise<File[]>;
 
-  @ManyToOne(() => User, (user) => user.notes)
+  @ManyToOne(() => User, (user) => user.notes, {
+    onDelete: 'CASCADE',
+  })
   user: User;
 
-  @ManyToOne(() => SmallCate, (smallCate) => smallCate.notes)
+  @ManyToOne(() => SmallCate, (smallCate) => smallCate.notes, {
+    onDelete: 'CASCADE',
+  })
   smallCate: SmallCate;
 }

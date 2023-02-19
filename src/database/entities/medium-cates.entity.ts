@@ -9,10 +9,14 @@ export class MediumCate extends Common {
   @Column({ length: 50 })
   name: string;
 
-  @ManyToOne(() => User, (user) => user.mediumCates)
+  @ManyToOne(() => User, (user) => user.mediumCates, {
+    onDelete: 'CASCADE',
+  })
   user: User;
 
-  @ManyToOne(() => LargeCate, (largeCate) => largeCate.mediumCates)
+  @ManyToOne(() => LargeCate, (largeCate) => largeCate.mediumCates, {
+    onDelete: 'CASCADE',
+  })
   largeCate: LargeCate;
 
   @OneToMany(() => SmallCate, (smallCate) => smallCate.mediumCate)
