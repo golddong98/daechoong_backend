@@ -65,7 +65,6 @@ export class UsersService {
       const confirmedUser = await this.usersRepository.findOne({
         id: userId,
       });
-      console.log(confirmedUser);
 
       const largeCatesFromUser = await confirmedUser.largeCates;
 
@@ -73,14 +72,12 @@ export class UsersService {
       //   id: userId,
       // });
 
-      console.log(largeCatesFromUser);
       const confirmedLargeCate = largeCatesFromUser.find((el) => {
         if (largeCateId === el.id) {
           return el;
         }
       });
 
-      console.log(confirmedLargeCate);
       if (!confirmedLargeCate) {
         throw new Error();
       }
