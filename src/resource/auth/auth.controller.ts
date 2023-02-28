@@ -45,8 +45,11 @@ export class AuthController {
   @UseGuards(AuthGuard('kakao'))
   async loginKakao(
     @Req() req: Request & IOAuthUser, //
+    @Res() res: Response,
   ) {
-    return this.authService.kakaoLogin({ req });
+    const token = await this.authService.kakaoLogin({ req });
+    res.status(200).json({ token });
+    return;
   }
 
   @UseGuards(AuthGuard('jwt'))
