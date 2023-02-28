@@ -18,7 +18,6 @@ export class MediumCatesService {
 
   async createMediumCates({ param, mediumCateCreateDTO, user }) {
     const largeCate = await this.largeCatesService.getLargeCateById(param);
-    console.log(mediumCateCreateDTO);
     const mediumCate = this.mediumCatesRepository.create({
       name: mediumCateCreateDTO.mediumCateName,
       user,

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LargeCatesService } from '../large-cates/large-cates.service';
+import { MediumCatesService } from '../medium-cates/medium-cates.service';
 import { UsersService } from '../users/users.service';
 // import {
 //   IAuthServiceGetAccessToken,
@@ -12,6 +13,7 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly largeCatesService: LargeCatesService,
+    private readonly mediumCatesService: MediumCatesService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -24,8 +26,36 @@ export class AuthService {
     // kakaostrategy
     if (!user) {
       user = await this.usersService.registerUser({ ...req.user }); //user가 없으면 하나 만들고, 있으면 이 if문에 들어오지 않을거기때문에 이러나 저러나 user는 존재하는게 됨.
-      // 3. 회원가입 후 바로 그 유저의 LargeCate 3개('교과','비교과','기타') 만들기
-      await this.largeCatesService.createLargeCates({ user });
+      // 3-1. 회원가입 후 바로 그 유저의 LargeCate 3개('교과','비교과','기타') 만들기
+      const subjectLargeCate =
+        await this.largeCatesService.createLargeCatesAuto({
+          name: '교과',
+          user,
+        });
+      await this.largeCatesService.createLargeCatesAuto({
+        name: '비교과',
+        user,
+      });
+      await this.largeCatesService.createLargeCatesAuto({ name: '기타', user });
+
+      // 3-2. 회원가입 후 바로 그 유저의 '교과'에 MediumCate를 3개 만들어줌
+      await this.mediumCatesService.createMediumCates({
+        param: subjectLargeCate.generatedMaps[0].id,
+        mediumCateCreateDTO: { mediumCateName: '2022년 1학기' },
+        user,
+      });
+
+      await this.mediumCatesService.createMediumCates({
+        param: subjectLargeCate.generatedMaps[0].id,
+        mediumCateCreateDTO: { mediumCateName: '2022년 2학기' },
+        user,
+      });
+
+      await this.mediumCatesService.createMediumCates({
+        param: subjectLargeCate.generatedMaps[0].id,
+        mediumCateCreateDTO: { mediumCateName: '2023년 1학기' },
+        user,
+      });
     }
 
     // jwtstrategy

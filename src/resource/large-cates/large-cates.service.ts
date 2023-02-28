@@ -13,23 +13,12 @@ export class LargeCatesService {
     return 'Hello largeCates!';
   }
 
-  async createLargeCates({ user }) {
-    const largeCate1 = this.largeCatesRepository.create({
-      name: '교과',
+  async createLargeCatesAuto({ name, user }) {
+    const largeCate = this.largeCatesRepository.create({
+      name,
       user,
     });
-    const largeCate2 = this.largeCatesRepository.create({
-      name: '비교과',
-      user,
-    });
-    const largeCate3 = this.largeCatesRepository.create({
-      name: '기타',
-      user,
-    });
-    await this.largeCatesRepository.insert(largeCate1);
-    await this.largeCatesRepository.insert(largeCate2);
-    await this.largeCatesRepository.insert(largeCate3);
-    return;
+    return await this.largeCatesRepository.insert(largeCate);
   }
 
   async getLargeCateById(id: number) {
