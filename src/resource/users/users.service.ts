@@ -175,4 +175,8 @@ export class UsersService {
       throw new BadRequestException('파일을 변경할 권한이 없습니다.');
     }
   }
+
+  async getUser({ userId }) {
+    return await this.usersRepository.findOne({ id: userId });
+  }
 }
