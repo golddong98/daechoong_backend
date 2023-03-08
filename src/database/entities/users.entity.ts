@@ -29,7 +29,7 @@ export class User extends Common {
   @Column({ nullable: true })
   profileImgUrl: string;
 
-  @Column({ default: false })
+  @Column({ type: 'boolean', default: false })
   isActive: boolean;
 
   @OneToMany(() => Note, (note) => note.user)

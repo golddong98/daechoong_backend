@@ -7,9 +7,11 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get('NODE_SERVER_PORT');
   app.enableCors({
-    origin: true,
-    methods: 'GET,POST,PUT,DELETE',
+    origin: '*',
+    methods: ['GET,POST,PUT,DELETE'],
+    exposedHeaders: ['Authorization'],
     credentials: true,
+    maxAge: 3600,
   });
   await app.listen(port);
 }
