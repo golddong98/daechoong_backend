@@ -56,6 +56,7 @@ export class UsersService {
     updateUser.major1 = afterSocialSignUpDTO.major1;
     updateUser.major2 = afterSocialSignUpDTO.major2;
     updateUser.profileImgUrl = afterSocialSignUpDTO.profileImgUrl;
+    updateUser.isActive = true;
 
     return await this.usersRepository.update(userId, updateUser);
   }
