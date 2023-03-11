@@ -16,9 +16,9 @@ import { AfterSocialSignUpDTO } from './dtos/user-after-sign-up.dto';
 interface IOAuthUser {
   //interface 설정
   user: {
+    id: string;
     name: string;
     email: string;
-    password: string;
   };
 }
 
@@ -47,7 +47,11 @@ export class AuthController {
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    const token = await this.authService.kakaoLogin({ req });
+    const token = await this.authService.kakaoLogin({
+      id: req.user.id,
+      email: req.user.email,
+      name: req.user.name,
+    });
     res.status(200).json({ token });
     return;
   }

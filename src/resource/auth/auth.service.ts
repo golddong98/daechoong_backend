@@ -17,15 +17,16 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async kakaoLogin({ req }) {
+  async kakaoLogin({ id, email, name }) {
     // 1. 회원조회
-    let user = await this.usersService.getUserByEmail(req.user.email); //user를 찾아서
+    let user = await this.usersService.getUserByIdAtFirst({ id });
+    // let user = await this.usersService.getUserByEmail(id); //user를 찾아서
 
     // 2, 회원가입이 안되어있다면? 자동회원가입
 
     // kakaostrategy
     if (!user) {
-      user = await this.usersService.registerUser({ ...req.user }); //user가 없으면 하나 만들고, 있으면 이 if문에 들어오지 않을거기때문에 이러나 저러나 user는 존재하는게 됨.
+      user = await this.usersService.registerUser({ id, email, name }); //user가 없으면 하나 만들고, 있으면 이 if문에 들어오지 않을거기때문에 이러나 저러나 user는 존재하는게 됨.
       // 3-1. 회원가입 후 바로 그 유저의 LargeCate 3개('교과','비교과','기타') 만들기
       const subjectLargeCate =
         await this.largeCatesService.createLargeCatesAuto({

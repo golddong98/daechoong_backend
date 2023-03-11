@@ -4,10 +4,9 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 export class UserRegisterDTO {
   @IsNumber()
   @IsNotEmpty({ message: '아이디가 존재하지 않습니다.' })
-  readonly id: number;
+  readonly id: string;
 
   @IsString()
-  @IsNotEmpty({ message: '이메일을 작성해주세요.' })
   readonly email: string;
 
   @IsString()

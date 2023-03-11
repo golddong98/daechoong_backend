@@ -25,7 +25,16 @@ export class UsersService {
     }
   }
 
-  async getUserById(id: number) {
+  async getUserByIdAtFirst({ id }) {
+    try {
+      const user = await this.usersRepository.findOne({ id });
+      return user;
+    } catch (error) {
+      throw new BadRequestException('해당하는 사용자를 찾을 수 없습니다.');
+    }
+  }
+
+  async getUserById({ id }) {
     try {
       const user = await this.usersRepository.findOne({ id });
       if (!user) throw new Error();
@@ -37,10 +46,10 @@ export class UsersService {
 
   // 에러처리하기
   async registerUser(userRegisterDTO: UserRegisterDTO) {
-    const { email } = userRegisterDTO;
-    const user = await this.usersRepository.findOne({ email });
+    const { id } = userRegisterDTO;
+    const user = await this.usersRepository.findOne({ id });
     if (user) {
-      throw new UnauthorizedException('해당하는 이메일은 이미 존재합니다.');
+      throw new UnauthorizedException('해당하는 유저는 이미 존재합니다.');
     }
     const newUser = await this.usersRepository.save({
       ...userRegisterDTO,

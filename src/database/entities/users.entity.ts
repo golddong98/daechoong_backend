@@ -1,17 +1,17 @@
 import { LargeCate } from './large-cates.entity';
 import { Note } from './notes.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
-import { Common } from './common.entity';
 import { MediumCate } from './medium-cates.entity';
 import { SmallCate } from './small-cates.entity';
 import { File } from './files.entity';
+import { ExistIdCommon } from './existIdCommon.entity';
 
 @Entity()
-export class User extends Common {
+export class User extends ExistIdCommon {
   @Column({ length: 50 })
   name: string;
 
-  @Column({ length: 100 })
+  @Column({ nullable: true, length: 100 })
   email: string;
 
   @Column({ nullable: true, length: 50 })
