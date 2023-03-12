@@ -189,4 +189,21 @@ export class UsersService {
   async getUser({ userId }) {
     return await this.usersRepository.findOne({ id: userId });
   }
+
+  async updateUser({ userId, updateDTO }) {
+    const updateUser = this.usersRepository.create({
+      schoolName: updateDTO.schoolName,
+      studentNumber: updateDTO.studentNumber,
+      major1: updateDTO.major1,
+      major2: updateDTO.major2,
+      profileImgUrl: updateDTO.profileImgUrl,
+    });
+
+    return await this.usersRepository.update(userId, updateUser);
+  }
+
+  // const newContentInNote = this.notesRepository.create({
+  //   content: updateNoteBodyDTO.content,
+  // });
+  // return await this.notesRepository.update(noteId, newContentInNote);
 }
