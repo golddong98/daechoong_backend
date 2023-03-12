@@ -1,4 +1,3 @@
-import { LargeCatesService } from './../large-cates/large-cates.service';
 import {
   Body,
   Controller,
@@ -32,7 +31,6 @@ export class NotesController {
     private readonly filesService: FilesService,
     private readonly smallCatesService: SmallCatesService,
     private readonly mediumCatesService: MediumCatesService,
-    private readonly largeCatesService: LargeCatesService,
   ) {}
 
   @Get()
