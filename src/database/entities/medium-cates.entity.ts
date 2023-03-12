@@ -1,6 +1,7 @@
 import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Common } from './common.entity';
 import { LargeCate } from './large-cates.entity';
+import { Note } from './notes.entity';
 import { SmallCate } from './small-cates.entity';
 import { User } from './users.entity';
 
@@ -18,6 +19,9 @@ export class MediumCate extends Common {
     onDelete: 'CASCADE',
   })
   largeCate: LargeCate;
+
+  @OneToMany(() => Note, (note) => note.mediumCate)
+  notes: Note[];
 
   @OneToMany(() => SmallCate, (smallCate) => smallCate.mediumCate)
   smallCates: Promise<SmallCate[]>;

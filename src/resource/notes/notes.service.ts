@@ -39,6 +39,66 @@ export class NotesService {
     return await this.notesRepository.delete(noteId);
   }
 
+  async getNotesInLargeCateByCreatedAt({ largeCateId }) {
+    const confirmedNotes = await this.notesRepository.find({
+      relations: ['largeCate', 'files'],
+      where: {
+        largeCate: {
+          id: largeCateId,
+        },
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    return confirmedNotes;
+  }
+
+  async getNotesInLargeCateByUpdatedAt({ largeCateId }) {
+    const confirmedNotes = await this.notesRepository.find({
+      relations: ['largeCate', 'files'],
+      where: {
+        largeCate: {
+          id: largeCateId,
+        },
+      },
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
+    return confirmedNotes;
+  }
+
+  async getNotesInMediumCateByCreatedAt({ mediumCateId }) {
+    const confirmedNotes = await this.notesRepository.find({
+      relations: ['mediumCate', 'files'],
+      where: {
+        mediumCate: {
+          id: mediumCateId,
+        },
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    return confirmedNotes;
+  }
+
+  async getNotesInMediumCateByUpdatedAt({ mediumCateId }) {
+    const confirmedNotes = await this.notesRepository.find({
+      relations: ['mediumCate', 'files'],
+      where: {
+        mediumCate: {
+          id: mediumCateId,
+        },
+      },
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
+    return confirmedNotes;
+  }
+
   async getNotesInSmallCateByCreatedAt({ smallCateId }) {
     const confirmedNotes = await this.notesRepository.find({
       relations: ['smallCate', 'files'],
