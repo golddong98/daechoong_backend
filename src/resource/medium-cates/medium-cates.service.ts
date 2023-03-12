@@ -37,9 +37,11 @@ export class MediumCatesService {
     return await this.mediumCatesRepository.delete(mediumCateId);
   }
 
-  async getMediumCateById(id: number) {
+  async getMediumCateById({ mediumCateId }) {
     try {
-      const mediumCate = await this.mediumCatesRepository.findOne({ id });
+      const mediumCate = await this.mediumCatesRepository.findOne({
+        id: mediumCateId,
+      });
       if (!mediumCate) throw new Error();
       return mediumCate;
     } catch (error) {

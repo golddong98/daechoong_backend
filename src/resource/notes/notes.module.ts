@@ -9,6 +9,8 @@ import { multerOptionsFactory } from 'src/common/utils/multer.options';
 import { Note } from 'src/database/entities/notes.entity';
 import { FilesModule } from '../files/files.module';
 import { SmallCatesModule } from '../small-cates/small-cates.module';
+import { MediumCatesModule } from '../medium-cates/medium-cates.module';
+import { LargeCatesModule } from '../large-cates/large-cates.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { SmallCatesModule } from '../small-cates/small-cates.module';
     UsersModule,
     FilesModule,
     SmallCatesModule,
+    MediumCatesModule,
+    LargeCatesModule,
   ],
   controllers: [NotesController],
   providers: [NotesService],

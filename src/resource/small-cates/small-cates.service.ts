@@ -17,9 +17,9 @@ export class SmallCatesService {
   }
 
   async createSmallCates({ mediumCateId, smallCateCreateDTO, user }) {
-    const mediumCate = await this.mediumCatesService.getMediumCateById(
+    const mediumCate = await this.mediumCatesService.getMediumCateById({
       mediumCateId,
-    );
+    });
     const smallCate = this.smallCatesRepository.create({
       name: smallCateCreateDTO.smallCateName,
       startedAt: smallCateCreateDTO.startedAt,

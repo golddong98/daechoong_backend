@@ -122,12 +122,8 @@ export class UsersService {
 
   async checkPermissionSmallCate({ userId, smallCateId }) {
     try {
-      const confirmedUser = await this.usersRepository.findOne({
-        id: userId,
-      });
-
+      const confirmedUser = await this.usersRepository.findOne(userId);
       const smallCatesFromUser = await confirmedUser.smallCates;
-
       const confirmedSmallCate = smallCatesFromUser.find((el) => {
         if (smallCateId === el.id) {
           return el;

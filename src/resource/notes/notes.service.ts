@@ -19,11 +19,13 @@ export class NotesService {
   }
 
   // createNoteDTO type만들기, return type만들기,
-  async createNote({ content, user, smallCate }) {
+  async createNote({ content, user, smallCate, mediumCate, largeCate }) {
     const note = this.notesRepository.create({
       content,
       user,
       smallCate,
+      mediumCate,
+      largeCate,
     });
     return await this.notesRepository.insert(note);
   }

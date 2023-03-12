@@ -1,3 +1,4 @@
+import { LargeCatesService } from './../large-cates/large-cates.service';
 import {
   Body,
   Controller,
@@ -21,6 +22,7 @@ import { FilesInterceptor } from '@nestjs/platform-express/multer';
 import { UsersService } from '../users/users.service';
 import { FilesService } from '../files/files.service';
 import { SmallCatesService } from '../small-cates/small-cates.service';
+import { MediumCatesService } from '../medium-cates/medium-cates.service';
 
 @Controller('notes')
 export class NotesController {
@@ -29,6 +31,8 @@ export class NotesController {
     private readonly usersService: UsersService,
     private readonly filesService: FilesService,
     private readonly smallCatesService: SmallCatesService,
+    private readonly mediumCatesService: MediumCatesService,
+    private readonly largeCatesService: LargeCatesService,
   ) {}
 
   @Get()
@@ -54,10 +58,20 @@ export class NotesController {
         smallCateId: param,
       });
 
+    const confirmedMediumCate = await this.smallCatesService.getSmallCateById({
+      smallCateId: confirmedSmallCate.id,
+    });
+
+    const confirmedLargeCate = await this.mediumCatesService.getMediumCateById({
+      mediumCateId: confirmedMediumCate.id,
+    });
+
     const newNote = await this.notesService.createNote({
       content: createNoteBodyDTO.content,
       user: confirmedUser,
       smallCate: confirmedSmallCate,
+      mediumCate: confirmedMediumCate,
+      largeCate: confirmedLargeCate,
     });
 
     await this.filesService.uploadFiles({
