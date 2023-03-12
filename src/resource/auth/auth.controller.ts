@@ -6,6 +6,8 @@ import {
   UseGuards,
   Post,
   Body,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
@@ -47,17 +49,18 @@ export class AuthController {
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    const token = await this.authService.kakaoLogin({
+    const { accessToken, isActive } = await this.authService.kakaoLogin({
       id: req.user.id,
       email: req.user.email,
       name: req.user.name,
     });
-    res.status(200).json({ token });
+    res.status(200).json({ token: accessToken, isActive });
     return;
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('sign-up')
+  @UsePipes(new ValidationPipe())
   async signUp(
     @Req() req: Request,
     @Res() res: Response,

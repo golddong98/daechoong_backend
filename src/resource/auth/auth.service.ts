@@ -64,7 +64,8 @@ export class AuthService {
     // this.setRefreshToken({ user, res });
     const payload = { email: user.email, id: user.id, name: user.name };
     const accessToken = this.jwtService.sign(payload);
-    return accessToken;
+    const isActive = user.isActive;
+    return { accessToken, isActive };
   }
 
   // usersService에 업데이트에 넣으면 될듯 + 회원가입후 필수적으로 작성하도록 로직짜야됨
