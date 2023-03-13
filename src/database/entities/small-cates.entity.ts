@@ -25,6 +25,6 @@ export class SmallCate extends Common {
   @Column()
   startedAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   endedAt: Date;
 }
