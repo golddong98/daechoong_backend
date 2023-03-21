@@ -11,6 +11,7 @@ import {
   UseGuards,
   Put,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from '../users/users.service';
@@ -27,10 +28,10 @@ export class SmallCatesController {
     private readonly mediumCatesService: MediumCatesService,
   ) {}
 
-  @Get()
-  getSmallCatesTest(): string {
-    return this.smallCatesService.getSmallCates();
-  }
+  // @Get()
+  // getSmallCatesTest(): string {
+  //   return this.smallCatesService.getSmallCates();
+  // }
 
   @UseGuards(AuthGuard('jwt'))
   @Post(':mediumCateId')
@@ -110,6 +111,23 @@ export class SmallCatesController {
     });
     const result = await this.mediumCatesService.getSmallCatesByMediumCateId({
       id: param,
+    });
+    res.status(200).json({ smallcates: result });
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  async getSmallCatesByYearAndMonth(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Query('year') year: number,
+    @Query('month') month: number,
+  ) {
+    const result = await this.smallCatesService.getSmallCatesByYearAndMonth({
+      year,
+      month,
+      userId: req.user.id,
     });
     res.status(200).json({ smallcates: result });
     return;

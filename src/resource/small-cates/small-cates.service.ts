@@ -44,4 +44,24 @@ export class SmallCatesService {
   async getSmallCateById({ smallCateId }) {
     return await this.smallCatesRepository.findOne({ id: smallCateId });
   }
+
+  async getSmallCatesByYearAndMonth({ year, month, userId }) {
+    const fromDate = new Date(year, month - 1, 1);
+    const toDate = new Date(year, month, 0);
+
+    return await this.smallCatesRepository.find({
+      where: `startedAt <= '${toDate.toISOString()}' AND endedAt >= '${fromDate.toISOString()}' AND userId = ${userId}`,
+    });
+
+    // const smallCates = await this.smallCatesRepository.find({
+    //   relations: ['user'],
+    // });
+
+    // return smallCates.filter(
+    //   (smallCate) =>
+    //     smallCate.startedAt <= toDate &&
+    //     smallCate.endedAt >= fromDate &&
+    //     smallCate.user.id === userId,
+    // );
+  }
 }
