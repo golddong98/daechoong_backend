@@ -24,9 +24,29 @@ export class MediumCatesController {
     private readonly usersService: UsersService,
   ) {}
 
-  @Get()
-  getMediumCates(): string {
-    return this.mediumCatesService.getMediumCates();
+  // @Get()
+  // getMediumCates(): string {
+  //   return this.mediumCatesService.getMediumCates();
+  // }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get(':largeCateId')
+  async getMediumCateByLargeCateId(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('largeCateId', ParseIntPipe) param: number,
+    // @Body() mediumCateCreateDTO: MediumCateCreateDTO,
+  ) {
+    await this.usersService.checkPermissionLargeCate({
+      userId: req.user.id,
+      largeCateId: param,
+    });
+
+    const result = await this.mediumCatesService.getMediumCateByLargeCateId({
+      param,
+    });
+    res.status(200).json({ mediumCates: result });
+    return;
   }
 
   @UseGuards(AuthGuard('jwt'))

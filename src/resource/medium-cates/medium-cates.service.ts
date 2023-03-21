@@ -16,6 +16,14 @@ export class MediumCatesService {
     return 'Hello mediumCates!';
   }
 
+  async getMediumCateByLargeCateId({ param }) {
+    return await this.mediumCatesRepository.find({
+      where: {
+        largeCate: param,
+      },
+    });
+  }
+
   async createMediumCates({ param, mediumCateCreateDTO, user }) {
     const largeCate = await this.largeCatesService.getLargeCateById(param);
     const mediumCate = this.mediumCatesRepository.create({
