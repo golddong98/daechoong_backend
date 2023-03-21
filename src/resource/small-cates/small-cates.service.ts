@@ -64,4 +64,13 @@ export class SmallCatesService {
     //     smallCate.user.id === userId,
     // );
   }
+
+  async getSmallCatesByMediumCateId({ id: mediumCateId }) {
+    return await this.smallCatesRepository.find({
+      select: ['id', 'name'],
+      where: {
+        mediumCate: mediumCateId,
+      },
+    });
+  }
 }

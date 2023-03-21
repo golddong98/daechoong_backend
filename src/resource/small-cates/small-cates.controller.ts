@@ -109,7 +109,7 @@ export class SmallCatesController {
       userId: req.user.id,
       mediumCateId: param,
     });
-    const result = await this.mediumCatesService.getSmallCatesByMediumCateId({
+    const result = await this.smallCatesService.getSmallCatesByMediumCateId({
       id: param,
     });
     res.status(200).json({ smallcates: result });
