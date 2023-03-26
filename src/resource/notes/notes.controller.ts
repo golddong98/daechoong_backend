@@ -72,11 +72,13 @@ export class NotesController {
       largeCate: confirmedLargeCate,
     });
 
-    await this.filesService.uploadFiles({
-      note: newNote.generatedMaps[0],
-      user: confirmedUser,
-      files,
-    });
+    if (files.length > 0) {
+      await this.filesService.uploadFiles({
+        note: newNote.generatedMaps[0],
+        user: confirmedUser,
+        files,
+      });
+    }
 
     res.status(200).send();
     return;
