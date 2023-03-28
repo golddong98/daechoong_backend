@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SmallCate } from 'src/database/entities/small-cates.entity';
 import { Repository } from 'typeorm';
@@ -14,6 +14,24 @@ export class SmallCatesService {
 
   getSmallCates(): string {
     return 'Hello smallCates!';
+  }
+
+  async checkPermissionSmallCate({ userId, smallCateId }) {
+    try {
+      const confirmedSmallCate = await this.smallCatesRepository.findOne({
+        relations: ['mediumCate', 'largeCate'],
+        where: {
+          id: smallCateId,
+          user: userId,
+        },
+      });
+      if (!confirmedSmallCate) {
+        throw new Error();
+      }
+      return { confirmedSmallCate };
+    } catch (error) {
+      throw new BadRequestException('소분류를 변경할 권한이 없습니다.');
+    }
   }
 
   async createSmallCates({ mediumCateId, smallCateCreateDTO, user }) {

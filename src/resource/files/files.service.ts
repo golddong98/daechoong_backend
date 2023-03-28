@@ -10,7 +10,7 @@ export class FilesService {
     private filesRepository: Repository<File>,
   ) {}
 
-  async uploadFiles({ user, note, files }) {
+  async uploadFiles({ userId, noteId, files }) {
     for (const element of files) {
       const file = this.filesRepository.create({
         originalName: element.originalname,
@@ -18,8 +18,8 @@ export class FilesService {
         mimeType: element.mimetype,
         size: element.size,
         fileUrl: element.location,
-        user,
-        note,
+        user: userId,
+        note: noteId,
       });
 
       await this.filesRepository.insert(file);

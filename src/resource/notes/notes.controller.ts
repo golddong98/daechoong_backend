@@ -50,32 +50,24 @@ export class NotesController {
     files: Express.MulterS3.File[],
   ) {
     // 다 긁어 오는거 잘못 된듯
-    const { confirmedUser, confirmedSmallCate } =
-      await this.usersService.checkPermissionSmallCate({
+    const { confirmedSmallCate } =
+      await this.smallCatesService.checkPermissionSmallCate({
         userId: req.user.id,
         smallCateId: param,
       });
 
-    const confirmedMediumCate = await this.smallCatesService.getSmallCateById({
-      smallCateId: confirmedSmallCate.id,
-    });
-
-    const confirmedLargeCate = await this.mediumCatesService.getMediumCateById({
-      mediumCateId: confirmedMediumCate.id,
-    });
-
     const newNote = await this.notesService.createNote({
       content: createNoteBodyDTO.content,
-      user: confirmedUser,
-      smallCate: confirmedSmallCate,
-      mediumCate: confirmedMediumCate,
-      largeCate: confirmedLargeCate,
+      userId: req.user.id,
+      smallCateId: param,
+      mediumCateId: confirmedSmallCate.mediumCate.id,
+      largeCateId: confirmedSmallCate.largeCate.id,
     });
 
-    if (files.length > 0) {
+    if (files && files.length > 0) {
       await this.filesService.uploadFiles({
-        note: newNote.generatedMaps[0],
-        user: confirmedUser,
+        noteId: newNote.id,
+        userId: req.user.id,
         files,
       });
     }
@@ -125,8 +117,8 @@ export class NotesController {
       });
 
     await this.filesService.uploadFiles({
-      user: confirmedUser,
-      note: confirmedNote,
+      userId: req.user.id,
+      noteId: confirmedNote.id,
       files,
     });
     res.status(200).send();
