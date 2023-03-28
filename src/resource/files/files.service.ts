@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { File } from 'src/database/entities/files.entity';
@@ -9,6 +9,21 @@ export class FilesService {
     @InjectRepository(File)
     private filesRepository: Repository<File>,
   ) {}
+
+  async checkPermissionFile({ userId, fileId }) {
+    try {
+      const confirmedFile = await this.filesRepository.findOne({
+        where: { id: fileId, user: userId },
+      });
+
+      if (!confirmedFile) {
+        throw new Error();
+      }
+      return { confirmedFile };
+    } catch (error) {
+      throw new BadRequestException('파일을 변경할 권한이 없습니다.');
+    }
+  }
 
   async uploadFiles({ userId, noteId, files }) {
     for (const element of files) {

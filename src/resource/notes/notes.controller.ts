@@ -131,7 +131,7 @@ export class NotesController {
     @Res() res: Response,
     @Param('fileId', ParseIntPipe) param: number,
   ) {
-    await this.usersService.checkPermissionFile({
+    await this.filesService.checkPermissionFile({
       userId: req.user.id,
       fileId: param,
     });
