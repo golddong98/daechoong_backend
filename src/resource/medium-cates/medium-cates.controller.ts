@@ -79,7 +79,7 @@ export class MediumCatesController {
     @Param('mediumCateId', ParseIntPipe) param: number,
     @Body() mediumCateCreateDTO: MediumCateCreateDTO,
   ) {
-    await this.usersService.checkPermissionMediumCate({
+    await this.mediumCatesService.checkPermissionMediumCate({
       userId: req.user.id,
       mediumCateId: param,
     });
@@ -99,7 +99,7 @@ export class MediumCatesController {
     @Res() res: Response,
     @Param('mediumCateId', ParseIntPipe) param: number,
   ) {
-    await this.usersService.checkPermissionMediumCate({
+    await this.mediumCatesService.checkPermissionMediumCate({
       userId: req.user.id,
       mediumCateId: param,
     });

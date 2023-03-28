@@ -98,27 +98,27 @@ export class UsersService {
     }
   }
 
-  async checkPermissionMediumCate({ userId, mediumCateId }) {
-    try {
-      const confirmedUser = await this.usersRepository.findOne({
-        id: userId,
-      });
+  // async checkPermissionMediumCate({ userId, mediumCateId }) {
+  //   try {
+  //     const confirmedUser = await this.usersRepository.findOne({
+  //       id: userId,
+  //     });
 
-      const mediumCatesFromUser = await confirmedUser.mediumCates;
+  //     const mediumCatesFromUser = await confirmedUser.mediumCates;
 
-      const confirmedMediumCate = mediumCatesFromUser.find((el) => {
-        if (mediumCateId === el.id) {
-          return el;
-        }
-      });
-      if (!confirmedMediumCate) {
-        throw new Error();
-      }
-      return { confirmedUser, confirmedMediumCate };
-    } catch (error) {
-      throw new BadRequestException('중분류를 변경할 권한이 없습니다.');
-    }
-  }
+  //     const confirmedMediumCate = mediumCatesFromUser.find((el) => {
+  //       if (mediumCateId === el.id) {
+  //         return el;
+  //       }
+  //     });
+  //     if (!confirmedMediumCate) {
+  //       throw new Error();
+  //     }
+  //     return { confirmedUser, confirmedMediumCate };
+  //   } catch (error) {
+  //     throw new BadRequestException('중분류를 변경할 권한이 없습니다.');
+  //   }
+  // }
 
   // async checkPermissionSmallCate({ userId, smallCateId }) {
   //   try {

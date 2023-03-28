@@ -16,6 +16,21 @@ export class MediumCatesService {
     return 'Hello mediumCates!';
   }
 
+  async checkPermissionMediumCate({ userId, mediumCateId }) {
+    try {
+      const confirmedMediumCate = await this.mediumCatesRepository.findOne({
+        where: { id: mediumCateId, user: userId },
+      });
+
+      if (!confirmedMediumCate) {
+        throw new Error();
+      }
+      return { confirmedMediumCate };
+    } catch (error) {
+      throw new BadRequestException('중분류를 변경할 권한이 없습니다.');
+    }
+  }
+
   async getMediumCateByLargeCateId({ param }) {
     return await this.mediumCatesRepository.find({
       where: {

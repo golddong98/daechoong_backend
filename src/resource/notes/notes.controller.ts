@@ -211,7 +211,7 @@ export class NotesController {
     @Res() res: Response,
     @Param('mediumCateId', ParseIntPipe) param: number,
   ) {
-    await this.usersService.checkPermissionMediumCate({
+    await this.mediumCatesService.checkPermissionMediumCate({
       userId: req.user.id,
       mediumCateId: param,
     });
@@ -231,7 +231,7 @@ export class NotesController {
     @Res() res: Response,
     @Param('mediumCateId', ParseIntPipe) param: number,
   ) {
-    await this.usersService.checkPermissionMediumCate({
+    await this.mediumCatesService.checkPermissionMediumCate({
       userId: req.user.id,
       mediumCateId: param,
     });

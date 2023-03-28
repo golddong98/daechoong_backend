@@ -41,17 +41,15 @@ export class SmallCatesController {
     @Param('mediumCateId', ParseIntPipe) param: number,
     @Body() smallCateCreateDTO: SmallCateCreateDTO,
   ) {
-    const { confirmedUser } = await this.usersService.checkPermissionMediumCate(
-      {
-        userId: req.user.id,
-        mediumCateId: param,
-      },
-    );
+    await this.mediumCatesService.checkPermissionMediumCate({
+      userId: req.user.id,
+      mediumCateId: param,
+    });
 
     await this.smallCatesService.createSmallCates({
       mediumCateId: param,
       smallCateCreateDTO,
-      user: confirmedUser,
+      userId: req.user.id,
     });
     res.status(200).send();
     return;
@@ -105,7 +103,7 @@ export class SmallCatesController {
     @Res() res: Response,
     @Param('mediumCateId', ParseIntPipe) param: number,
   ) {
-    await this.usersService.checkPermissionMediumCate({
+    await this.mediumCatesService.checkPermissionMediumCate({
       userId: req.user.id,
       mediumCateId: param,
     });
