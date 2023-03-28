@@ -160,27 +160,27 @@ export class UsersService {
   //   }
   // }
 
-  async checkPermissionFile({ userId, fileId }) {
-    try {
-      const confirmedUser = await this.usersRepository.findOne({
-        id: userId,
-      });
+  // async checkPermissionFile({ userId, fileId }) {
+  //   try {
+  //     const confirmedUser = await this.usersRepository.findOne({
+  //       id: userId,
+  //     });
 
-      const filesFromUser = await confirmedUser.files;
+  //     const filesFromUser = await confirmedUser.files;
 
-      const confirmedFile = filesFromUser.find((el) => {
-        if (fileId === el.id) {
-          return el;
-        }
-      });
-      if (!confirmedFile) {
-        throw new Error();
-      }
-      return { confirmedUser, confirmedFile };
-    } catch (error) {
-      throw new BadRequestException('파일을 변경할 권한이 없습니다.');
-    }
-  }
+  //     const confirmedFile = filesFromUser.find((el) => {
+  //       if (fileId === el.id) {
+  //         return el;
+  //       }
+  //     });
+  //     if (!confirmedFile) {
+  //       throw new Error();
+  //     }
+  //     return { confirmedUser, confirmedFile };
+  //   } catch (error) {
+  //     throw new BadRequestException('파일을 변경할 권한이 없습니다.');
+  //   }
+  // }
 
   async getUser({ userId }) {
     return await this.usersRepository.findOne({ id: userId });
