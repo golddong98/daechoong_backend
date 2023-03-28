@@ -252,7 +252,7 @@ export class NotesController {
     @Res() res: Response,
     @Param('smallCateId', ParseIntPipe) param: number,
   ) {
-    await this.usersService.checkPermissionSmallCate({
+    await this.smallCatesService.checkPermissionSmallCate({
       userId: req.user.id,
       smallCateId: param,
     });
@@ -271,7 +271,7 @@ export class NotesController {
     @Res() res: Response,
     @Param('smallCateId', ParseIntPipe) param: number,
   ) {
-    await this.usersService.checkPermissionSmallCate({
+    await this.smallCatesService.checkPermissionSmallCate({
       userId: req.user.id,
       smallCateId: param,
     });

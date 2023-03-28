@@ -120,23 +120,23 @@ export class UsersService {
     }
   }
 
-  async checkPermissionSmallCate({ userId, smallCateId }) {
-    try {
-      const confirmedUser = await this.usersRepository.findOne(userId);
-      const smallCatesFromUser = await confirmedUser.smallCates;
-      const confirmedSmallCate = smallCatesFromUser.find((el) => {
-        if (smallCateId === el.id) {
-          return el;
-        }
-      });
-      if (!confirmedSmallCate) {
-        throw new Error();
-      }
-      return { confirmedUser, confirmedSmallCate };
-    } catch (error) {
-      throw new BadRequestException('소분류를 변경할 권한이 없습니다.');
-    }
-  }
+  // async checkPermissionSmallCate({ userId, smallCateId }) {
+  //   try {
+  //     const confirmedUser = await this.usersRepository.findOne(userId);
+  //     const smallCatesFromUser = await confirmedUser.smallCates;
+  //     const confirmedSmallCate = smallCatesFromUser.find((el) => {
+  //       if (smallCateId === el.id) {
+  //         return el;
+  //       }
+  //     });
+  //     if (!confirmedSmallCate) {
+  //       throw new Error();
+  //     }
+  //     return { confirmedUser, confirmedSmallCate };
+  //   } catch (error) {
+  //     throw new BadRequestException('소분류를 변경할 권한이 없습니다.');
+  //   }
+  // }
 
   async checkPermissionNotes({ userId, noteId }) {
     try {
