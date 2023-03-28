@@ -138,27 +138,27 @@ export class UsersService {
   //   }
   // }
 
-  async checkPermissionNotes({ userId, noteId }) {
-    try {
-      const confirmedUser = await this.usersRepository.findOne({
-        id: userId,
-      });
+  // async checkPermissionNotes({ userId, noteId }) {
+  //   try {
+  //     const confirmedUser = await this.usersRepository.findOne({
+  //       id: userId,
+  //     });
 
-      const notesFromUser = await confirmedUser.notes;
+  //     const notesFromUser = await confirmedUser.notes;
 
-      const confirmedNote = notesFromUser.find((el) => {
-        if (noteId === el.id) {
-          return el;
-        }
-      });
-      if (!confirmedNote) {
-        throw new Error();
-      }
-      return { confirmedUser, confirmedNote };
-    } catch (error) {
-      throw new BadRequestException('노트의 글을 변경할 권한이 없습니다.');
-    }
-  }
+  //     const confirmedNote = notesFromUser.find((el) => {
+  //       if (noteId === el.id) {
+  //         return el;
+  //       }
+  //     });
+  //     if (!confirmedNote) {
+  //       throw new Error();
+  //     }
+  //     return { confirmedUser, confirmedNote };
+  //   } catch (error) {
+  //     throw new BadRequestException('노트의 글을 변경할 권한이 없습니다.');
+  //   }
+  // }
 
   async checkPermissionFile({ userId, fileId }) {
     try {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Note } from '../../database/entities/notes.entity';
@@ -17,6 +17,39 @@ export class NotesService {
   getNotes(): string {
     return 'Hello Notes!';
   }
+
+  async checkPermissionNotes({ userId, noteId }) {
+    try {
+      const confirmedNote = await this.notesRepository.findOne({
+        relations: [],
+        where: { id: noteId, user: userId },
+      });
+
+      if (!confirmedNote) {
+        throw new Error();
+      }
+      return { confirmedNote };
+    } catch (error) {
+      throw new BadRequestException('노트의 글을 변경할 권한이 없습니다.');
+    }
+  }
+  // async checkPermissionSmallCate({ userId, smallCateId }) {
+  //   try {
+  //     const confirmedSmallCate = await this.smallCatesRepository.findOne({
+  //       relations: ['mediumCate', 'largeCate'],
+  //       where: {
+  //         id: smallCateId,
+  //         user: userId,
+  //       },
+  //     });
+  //     if (!confirmedSmallCate) {
+  //       throw new Error();
+  //     }
+  //     return { confirmedSmallCate };
+  //   } catch (error) {
+  //     throw new BadRequestException('소분류를 변경할 권한이 없습니다.');
+  //   }
+  // }
 
   // createNoteDTO type만들기, return type만들기,
   async createNote({

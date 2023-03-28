@@ -87,7 +87,7 @@ export class NotesController {
     @Param('noteId', ParseIntPipe) param: number,
     @Body() updateNoteBodyDTO: CreateNoteBodyDTO,
   ) {
-    await this.usersService.checkPermissionNotes({
+    await this.notesService.checkPermissionNotes({
       userId: req.user.id,
       noteId: param,
     });
@@ -110,11 +110,10 @@ export class NotesController {
     @UploadedFiles()
     files: Express.MulterS3.File[],
   ) {
-    const { confirmedUser, confirmedNote } =
-      await this.usersService.checkPermissionNotes({
-        userId: req.user.id,
-        noteId: param,
-      });
+    const { confirmedNote } = await this.notesService.checkPermissionNotes({
+      userId: req.user.id,
+      noteId: param,
+    });
 
     await this.filesService.uploadFiles({
       userId: req.user.id,
@@ -152,7 +151,7 @@ export class NotesController {
     @Res() res: Response,
     @Param('noteId', ParseIntPipe) param: number,
   ) {
-    await this.usersService.checkPermissionNotes({
+    await this.notesService.checkPermissionNotes({
       userId: req.user.id,
       noteId: param,
     });
