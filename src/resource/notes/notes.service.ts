@@ -21,7 +21,7 @@ export class NotesService {
   async checkPermissionNotes({ userId, noteId }) {
     try {
       const confirmedNote = await this.notesRepository.findOne({
-        relations: [],
+        relations: ['files'],
         where: { id: noteId, user: userId },
       });
 
@@ -33,23 +33,21 @@ export class NotesService {
       throw new BadRequestException('노트의 글을 변경할 권한이 없습니다.');
     }
   }
-  // async checkPermissionSmallCate({ userId, smallCateId }) {
-  //   try {
-  //     const confirmedSmallCate = await this.smallCatesRepository.findOne({
-  //       relations: ['mediumCate', 'largeCate'],
-  //       where: {
-  //         id: smallCateId,
-  //         user: userId,
-  //       },
-  //     });
-  //     if (!confirmedSmallCate) {
-  //       throw new Error();
-  //     }
-  //     return { confirmedSmallCate };
-  //   } catch (error) {
-  //     throw new BadRequestException('소분류를 변경할 권한이 없습니다.');
-  //   }
-  // }
+
+  async getAllNotes({ userId }) {
+    try {
+      const confirmedNotes = await this.notesRepository.find({
+        relations: ['files'],
+        where: { user: userId },
+        order: {
+          updatedAt: 'DESC',
+        },
+      });
+      return confirmedNotes;
+    } catch (error) {
+      throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
+    }
+  }
 
   // createNoteDTO type만들기, return type만들기,
   async createNote({

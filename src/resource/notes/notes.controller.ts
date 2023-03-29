@@ -41,6 +41,14 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Get('main')
+  async getAllNotes(@Req() req: Request, @Res() res: Response) {
+    const result = await this.notesService.getAllNotes({ userId: req.user.id });
+    res.status(200).json({ notes: result });
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Post(':smallCateId')
   @UseInterceptors(FilesInterceptor('file', 10))
   async uploadNote(
@@ -76,9 +84,6 @@ export class NotesController {
 
     res.status(200).send();
     return;
-  }
-  catch(error) {
-    console.log(error);
   }
 
   @UseGuards(AuthGuard('jwt'))
