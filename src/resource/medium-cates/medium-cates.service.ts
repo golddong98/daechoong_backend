@@ -39,14 +39,14 @@ export class MediumCatesService {
     });
   }
 
-  async createMediumCates({ param, mediumCateCreateDTO, user }) {
-    const largeCate = await this.largeCatesService.getLargeCateById(param);
+  async createMediumCates({ param, mediumCateCreateDTO, userId }) {
     const mediumCate = this.mediumCatesRepository.create({
       name: mediumCateCreateDTO.mediumCateName,
-      user,
-      largeCate,
+      user: userId,
+      largeCate: param,
     });
-    return await this.mediumCatesRepository.insert(mediumCate);
+    await this.mediumCatesRepository.insert(mediumCate);
+    return mediumCate;
   }
 
   async updateMediumCates({ param, mediumCateCreateDTO }) {

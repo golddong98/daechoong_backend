@@ -31,31 +31,34 @@ export class AuthService {
       const subjectLargeCate =
         await this.largeCatesService.createLargeCatesAuto({
           name: '교과',
-          user,
+          userId: user.id,
         });
       await this.largeCatesService.createLargeCatesAuto({
         name: '비교과',
-        user,
+        userId: user.id,
       });
-      await this.largeCatesService.createLargeCatesAuto({ name: '기타', user });
+      await this.largeCatesService.createLargeCatesAuto({
+        name: '기타',
+        userId: user.id,
+      });
 
       // 3-2. 회원가입 후 바로 그 유저의 '교과'에 MediumCate를 3개 만들어줌
       await this.mediumCatesService.createMediumCates({
-        param: subjectLargeCate.generatedMaps[0].id,
+        param: subjectLargeCate.id,
         mediumCateCreateDTO: { mediumCateName: '2022년 1학기' },
-        user,
+        userId: user.id,
       });
 
       await this.mediumCatesService.createMediumCates({
-        param: subjectLargeCate.generatedMaps[0].id,
+        param: subjectLargeCate.id,
         mediumCateCreateDTO: { mediumCateName: '2022년 2학기' },
-        user,
+        userId: user.id,
       });
 
       await this.mediumCatesService.createMediumCates({
-        param: subjectLargeCate.generatedMaps[0].id,
+        param: subjectLargeCate.id,
         mediumCateCreateDTO: { mediumCateName: '2023년 1학기' },
-        user,
+        userId: user.id,
       });
     }
 

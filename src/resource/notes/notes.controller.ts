@@ -22,6 +22,7 @@ import { UsersService } from '../users/users.service';
 import { FilesService } from '../files/files.service';
 import { SmallCatesService } from '../small-cates/small-cates.service';
 import { MediumCatesService } from '../medium-cates/medium-cates.service';
+import { LargeCatesService } from '../large-cates/large-cates.service';
 
 @Controller('notes')
 export class NotesController {
@@ -31,6 +32,7 @@ export class NotesController {
     private readonly filesService: FilesService,
     private readonly smallCatesService: SmallCatesService,
     private readonly mediumCatesService: MediumCatesService,
+    private readonly largeCatesService: LargeCatesService,
   ) {}
 
   @Get()
@@ -171,7 +173,7 @@ export class NotesController {
     @Res() res: Response,
     @Param('largeCateId', ParseIntPipe) param: number,
   ) {
-    await this.usersService.checkPermissionLargeCate({
+    await this.largeCatesService.checkPermissionLargeCate({
       userId: req.user.id,
       largeCateId: param,
     });
@@ -191,7 +193,7 @@ export class NotesController {
     @Res() res: Response,
     @Param('largeCateId', ParseIntPipe) param: number,
   ) {
-    await this.usersService.checkPermissionLargeCate({
+    await this.largeCatesService.checkPermissionLargeCate({
       userId: req.user.id,
       largeCateId: param,
     });

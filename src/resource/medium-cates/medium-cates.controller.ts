@@ -16,12 +16,14 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { MediumCateCreateDTO } from './dtos/medium-cate-create.dto';
 import { UsersService } from '../users/users.service';
+import { LargeCatesService } from '../large-cates/large-cates.service';
 
 @Controller('medium-cates')
 export class MediumCatesController {
   constructor(
     private readonly mediumCatesService: MediumCatesService,
     private readonly usersService: UsersService,
+    private readonly largeCatesService: LargeCatesService,
   ) {}
 
   // @Get()
@@ -37,7 +39,7 @@ export class MediumCatesController {
     @Param('largeCateId', ParseIntPipe) param: number,
     // @Body() mediumCateCreateDTO: MediumCateCreateDTO,
   ) {
-    await this.usersService.checkPermissionLargeCate({
+    await this.largeCatesService.checkPermissionLargeCate({
       userId: req.user.id,
       largeCateId: param,
     });
@@ -57,7 +59,7 @@ export class MediumCatesController {
     @Param('largeCateId', ParseIntPipe) param: number,
     @Body() mediumCateCreateDTO: MediumCateCreateDTO,
   ) {
-    const { confirmedUser } = await this.usersService.checkPermissionLargeCate({
+    await this.largeCatesService.checkPermissionLargeCate({
       userId: req.user.id,
       largeCateId: param,
     });
@@ -65,7 +67,7 @@ export class MediumCatesController {
     await this.mediumCatesService.createMediumCates({
       param,
       mediumCateCreateDTO,
-      user: confirmedUser,
+      userId: req.user.id,
     });
     res.status(200).send();
     return;

@@ -10,6 +10,22 @@ export class LargeCatesService {
     private readonly largeCatesRepository: Repository<LargeCate>,
   ) {}
 
+  async checkPermissionLargeCate({ userId, largeCateId }) {
+    try {
+      const confirmedLargeCate = await this.largeCatesRepository.findOne({
+        where: { id: largeCateId, user: userId },
+      });
+
+      if (!confirmedLargeCate) {
+        throw new Error();
+      }
+
+      return { confirmedLargeCate };
+    } catch (error) {
+      throw new BadRequestException('대분류에 항목을 변경할 권한이 없습니다.');
+    }
+  }
+
   async getLargeCates({ userId }) {
     return await this.largeCatesRepository.find({
       relations: ['mediumCates'],
@@ -24,15 +40,16 @@ export class LargeCatesService {
     });
   }
 
-  async createLargeCatesAuto({ name, user }) {
+  async createLargeCatesAuto({ name, userId }) {
     const largeCate = this.largeCatesRepository.create({
       name,
-      user,
+      user: userId,
     });
-    return await this.largeCatesRepository.insert(largeCate);
+    await this.largeCatesRepository.insert(largeCate);
+    return largeCate;
   }
 
-  async getLargeCateById(id: number) {
+  async getLargeCateById({ id }) {
     try {
       const largeCate = await this.largeCatesRepository.findOne({ id });
       if (!largeCate) throw new Error();
