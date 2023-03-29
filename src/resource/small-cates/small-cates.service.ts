@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { range } from 'src/common/utils/functions';
 import { SmallCate } from 'src/database/entities/small-cates.entity';
 import { Repository } from 'typeorm';
 import { MediumCatesService } from '../medium-cates/medium-cates.service';
@@ -87,5 +88,33 @@ export class SmallCatesService {
         mediumCate: mediumCateId,
       },
     });
+  }
+
+  async getAllSmallCatesByYear({ userId }) {
+    const smallCates = await this.smallCatesRepository.find({
+      where: {
+        user: userId,
+      },
+    });
+
+    const smallCatesByYear: { [key: number]: SmallCate[] } = {};
+
+    for (const smallCate of smallCates) {
+      const startedAtYear = smallCate.startedAt.getFullYear();
+      const endedAtYear = smallCate.endedAt
+        ? smallCate.endedAt.getFullYear()
+        : new Date().getFullYear();
+
+      const years = range(startedAtYear, endedAtYear);
+
+      years.forEach((year) => {
+        if (!smallCatesByYear[year]) {
+          smallCatesByYear[year] = [];
+        }
+        smallCatesByYear[year].push(smallCate);
+      });
+    }
+
+    return smallCatesByYear;
   }
 }

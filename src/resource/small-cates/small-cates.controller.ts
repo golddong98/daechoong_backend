@@ -97,7 +97,7 @@ export class SmallCatesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get(':mediumCateId')
+  @Get('medium-cate-id/:mediumCateId')
   async getSmallCatesByMediumCateId(
     @Req() req: Request,
     @Res() res: Response,
@@ -125,6 +125,16 @@ export class SmallCatesController {
     const result = await this.smallCatesService.getSmallCatesByYearAndMonth({
       year,
       month,
+      userId: req.user.id,
+    });
+    res.status(200).json({ smallcates: result });
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('by-year')
+  async getAllSmallCatesByYear(@Req() req: Request, @Res() res: Response) {
+    const result = await this.smallCatesService.getAllSmallCatesByYear({
       userId: req.user.id,
     });
     res.status(200).json({ smallcates: result });
