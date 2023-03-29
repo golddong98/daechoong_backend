@@ -32,7 +32,7 @@ export class MediumCatesController {
   // }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get(':largeCateId')
+  @Get('large-cate-id/:largeCateId')
   async getMediumCateByLargeCateId(
     @Req() req: Request,
     @Res() res: Response,
@@ -52,7 +52,7 @@ export class MediumCatesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Post(':largeCateId')
+  @Post('large-cate-id/:largeCateId')
   async createMediumCate(
     @Req() req: Request,
     @Res() res: Response,
@@ -74,7 +74,7 @@ export class MediumCatesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Put(':mediumCateId')
+  @Put('medium-cate-id/:mediumCateId')
   async updateMediumCate(
     @Req() req: Request,
     @Res() res: Response,
@@ -95,7 +95,7 @@ export class MediumCatesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Delete(':mediumCateId')
+  @Delete('medium-cate-id/:mediumCateId')
   async deleteMediumCate(
     @Req() req: Request,
     @Res() res: Response,

@@ -49,7 +49,7 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Post(':smallCateId')
+  @Post('small-cate-id/:smallCateId')
   @UseInterceptors(FilesInterceptor('file', 10))
   async uploadNote(
     @Req() req: Request,
@@ -152,7 +152,7 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Delete(':noteId')
+  @Delete('note-id/:noteId')
   async deleteNote(
     @Req() req: Request,
     @Res() res: Response,
@@ -172,7 +172,7 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('wrt/large-cate/:largeCateId')
+  @Get('wrt/large-cate-id/:largeCateId')
   async getNotesInLargeCateByCreatedAt(
     @Req() req: Request,
     @Res() res: Response,
@@ -192,7 +192,7 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('mod/large-cate/:largeCateId')
+  @Get('mod/large-cate-id/:largeCateId')
   async getNotesInLargeCateByUpdatedAt(
     @Req() req: Request,
     @Res() res: Response,

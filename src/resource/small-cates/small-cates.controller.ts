@@ -34,7 +34,7 @@ export class SmallCatesController {
   // }
 
   @UseGuards(AuthGuard('jwt'))
-  @Post(':mediumCateId')
+  @Post('medium-cate-id/:mediumCateId')
   async createSmallCate(
     @Req() req: Request,
     @Res() res: Response,
@@ -56,7 +56,7 @@ export class SmallCatesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Put(':smallCateId')
+  @Put('small-cate-id/:smallCateId')
   async updateSmallCate(
     @Req() req: Request,
     @Res() res: Response,
@@ -77,7 +77,7 @@ export class SmallCatesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Delete(':smallCateId')
+  @Delete('small-cate-id/:smallCateId')
   async deleteSmallCate(
     @Req() req: Request,
     @Res() res: Response,
