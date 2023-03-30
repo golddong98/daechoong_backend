@@ -35,13 +35,19 @@ export class SmallCatesService {
     }
   }
 
-  async createSmallCates({ mediumCateId, smallCateCreateDTO, userId }) {
+  async createSmallCates({
+    largeCateId,
+    mediumCateId,
+    smallCateCreateDTO,
+    userId,
+  }) {
     const smallCate = this.smallCatesRepository.create({
       name: smallCateCreateDTO.smallCateName,
       startedAt: smallCateCreateDTO.startedAt,
       endedAt: smallCateCreateDTO.endedAt,
       user: userId,
       mediumCate: mediumCateId,
+      largeCate: largeCateId,
     });
     return await this.smallCatesRepository.insert(smallCate);
   }

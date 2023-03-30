@@ -19,6 +19,7 @@ export class MediumCatesService {
   async checkPermissionMediumCate({ userId, mediumCateId }) {
     try {
       const confirmedMediumCate = await this.mediumCatesRepository.findOne({
+        relations: ['largeCate'],
         where: { id: mediumCateId, user: userId },
       });
 

@@ -41,12 +41,14 @@ export class SmallCatesController {
     @Param('mediumCateId', ParseIntPipe) param: number,
     @Body() smallCateCreateDTO: SmallCateCreateDTO,
   ) {
-    await this.mediumCatesService.checkPermissionMediumCate({
-      userId: req.user.id,
-      mediumCateId: param,
-    });
+    const { confirmedMediumCate } =
+      await this.mediumCatesService.checkPermissionMediumCate({
+        userId: req.user.id,
+        mediumCateId: param,
+      });
 
     await this.smallCatesService.createSmallCates({
+      largeCateId: confirmedMediumCate.largeCate.id,
       mediumCateId: param,
       smallCateCreateDTO,
       userId: req.user.id,
