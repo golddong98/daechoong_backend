@@ -37,6 +37,7 @@ export class NotesService {
   async getAllNotes({ userId }) {
     try {
       const confirmedNotes = await this.notesRepository.find({
+        select: ['id', 'content', 'files'],
         relations: ['files'],
         where: { user: userId },
         order: {

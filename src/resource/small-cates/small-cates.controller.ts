@@ -110,7 +110,7 @@ export class SmallCatesController {
     const result = await this.smallCatesService.getSmallCatesByMediumCateId({
       id: param,
     });
-    res.status(200).json({ smallcates: result });
+    res.status(200).json({ smallCates: result });
     return;
   }
 
@@ -127,7 +127,7 @@ export class SmallCatesController {
       month,
       userId: req.user.id,
     });
-    res.status(200).json({ smallcates: result });
+    res.status(200).json({ smallCates: result });
     return;
   }
 
@@ -137,7 +137,7 @@ export class SmallCatesController {
     const result = await this.smallCatesService.getAllSmallCatesByYear({
       userId: req.user.id,
     });
-    res.status(200).json({ smallcates: result });
+    res.status(200).json({ smallCates: result });
     return;
   }
 }

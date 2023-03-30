@@ -65,20 +65,22 @@ export class SmallCatesService {
     const fromDate = new Date(year, month - 1, 1);
     const toDate = new Date(year, month, 0);
 
-    return await this.smallCatesRepository.find({
-      where: `startedAt <= '${toDate.toISOString()}' AND endedAt >= '${fromDate.toISOString()}' AND userId = ${userId}`,
-    });
-
-    // const smallCates = await this.smallCatesRepository.find({
-    //   relations: ['user'],
-    // });
-
-    // return smallCates.filter(
-    //   (smallCate) =>
-    //     smallCate.startedAt <= toDate &&
-    //     smallCate.endedAt >= fromDate &&
-    //     smallCate.user.id === userId,
-    // );
+    return await this.smallCatesRepository
+      .createQueryBuilder('small_cate')
+      .select([
+        'small_cate.id',
+        'small_cate.name',
+        'medium_cate.id',
+        'medium_cate.name',
+        'large_cate.id',
+        'large_cate.name',
+      ])
+      .leftJoin('small_cate.mediumCate', 'medium_cate')
+      .leftJoin('medium_cate.largeCate', 'large_cate')
+      .where(
+        `startedAt <= '${toDate.toISOString()}' AND endedAt >= '${fromDate.toISOString()}' AND small_cate.userId = ${userId}`,
+      )
+      .getMany();
   }
 
   async getSmallCatesByMediumCateId({ id: mediumCateId }) {
@@ -92,13 +94,13 @@ export class SmallCatesService {
 
   async getAllSmallCatesByYear({ userId }) {
     const smallCates = await this.smallCatesRepository.find({
+      select: ['id', 'name', 'startedAt', 'endedAt'],
       where: {
         user: userId,
       },
     });
 
     const smallCatesByYear: { [key: number]: SmallCate[] } = {};
-
     for (const smallCate of smallCates) {
       const startedAtYear = smallCate.startedAt.getFullYear();
       const endedAtYear = smallCate.endedAt
