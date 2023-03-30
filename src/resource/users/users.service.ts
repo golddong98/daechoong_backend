@@ -71,7 +71,20 @@ export class UsersService {
   }
 
   async getUser({ userId }) {
-    return await this.usersRepository.findOne({ id: userId });
+    return await this.usersRepository.findOne({
+      select: [
+        'id',
+        'name',
+        'email',
+        'schoolName',
+        'studentNumber',
+        'major1',
+        'major2',
+        'profileImgUrl',
+        'isActive',
+      ],
+      where: { id: userId },
+    });
   }
 
   async updateUser({ userId, updateDTO }) {

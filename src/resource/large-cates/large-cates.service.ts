@@ -27,17 +27,21 @@ export class LargeCatesService {
   }
 
   async getLargeCates({ userId }) {
-    return await this.largeCatesRepository.find({
-      relations: ['mediumCates'],
-      where: {
-        user: {
-          id: userId,
-        },
-      },
-      order: {
-        id: 'ASC',
-      },
-    });
+    return await this.largeCatesRepository
+      .createQueryBuilder('large_cate')
+      .select([
+        'large_cate.id',
+        'large_cate.name',
+        'medium_cate.id',
+        'medium_cate.name',
+        'small_cate.id',
+        'small_cate.name',
+      ])
+      .leftJoin('large_cate.mediumCates', 'medium_cate')
+      .leftJoin('medium_cate.smallCates', 'small_cate')
+      .where(`large_cate.userId = ${userId}`)
+      .orderBy('large_cate.id', 'ASC')
+      .getMany();
   }
 
   async createLargeCatesAuto({ name, userId }) {

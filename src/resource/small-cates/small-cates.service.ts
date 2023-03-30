@@ -82,7 +82,7 @@ export class SmallCatesService {
         'large_cate.name',
       ])
       .leftJoin('small_cate.mediumCate', 'medium_cate')
-      .leftJoin('medium_cate.largeCate', 'large_cate')
+      .leftJoin('small_cate.largeCate', 'large_cate')
       .where(
         `startedAt <= '${toDate.toISOString()}' AND endedAt >= '${fromDate.toISOString()}' AND small_cate.userId = ${userId}`,
       )

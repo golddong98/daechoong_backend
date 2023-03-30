@@ -212,7 +212,7 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('wrt/medium-cate/:mediumCateId')
+  @Get('wrt/medium-cate-id/:mediumCateId')
   async getNotesInMediumCateByCreatedAt(
     @Req() req: Request,
     @Res() res: Response,
@@ -232,7 +232,7 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('mod/medium-cate/:mediumCateId')
+  @Get('mod/medium-cate-id/:mediumCateId')
   async getNotesInMediumCateByUpdatedAt(
     @Req() req: Request,
     @Res() res: Response,
@@ -252,7 +252,7 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('wrt/small-cate/:smallCateId')
+  @Get('wrt/small-cate-id/:smallCateId')
   async getNotesInSmallCateByCreatedAt(
     @Req() req: Request,
     @Res() res: Response,
@@ -271,7 +271,7 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('mod/small-cate/:smallCateId')
+  @Get('mod/small-cate-id/:smallCateId')
   async getNotesInSmallCateByUpdatedAt(
     @Req() req: Request,
     @Res() res: Response,

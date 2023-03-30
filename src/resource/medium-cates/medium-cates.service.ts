@@ -34,6 +34,7 @@ export class MediumCatesService {
 
   async getMediumCateByLargeCateId({ param }) {
     return await this.mediumCatesRepository.find({
+      select: ['id', 'name'],
       where: {
         largeCate: param,
       },
