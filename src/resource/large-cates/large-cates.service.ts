@@ -34,11 +34,12 @@ export class LargeCatesService {
         'large_cate.name',
         'medium_cate.id',
         'medium_cate.name',
-        'small_cate.id',
-        'small_cate.name',
+        // small cate도 추가적으로 같이 불러오고 싶을 시 주석풀면됨
+        // 'small_cate.id',
+        // 'small_cate.name',
       ])
       .leftJoin('large_cate.mediumCates', 'medium_cate')
-      .leftJoin('medium_cate.smallCates', 'small_cate')
+      // .leftJoin('medium_cate.smallCates', 'small_cate')
       .where(`large_cate.userId = ${userId}`)
       .orderBy('large_cate.id', 'ASC')
       .getMany();
