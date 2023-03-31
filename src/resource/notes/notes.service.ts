@@ -34,7 +34,7 @@ export class NotesService {
     }
   }
 
-  async getAllNotes({ userId }) {
+  async getAllNotesUpdatedAt({ userId }) {
     try {
       return await this.notesRepository
         .createQueryBuilder('note')
@@ -51,6 +51,29 @@ export class NotesService {
         .leftJoin('note.files', 'file')
         .where(`note.userId = ${userId}`)
         .orderBy('note.updatedAt', 'DESC')
+        .getMany();
+    } catch (error) {
+      throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
+    }
+  }
+
+  async getAllNotesByCreatedAt({ userId }) {
+    try {
+      return await this.notesRepository
+        .createQueryBuilder('note')
+        .select([
+          'note.id',
+          'note.content',
+          'file.id',
+          'file.fileUrl',
+          'file.originalName',
+          'file.mimeType',
+          'file.encoding',
+          'file.size',
+        ])
+        .leftJoin('note.files', 'file')
+        .where(`note.userId = ${userId}`)
+        .orderBy('note.createdAt', 'DESC')
         .getMany();
     } catch (error) {
       throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');

@@ -41,9 +41,21 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('main')
-  async getAllNotes(@Req() req: Request, @Res() res: Response) {
-    const result = await this.notesService.getAllNotes({ userId: req.user.id });
+  @Get('mod/main')
+  async getAllNotesUpdatedAt(@Req() req: Request, @Res() res: Response) {
+    const result = await this.notesService.getAllNotesUpdatedAt({
+      userId: req.user.id,
+    });
+    res.status(200).json({ notes: result });
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('wrt/main')
+  async getAllNotesByCreatedAt(@Req() req: Request, @Res() res: Response) {
+    const result = await this.notesService.getAllNotesByCreatedAt({
+      userId: req.user.id,
+    });
     res.status(200).json({ notes: result });
     return;
   }
