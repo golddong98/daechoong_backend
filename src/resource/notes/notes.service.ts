@@ -118,6 +118,7 @@ export class NotesService {
       .select([
         'note.id',
         'note.content',
+        'note.createdAt',
         'file.id',
         'file.fileUrl',
         'file.originalName',
@@ -140,6 +141,7 @@ export class NotesService {
       .select([
         'note.id',
         'note.content',
+        'note.createdAt',
         'file.id',
         'file.fileUrl',
         'file.originalName',
@@ -162,6 +164,7 @@ export class NotesService {
       .select([
         'note.id',
         'note.content',
+        'note.createdAt',
         'file.id',
         'file.fileUrl',
         'file.originalName',
@@ -184,6 +187,7 @@ export class NotesService {
       .select([
         'note.id',
         'note.content',
+        'note.createdAt',
         'file.id',
         'file.fileUrl',
         'file.originalName',
@@ -206,6 +210,7 @@ export class NotesService {
       .select([
         'note.id',
         'note.content',
+        'note.createdAt',
         'file.id',
         'file.fileUrl',
         'file.originalName',
@@ -228,6 +233,7 @@ export class NotesService {
       .select([
         'note.id',
         'note.content',
+        'note.createdAt',
         'file.id',
         'file.fileUrl',
         'file.originalName',
