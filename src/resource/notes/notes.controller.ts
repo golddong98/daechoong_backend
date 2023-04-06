@@ -111,11 +111,11 @@ export class NotesController {
       noteId: param,
     });
 
-    await this.notesService.updateContentInNote({
+    const result = await this.notesService.updateContentInNote({
       noteId: param,
       updateNoteBodyDTO,
     });
-    res.status(200).send();
+    res.status(200).json({ note: result });
     return;
   }
 
@@ -134,12 +134,12 @@ export class NotesController {
       noteId: param,
     });
 
-    await this.filesService.uploadFiles({
+    const result = await this.filesService.uploadFiles({
       userId: req.user.id,
       noteId: confirmedNote.id,
       files,
     });
-    res.status(200).send();
+    res.status(200).json({ note: result });
     return;
   }
 

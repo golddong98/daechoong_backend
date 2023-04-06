@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MediumCate } from 'src/database/entities/medium-cates.entity';
 import { Repository } from 'typeorm';
@@ -55,7 +59,18 @@ export class MediumCatesService {
     const mediumCate = this.mediumCatesRepository.create({
       name: mediumCateCreateDTO.mediumCateName,
     });
-    return await this.mediumCatesRepository.update(param, mediumCate);
+    const updateResult = await this.mediumCatesRepository.update(
+      param,
+      mediumCate,
+    );
+    if (updateResult.affected > 0) {
+      return this.mediumCatesRepository.findOne({
+        select: ['id', 'name'],
+        where: { id: param },
+      });
+    } else {
+      throw new NotFoundException(`중분류 수정 중 오류가 났습니다.`);
+    }
   }
 
   async deleteMediumCates({ mediumCateId }) {

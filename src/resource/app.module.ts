@@ -11,6 +11,7 @@ import { LargeCatesModule } from './large-cates/large-cates.module';
 import { CalendarsModule } from './calendars/calendars.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AuthModule } from './auth/auth.module';
     LargeCatesModule,
     CalendarsModule,
     UsersModule,
+    FilesModule,
     AuthModule,
   ],
   controllers: [AppController],

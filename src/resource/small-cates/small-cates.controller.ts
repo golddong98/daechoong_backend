@@ -70,11 +70,11 @@ export class SmallCatesController {
       smallCateId: param,
     });
 
-    await this.smallCatesService.updateSmallCates({
+    const result = await this.smallCatesService.updateSmallCates({
       smallCateId: param,
       smallCateNameUpdateDTO,
     });
-    res.status(200).send();
+    res.status(200).json({ smallCate: result });
     return;
   }
 

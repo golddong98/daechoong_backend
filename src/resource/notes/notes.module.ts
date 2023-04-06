@@ -28,5 +28,6 @@ import { LargeCatesModule } from '../large-cates/large-cates.module';
   ],
   controllers: [NotesController],
   providers: [NotesService],
+  exports: [NotesService],
 })
 export class NotesModule {}

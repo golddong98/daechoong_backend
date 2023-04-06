@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { range } from 'src/common/utils/functions';
 import { SmallCate } from 'src/database/entities/small-cates.entity';
@@ -56,7 +60,18 @@ export class SmallCatesService {
     const mediumCate = this.smallCatesRepository.create({
       name: smallCateNameUpdateDTO.smallCateName,
     });
-    return await this.smallCatesRepository.update(smallCateId, mediumCate);
+    const updateResult = await this.smallCatesRepository.update(
+      smallCateId,
+      mediumCate,
+    );
+    if (updateResult.affected > 0) {
+      return this.smallCatesRepository.findOne({
+        select: ['id', 'name', 'startedAt', 'endedAt'],
+        where: { id: smallCateId },
+      });
+    } else {
+      throw new NotFoundException(`소분류 수정 중 오류가 났습니다.`);
+    }
   }
 
   async deleteSmallCates({ smallCateId }) {

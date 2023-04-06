@@ -2,12 +2,14 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { File } from 'src/database/entities/files.entity';
+import { NotesService } from '../notes/notes.service';
 
 @Injectable()
 export class FilesService {
   constructor(
     @InjectRepository(File)
     private filesRepository: Repository<File>,
+    private notesService: NotesService,
   ) {}
 
   async checkPermissionFile({ userId, fileId }) {
@@ -26,20 +28,24 @@ export class FilesService {
   }
 
   async uploadFiles({ userId, noteId, files }) {
-    for (const element of files) {
-      const file = this.filesRepository.create({
-        originalName: element.originalname,
-        encoding: element.encoding,
-        mimeType: element.mimetype,
-        size: element.size,
-        fileUrl: element.location,
-        user: userId,
-        note: noteId,
-      });
+    try {
+      for (const element of files) {
+        const file = this.filesRepository.create({
+          originalName: element.originalname,
+          encoding: element.encoding,
+          mimeType: element.mimetype,
+          size: element.size,
+          fileUrl: element.location,
+          user: userId,
+          note: noteId,
+        });
 
-      await this.filesRepository.insert(file);
+        await this.filesRepository.insert(file);
+      }
+      return await this.notesService.getOneNote({ noteId });
+    } catch (error) {
+      return new BadRequestException('파일을 수정 중 오류가 났습니다.');
     }
-    return;
   }
 
   async deleteFileInNote({ fileId }) {

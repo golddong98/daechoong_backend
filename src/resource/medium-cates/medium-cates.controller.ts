@@ -86,11 +86,11 @@ export class MediumCatesController {
       mediumCateId: param,
     });
 
-    await this.mediumCatesService.updateMediumCates({
+    const result = await this.mediumCatesService.updateMediumCates({
       param,
       mediumCateCreateDTO,
     });
-    res.status(200).send();
+    res.status(200).json({ mediumCate: result });
     return;
   }
 

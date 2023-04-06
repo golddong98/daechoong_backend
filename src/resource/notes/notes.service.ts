@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Note } from '../../database/entities/notes.entity';
@@ -101,11 +105,38 @@ export class NotesService {
     return note;
   }
 
+  async getOneNote({ noteId }) {
+    return await this.notesRepository
+      .createQueryBuilder('note')
+      .select([
+        'note.id',
+        'note.content',
+        'note.createdAt',
+        'file.id',
+        'file.fileUrl',
+        'file.originalName',
+        'file.mimeType',
+        'file.encoding',
+        'file.size',
+      ])
+      .leftJoin('note.files', 'file')
+      .where(`note.id = ${noteId}`)
+      .getOne();
+  }
+
   async updateContentInNote({ noteId, updateNoteBodyDTO }) {
     const newContentInNote = this.notesRepository.create({
       content: updateNoteBodyDTO.content,
     });
-    return await this.notesRepository.update(noteId, newContentInNote);
+    const updateResult = await this.notesRepository.update(
+      noteId,
+      newContentInNote,
+    );
+    if (updateResult.affected > 0) {
+      return this.getOneNote({ noteId });
+    } else {
+      throw new NotFoundException(`노트 수정 중 오류가 났습니다.`);
+    }
   }
 
   async deleteNote({ noteId }) {
