@@ -64,12 +64,12 @@ export class MediumCatesController {
       largeCateId: param,
     });
 
-    await this.mediumCatesService.createMediumCates({
+    const result = await this.mediumCatesService.createMediumCates({
       param,
       mediumCateCreateDTO,
       userId: req.user.id,
     });
-    res.status(200).send();
+    res.status(200).json({ mediumCate: result });
     return;
   }
 

@@ -53,7 +53,8 @@ export class SmallCatesService {
       mediumCate: mediumCateId,
       largeCate: largeCateId,
     });
-    return await this.smallCatesRepository.insert(smallCate);
+    await this.smallCatesRepository.insert(smallCate);
+    return smallCate;
   }
 
   async updateSmallCates({ smallCateId, smallCateNameUpdateDTO }) {

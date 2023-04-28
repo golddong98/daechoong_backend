@@ -47,13 +47,13 @@ export class SmallCatesController {
         mediumCateId: param,
       });
 
-    await this.smallCatesService.createSmallCates({
+    const result = await this.smallCatesService.createSmallCates({
       largeCateId: confirmedMediumCate.largeCate.id,
       mediumCateId: param,
       smallCateCreateDTO,
       userId: req.user.id,
     });
-    res.status(200).send();
+    res.status(200).json({ smallCate: result });
     return;
   }
 
