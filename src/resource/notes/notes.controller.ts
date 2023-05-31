@@ -39,24 +39,27 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('mod/main')
-  async getAllNotesUpdatedAt(@Req() req: Request, @Res() res: Response) {
-    const result = await this.notesService.getAllNotesUpdatedAt({
+  @Get('main/cate-id/:cate-id')
+  async getNotesCatesTempNotesByCateId(
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const result = await this.notesService.getNotesCatesTempNotesByCateId({
       userId: req.user.id,
     });
     res.status(200).json({ notes: result });
     return;
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get('wrt/main')
-  async getAllNotesByCreatedAt(@Req() req: Request, @Res() res: Response) {
-    const result = await this.notesService.getAllNotesByCreatedAt({
-      userId: req.user.id,
-    });
-    res.status(200).json({ notes: result });
-    return;
-  }
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('wrt/main')
+  // async getAllNotesByCreatedAt(@Req() req: Request, @Res() res: Response) {
+  //   const result = await this.notesService.getAllNotesByCreatedAt({
+  //     userId: req.user.id,
+  //   });
+  //   res.status(200).json({ notes: result });
+  //   return;
+  // }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('cate-id/:cateId')
@@ -70,11 +73,10 @@ export class NotesController {
     files: Express.MulterS3.File[],
   ) {
     // 다 긁어 오는거 잘못 된듯
-    const { confirmedSmallCate } =
-      await this.catesService.checkPermissionSmallCate({
-        userId: req.user.id,
-        cateId: param,
-      });
+    const { confirmedCate } = await this.catesService.checkPermissionCate({
+      userId: req.user.id,
+      cateId: param,
+    });
 
     const newNote = await this.notesService.createNote({
       content: createNoteBodyDTO.content,
@@ -262,40 +264,36 @@ export class NotesController {
   // }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('wrt/cate-id/:cateId')
-  async getNotesInSmallCateByCreatedAt(
+  @Get('cate-id/:cateId')
+  async getNotesCateNameByCateId(
     @Req() req: Request,
     @Res() res: Response,
     @Param('cateId', ParseIntPipe) param: number,
   ) {
-    await this.catesService.checkPermissionSmallCate({
+    const result = await this.notesService.getNotesCateNameByCateId({
+      cateId: param,
       userId: req.user.id,
-      cateId: param,
-    });
-
-    const result = await this.notesService.getNotesInSmallCateByCreatedAt({
-      cateId: param,
     });
     res.status(200).json({ notes: result });
     return;
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get('mod/cate-id/:cateId')
-  async getNotesInSmallCateByUpdatedAt(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Param('cateId', ParseIntPipe) param: number,
-  ) {
-    await this.catesService.checkPermissionSmallCate({
-      userId: req.user.id,
-      cateId: param,
-    });
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('mod/cate-id/:cateId')
+  // async getNotesInCateByUpdatedAt(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Param('cateId', ParseIntPipe) param: number,
+  // ) {
+  //   await this.catesService.checkPermissionCate({
+  //     userId: req.user.id,
+  //     cateId: param,
+  //   });
 
-    const result = await this.notesService.getNotesInSmallCateByUpdatedAt({
-      cateId: param,
-    });
-    res.status(200).json({ notes: result });
-    return;
-  }
+  //   const result = await this.notesService.getNotesInCateByUpdatedAt({
+  //     cateId: param,
+  //   });
+  //   res.status(200).json({ notes: result });
+  //   return;
+  // }
 }

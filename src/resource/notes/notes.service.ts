@@ -38,7 +38,7 @@ export class NotesService {
     }
   }
 
-  async getAllNotesUpdatedAt({ userId }) {
+  async getNotesCatesTempNotesByCateId({ userId }) {
     try {
       return await this.notesRepository
         .createQueryBuilder('note')
@@ -62,7 +62,7 @@ export class NotesService {
     }
   }
 
-  async getAllNotesByCreatedAt({ userId }) {
+  async getNotesCateNameByCateId({ cateId, userId }) {
     try {
       return await this.notesRepository
         .createQueryBuilder('note')
@@ -76,15 +76,43 @@ export class NotesService {
           'file.mimeType',
           'file.encoding',
           'file.size',
+          'cate_id.id',
+          'cate_id.name',
         ])
         .leftJoin('note.files', 'file')
-        .where(`note.userId = ${userId}`)
+        .leftJoin('note.cate', 'cate_id')
+        .where(`note.cateId = ${cateId}`)
+        .andWhere(`note.userId = ${userId}`)
         .orderBy('note.createdAt', 'DESC')
         .getMany();
     } catch (error) {
       throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
     }
   }
+
+  // async getAllNotesByCreatedAt({ userId }) {
+  //   try {
+  //     return await this.notesRepository
+  //       .createQueryBuilder('note')
+  //       .select([
+  //         'note.id',
+  //         'note.content',
+  //         'note.createdAt',
+  //         'file.id',
+  //         'file.fileUrl',
+  //         'file.originalName',
+  //         'file.mimeType',
+  //         'file.encoding',
+  //         'file.size',
+  //       ])
+  //       .leftJoin('note.files', 'file')
+  //       .where(`note.userId = ${userId}`)
+  //       .orderBy('note.createdAt', 'DESC')
+  //       .getMany();
+  //   } catch (error) {
+  //     throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
+  //   }
+  // }
 
   // createNoteDTO type만들기, return type만들기,
   async createNote({
@@ -235,49 +263,26 @@ export class NotesService {
   //     .getMany();
   // }
 
-  async getNotesInSmallCateByCreatedAt({ cateId }) {
-    return await this.notesRepository
-      .createQueryBuilder('note')
-      .select([
-        'note.id',
-        'note.content',
-        'note.createdAt',
-        'file.id',
-        'file.fileUrl',
-        'file.originalName',
-        'file.mimeType',
-        'file.encoding',
-        'file.size',
-        'small_cate_id.id',
-        'small_cate_id.name',
-      ])
-      .leftJoin('note.files', 'file')
-      .leftJoin('note.smallCate', 'small_cate_id')
-      .where(`note.smallCateId = ${cateId}`)
-      .orderBy('note.createdAt', 'DESC')
-      .getMany();
-  }
-
-  async getNotesInSmallCateByUpdatedAt({ cateId }) {
-    return await this.notesRepository
-      .createQueryBuilder('note')
-      .select([
-        'note.id',
-        'note.content',
-        'note.createdAt',
-        'file.id',
-        'file.fileUrl',
-        'file.originalName',
-        'file.mimeType',
-        'file.encoding',
-        'file.size',
-        'small_cate_id.id',
-        'small_cate_id.name',
-      ])
-      .leftJoin('note.files', 'file')
-      .leftJoin('note.smallCate', 'small_cate_id')
-      .where(`note.smallCateId = ${cateId}`)
-      .orderBy('note.updatedAt', 'DESC')
-      .getMany();
-  }
+  // async getNotesInSmallCateByUpdatedAt({ cateId }) {
+  //   return await this.notesRepository
+  //     .createQueryBuilder('note')
+  //     .select([
+  //       'note.id',
+  //       'note.content',
+  //       'note.createdAt',
+  //       'file.id',
+  //       'file.fileUrl',
+  //       'file.originalName',
+  //       'file.mimeType',
+  //       'file.encoding',
+  //       'file.size',
+  //       'small_cate_id.id',
+  //       'small_cate_id.name',
+  //     ])
+  //     .leftJoin('note.files', 'file')
+  //     .leftJoin('note.smallCate', 'small_cate_id')
+  //     .where(`note.smallCateId = ${cateId}`)
+  //     .orderBy('note.updatedAt', 'DESC')
+  //     .getMany();
+  // }
 }

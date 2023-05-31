@@ -1,22 +1,22 @@
 import { CatesService } from './cates.service';
 import {
-  //   Body,
+  Body,
   Controller,
-  //   Get,
-  //   Param,
-  //   ParseIntPipe,
-  //   Post,
-  //   Req,
-  //   Res,
-  //   UseGuards,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Req,
+  Res,
+  UseGuards,
   //   Put,
   //   Delete,
   //   Query,
 } from '@nestjs/common';
-// import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from '../users/users.service';
-// import { SmallCateCreateDTO } from './dtos/small-cate-create.dto';
-// import { Request, Response } from 'express';
+import { CateCreateDTO } from './dtos/cate-create.dto';
+import { Request, Response } from 'express';
 // import { SmallCateNameUpdateDTO } from './dtos/small-cate-name-update.dto';
 // import { MediumCatesService } from '../medium-cates/medium-cates.service';
 
@@ -32,29 +32,20 @@ export class CatesController {
   //   return this.smallCatesService.getSmallCates();
   // }
 
-  //   @UseGuards(AuthGuard('jwt'))
-  //   @Post('medium-cate-id/:mediumCateId')
-  //   async createSmallCate(
-  //     @Req() req: Request,
-  //     @Res() res: Response,
-  //     @Param('mediumCateId', ParseIntPipe) param: number,
-  //     @Body() smallCateCreateDTO: SmallCateCreateDTO,
-  //   ) {
-  //     const { confirmedMediumCate } =
-  //       await this.mediumCatesService.checkPermissionMediumCate({
-  //         userId: req.user.id,
-  //         mediumCateId: param,
-  //       });
-
-  //     const result = await this.smallCatesService.createSmallCates({
-  //       largeCateId: confirmedMediumCate.largeCate.id,
-  //       mediumCateId: param,
-  //       smallCateCreateDTO,
-  //       userId: req.user.id,
-  //     });
-  //     res.status(200).json({ smallCate: result });
-  //     return;
-  //   }
+  @UseGuards(AuthGuard('jwt'))
+  @Post('')
+  async createSmallCate(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() cateCreateDTO: CateCreateDTO,
+  ) {
+    const result = await this.catesService.createCates({
+      cateCreateDTO,
+      userId: req.user.id,
+    });
+    res.status(200).json({ cate: result });
+    return;
+  }
 
   //   @UseGuards(AuthGuard('jwt'))
   //   @Put('cate-id/:cateId')
@@ -97,23 +88,24 @@ export class CatesController {
   //     return;
   //   }
 
-  //   @UseGuards(AuthGuard('jwt'))
-  //   @Get('medium-cate-id/:mediumCateId')
-  //   async getSmallCatesByMediumCateId(
-  //     @Req() req: Request,
-  //     @Res() res: Response,
-  //     @Param('mediumCateId', ParseIntPipe) param: number,
-  //   ) {
-  //     await this.mediumCatesService.checkPermissionMediumCate({
-  //       userId: req.user.id,
-  //       mediumCateId: param,
-  //     });
-  //     const result = await this.smallCatesService.getSmallCatesByMediumCateId({
-  //       id: param,
-  //     });
-  //     res.status(200).json({ smallCates: result });
-  //     return;
-  //   }
+  @UseGuards(AuthGuard('jwt'))
+  @Get('cate-id/:cateId')
+  async getCateByCateId(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('cateId', ParseIntPipe) param: number,
+  ) {
+    //   await this.mediumCatesService.checkPermissionMediumCate({
+    //     userId: req.user.id,
+    //     cateId: param,
+    //   });
+    const result = await this.catesService.getCateByCateId({
+      id: param,
+      userId: req.user.id,
+    });
+    res.status(200).json({ cate: result });
+    return;
+  }
 
   //   @UseGuards(AuthGuard('jwt'))
   //   @Get()

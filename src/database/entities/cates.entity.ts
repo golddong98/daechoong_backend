@@ -28,9 +28,9 @@ export class Cate extends Common {
   // })
   // mediumCate: MediumCate;
 
-  @Column()
-  startedAt: Date;
+  // @Column()
+  // startedAt: Date;
 
-  @Column({ nullable: true })
-  endedAt: Date;
+  // @Column({ nullable: true })
+  // endedAt: Date;
 }
