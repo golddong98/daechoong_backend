@@ -11,26 +11,26 @@ export class User extends ExistIdCommon {
   @Column({ length: 50 })
   name: string;
 
-  @Column({ nullable: true, length: 100 })
-  email: string;
+  // @Column({ nullable: true, length: 100 })
+  // email: string;
 
-  @Column({ nullable: true, length: 50 })
-  schoolName: string;
+  // @Column({ nullable: true, length: 50 })
+  // schoolName: string;
 
-  @Column({ nullable: true })
-  studentNumber: number;
+  // @Column({ nullable: true })
+  // studentNumber: number;
 
-  @Column({ nullable: true, length: 50 })
-  major1: string;
+  // @Column({ nullable: true, length: 50 })
+  // major1: string;
 
-  @Column({ nullable: true, length: 50 })
-  major2: string;
+  // @Column({ nullable: true, length: 50 })
+  // major2: string;
 
   @Column({ nullable: true })
   profileImgUrl: string;
 
-  @Column({ type: 'boolean', default: false })
-  isActive: boolean;
+  // @Column({ type: 'boolean', default: false })
+  // isActive: boolean;
 
   @OneToMany(() => Note, (note) => note.user)
   notes: Promise<Note[]>;

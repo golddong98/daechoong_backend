@@ -6,8 +6,12 @@ export class UserRegisterDTO {
   @IsNotEmpty({ message: '아이디가 존재하지 않습니다.' })
   readonly id: string;
 
+  // @IsString()
+  // readonly email: string;
+
   @IsString()
-  readonly email: string;
+  @IsNotEmpty({ message: '프로필이 없습니다.' })
+  readonly profileImgUrl: string;
 
   @IsString()
   @IsNotEmpty({ message: '이름을 작성해주세요.' })

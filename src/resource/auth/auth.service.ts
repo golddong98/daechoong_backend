@@ -17,7 +17,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async kakaoLogin({ id, email, name }) {
+  async kakaoLogin({ id, name, profileImgUrl }) {
     // 1. 회원조회
     let user = await this.usersService.getUserByIdAtFirst({ id });
     // let user = await this.usersService.getUserByEmail(id); //user를 찾아서
@@ -26,56 +26,29 @@ export class AuthService {
 
     // kakaostrategy
     if (!user) {
-      user = await this.usersService.registerUser({ id, email, name }); //user가 없으면 하나 만들고, 있으면 이 if문에 들어오지 않을거기때문에 이러나 저러나 user는 존재하는게 됨.
-      // 3-1. 회원가입 후 바로 그 유저의 LargeCate 3개('교과','비교과','기타') 만들기
-      const subjectLargeCate =
-        await this.largeCatesService.createLargeCatesAuto({
-          name: '교과',
-          userId: user.id,
-        });
-      await this.largeCatesService.createLargeCatesAuto({
-        name: '비교과',
-        userId: user.id,
-      });
-      await this.largeCatesService.createLargeCatesAuto({
-        name: '기타',
-        userId: user.id,
-      });
+      user = await this.usersService.registerUser({ id, name, profileImgUrl }); //user가 없으면 하나 만들고, 있으면 이 if문에 들어오지 않을거기때문에 이러나 저러나 user는 존재하는게 됨.
 
-      // 3-2. 회원가입 후 바로 그 유저의 '교과'에 MediumCate를 3개 만들어줌
-      await this.mediumCatesService.createMediumCates({
-        param: subjectLargeCate.id,
-        mediumCateCreateDTO: { mediumCateName: '2022년 1학기' },
-        userId: user.id,
-      });
-
-      await this.mediumCatesService.createMediumCates({
-        param: subjectLargeCate.id,
-        mediumCateCreateDTO: { mediumCateName: '2022년 2학기' },
-        userId: user.id,
-      });
-
-      await this.mediumCatesService.createMediumCates({
-        param: subjectLargeCate.id,
-        mediumCateCreateDTO: { mediumCateName: '2023년 1학기' },
-        userId: user.id,
-      });
+      //아래 대신 이제 튜토리얼 넣어야됨
     }
 
     // jwtstrategy
     // 4. 회원가입이 되어있다면? 로그인(AT, RT를 생성해서 브라우저에 전송)한다
     // this.setRefreshToken({ user, res });
-    const payload = { email: user.email, id: user.id, name: user.name };
+    const payload = {
+      id: user.id,
+      name: user.name,
+      profileImgUrl: user.profileImgUrl,
+    };
     const accessToken = this.jwtService.sign(payload);
-    const isActive = user.isActive;
-    return { accessToken, isActive };
+    // const isActive = user.isActive;
+    return { accessToken };
   }
 
   // usersService에 업데이트에 넣으면 될듯 + 회원가입후 필수적으로 작성하도록 로직짜야됨
-  async afterSocialSignUp({ userId, afterSocialSignUpDTO }) {
-    return this.usersService.afterSignUpUpdateUser({
-      userId,
-      afterSocialSignUpDTO,
-    });
-  }
+  // async afterSocialSignUp({ userId, afterSocialSignUpDTO }) {
+  //   return this.usersService.afterSignUpUpdateUser({
+  //     userId,
+  //     afterSocialSignUpDTO,
+  //   });
+  // }
 }

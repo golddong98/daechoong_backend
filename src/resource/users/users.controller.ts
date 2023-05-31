@@ -1,16 +1,16 @@
 import { UsersService } from './users.service';
 import {
-  Body,
+  // Body,
   Controller,
   Get,
-  Put,
+  // Put,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
-import { AfterSocialSignUpDTO } from '../auth/dtos/user-after-sign-up.dto';
+// import { AfterSocialSignUpDTO } from '../auth/dtos/user-after-sign-up.dto';
 
 @Controller('users')
 export class UsersController {
@@ -31,18 +31,18 @@ export class UsersController {
     return;
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Put('me')
-  async updateUser(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Body() afterSocialSignUpDTO: AfterSocialSignUpDTO,
-  ) {
-    await this.usersService.updateUser({
-      userId: req.user.id,
-      updateDTO: afterSocialSignUpDTO,
-    });
-    res.status(200).send();
-    return;
-  }
+  // @UseGuards(AuthGuard('jwt'))
+  // @Put('me')
+  // async updateUser(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Body() afterSocialSignUpDTO: AfterSocialSignUpDTO,
+  // ) {
+  //   await this.usersService.updateUser({
+  //     userId: req.user.id,
+  //     updateDTO: afterSocialSignUpDTO,
+  //   });
+  //   res.status(200).send();
+  //   return;
+  // }
 }

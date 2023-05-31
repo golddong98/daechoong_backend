@@ -4,15 +4,15 @@ import {
   Res,
   Req,
   UseGuards,
-  Post,
-  Body,
-  UsePipes,
-  ValidationPipe,
+  // Post,
+  // Body,
+  // UsePipes,
+  // ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { AfterSocialSignUpDTO } from './dtos/user-after-sign-up.dto';
+// import { AfterSocialSignUpDTO } from './dtos/user-after-sign-up.dto';
 // import { AfterSocialSignUpDTO } from './dtos/user-after-sign-up.dto';
 
 interface IOAuthUser {
@@ -20,7 +20,8 @@ interface IOAuthUser {
   user: {
     id: string;
     name: string;
-    email: string;
+    profileImgUrl: string;
+    // email: string;
   };
 }
 
@@ -49,28 +50,28 @@ export class AuthController {
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    const { accessToken, isActive } = await this.authService.kakaoLogin({
+    const { accessToken } = await this.authService.kakaoLogin({
       id: req.user.id,
-      email: req.user.email,
       name: req.user.name,
+      profileImgUrl: req.user.profileImgUrl,
     });
-    res.status(200).json({ token: accessToken, isActive });
+    res.status(200).json({ token: accessToken });
     return;
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Post('sign-up')
-  @UsePipes(new ValidationPipe())
-  async signUp(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Body() afterSocialSignUpDTO: AfterSocialSignUpDTO,
-  ) {
-    this.authService.afterSocialSignUp({
-      userId: req.user.id,
-      afterSocialSignUpDTO,
-    });
-    res.status(200).send();
-    return;
-  }
+  // @UseGuards(AuthGuard('jwt'))
+  // @Post('sign-up')
+  // @UsePipes(new ValidationPipe())
+  // async signUp(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Body() afterSocialSignUpDTO: AfterSocialSignUpDTO,
+  // ) {
+  //   this.authService.afterSocialSignUp({
+  //     userId: req.user.id,
+  //     afterSocialSignUpDTO,
+  //   });
+  //   res.status(200).send();
+  //   return;
+  // }
 }

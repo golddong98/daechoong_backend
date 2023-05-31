@@ -11,7 +11,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
       clientID: configService.get('KAKAO_CLIENT_ID'),
       clientSecret: configService.get('KAKAO_CLIENT_SECRET'),
       callbackURL: configService.get('KAKAO_CALLBACK_URL'),
-      scope: ['account_email', 'profile_nickname'],
+      scope: ['profile_image', 'profile_nickname'],
     });
   }
 
@@ -31,10 +31,11 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     const payload: UserKakaoDTO = {
       id: profileJson.id,
       name: kakao_account.profile.nickname,
-      email:
-        kakao_account.has_email && !kakao_account.email_needs_agreement
-          ? kakao_account.email
-          : null,
+      profileImgUrl: kakao_account.profile.thumbnail_image_url,
+      // email:
+      //   kakao_account.has_email && !kakao_account.email_needs_agreement
+      //     ? kakao_account.email
+      //     : null,
     };
     done(null, payload);
   }
