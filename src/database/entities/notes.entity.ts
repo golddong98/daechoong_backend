@@ -1,10 +1,10 @@
-import { SmallCate } from './small-cates.entity';
+import { Cate } from './cates.entity';
 import { File } from './files.entity';
 import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Common } from './common.entity';
 import { User } from './users.entity';
-import { LargeCate } from './large-cates.entity';
-import { MediumCate } from './medium-cates.entity';
+// import { LargeCate } from './large-cates.entity';
+// import { MediumCate } from './medium-cates.entity';
 
 @Entity()
 export class Note extends Common {
@@ -19,18 +19,18 @@ export class Note extends Common {
   })
   user: User;
 
-  @ManyToOne(() => LargeCate, (largeCate) => largeCate.notes, {
-    onDelete: 'CASCADE',
-  })
-  largeCate: LargeCate;
+  // @ManyToOne(() => LargeCate, (largeCate) => largeCate.notes, {
+  //   onDelete: 'CASCADE',
+  // })
+  // largeCate: LargeCate;
 
-  @ManyToOne(() => MediumCate, (mediumCate) => mediumCate.notes, {
-    onDelete: 'CASCADE',
-  })
-  mediumCate: MediumCate;
+  // @ManyToOne(() => MediumCate, (mediumCate) => mediumCate.notes, {
+  //   onDelete: 'CASCADE',
+  // })
+  // mediumCate: MediumCate;
 
-  @ManyToOne(() => SmallCate, (smallCate) => smallCate.notes, {
+  @ManyToOne(() => Cate, (cate) => cate.notes, {
     onDelete: 'CASCADE',
   })
-  smallCate: SmallCate;
+  cate: Cate;
 }

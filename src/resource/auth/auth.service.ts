@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LargeCatesService } from '../large-cates/large-cates.service';
-import { MediumCatesService } from '../medium-cates/medium-cates.service';
+// import { LargeCatesService } from '../large-cates/large-cates.service';
+// import { MediumCatesService } from '../medium-cates/medium-cates.service';
 import { UsersService } from '../users/users.service';
 // import {
 //   IAuthServiceGetAccessToken,
@@ -12,8 +12,8 @@ import { UsersService } from '../users/users.service';
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly largeCatesService: LargeCatesService,
-    private readonly mediumCatesService: MediumCatesService,
+    // private readonly largeCatesService: LargeCatesService,
+    // private readonly mediumCatesService: MediumCatesService,
     private readonly jwtService: JwtService,
   ) {}
 

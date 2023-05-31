@@ -6,14 +6,14 @@ import { KakaoStrategy } from './kakao.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from '../users/users.module';
-import { LargeCatesModule } from '../large-cates/large-cates.module';
-import { MediumCatesModule } from '../medium-cates/medium-cates.module';
+// import { LargeCatesModule } from '../large-cates/large-cates.module';
+// import { MediumCatesModule } from '../medium-cates/medium-cates.module';
 
 @Module({
   imports: [
     UsersModule,
-    LargeCatesModule,
-    MediumCatesModule,
+    // LargeCatesModule,
+    // MediumCatesModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

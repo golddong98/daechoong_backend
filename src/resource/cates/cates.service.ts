@@ -5,28 +5,27 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { range } from 'src/common/utils/functions';
-import { SmallCate } from 'src/database/entities/small-cates.entity';
+import { Cate } from 'src/database/entities/cates.entity';
 import { Repository } from 'typeorm';
-import { MediumCatesService } from '../medium-cates/medium-cates.service';
+// import { MediumCatesService } from '../medium-cates/medium-cates.service';
 
 @Injectable()
-export class SmallCatesService {
+export class CatesService {
   constructor(
-    @InjectRepository(SmallCate)
-    private readonly smallCatesRepository: Repository<SmallCate>,
-    private readonly mediumCatesService: MediumCatesService,
+    @InjectRepository(Cate)
+    private readonly catesRepository: Repository<Cate>,
   ) {}
 
-  getSmallCates(): string {
-    return 'Hello smallCates!';
+  getCates(): string {
+    return 'Hello Cates!';
   }
 
-  async checkPermissionSmallCate({ userId, smallCateId }) {
+  async checkPermissionSmallCate({ userId, cateId }) {
     try {
-      const confirmedSmallCate = await this.smallCatesRepository.findOne({
+      const confirmedSmallCate = await this.catesRepository.findOne({
         relations: ['mediumCate', 'largeCate'],
         where: {
-          id: smallCateId,
+          id: cateId,
           user: userId,
         },
       });
@@ -40,33 +39,33 @@ export class SmallCatesService {
   }
 
   async createSmallCates({
-    largeCateId,
-    mediumCateId,
+    // largeCateId,
+    // mediumCateId,
     smallCateCreateDTO,
     userId,
   }) {
-    const smallCate = this.smallCatesRepository.create({
+    const smallCate = this.catesRepository.create({
       name: smallCateCreateDTO.smallCateName,
-      startedAt: smallCateCreateDTO.startedAt,
-      endedAt: smallCateCreateDTO.endedAt,
+      // startedAt: smallCateCreateDTO.startedAt,
+      // endedAt: smallCateCreateDTO.endedAt,
       user: userId,
-      mediumCate: mediumCateId,
-      largeCate: largeCateId,
+      // mediumCate: mediumCateId,
+      // largeCate: largeCateId,
     });
-    await this.smallCatesRepository.insert(smallCate);
+    await this.catesRepository.insert(smallCate);
     return smallCate;
   }
 
   async updateSmallCates({ smallCateId, smallCateNameUpdateDTO }) {
-    const mediumCate = this.smallCatesRepository.create({
+    const mediumCate = this.catesRepository.create({
       name: smallCateNameUpdateDTO.smallCateName,
     });
-    const updateResult = await this.smallCatesRepository.update(
+    const updateResult = await this.catesRepository.update(
       smallCateId,
       mediumCate,
     );
     if (updateResult.affected > 0) {
-      return this.smallCatesRepository.findOne({
+      return this.catesRepository.findOne({
         select: ['id', 'name', 'startedAt', 'endedAt'],
         where: { id: smallCateId },
       });
@@ -76,18 +75,18 @@ export class SmallCatesService {
   }
 
   async deleteSmallCates({ smallCateId }) {
-    return await this.smallCatesRepository.delete(smallCateId);
+    return await this.catesRepository.delete(smallCateId);
   }
 
   async getSmallCateById({ smallCateId }) {
-    return await this.smallCatesRepository.findOne({ id: smallCateId });
+    return await this.catesRepository.findOne({ id: smallCateId });
   }
 
   async getSmallCatesByYearAndMonth({ year, month, userId }) {
     const fromDate = new Date(year, month - 1, 1);
     const toDate = new Date(year, month, 0);
 
-    return await this.smallCatesRepository
+    return await this.catesRepository
       .createQueryBuilder('small_cate')
       .select([
         'small_cate.id',
@@ -106,7 +105,7 @@ export class SmallCatesService {
   }
 
   async getSmallCatesByMediumCateId({ id: mediumCateId }) {
-    return await this.smallCatesRepository.find({
+    return await this.catesRepository.find({
       select: ['id', 'name'],
       where: {
         mediumCate: mediumCateId,
@@ -115,14 +114,14 @@ export class SmallCatesService {
   }
 
   async getAllSmallCatesByYear({ userId }) {
-    const smallCates = await this.smallCatesRepository.find({
+    const smallCates = await this.catesRepository.find({
       select: ['id', 'name', 'startedAt', 'endedAt'],
       where: {
         user: userId,
       },
     });
 
-    const smallCatesByYear: { [key: number]: SmallCate[] } = {};
+    const smallCatesByYear: { [key: number]: Cate[] } = {};
     for (const smallCate of smallCates) {
       const startedAtYear = smallCate.startedAt.getFullYear();
       const endedAtYear = smallCate.endedAt

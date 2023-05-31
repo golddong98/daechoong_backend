@@ -90,16 +90,16 @@ export class NotesService {
   async createNote({
     content,
     userId,
-    smallCateId,
-    mediumCateId,
-    largeCateId,
+    cateId,
+    // mediumCateId,
+    // largeCateId,
   }) {
     const note = this.notesRepository.create({
       content,
       user: userId,
-      smallCate: smallCateId,
-      mediumCate: mediumCateId,
-      largeCate: largeCateId,
+      cate: cateId,
+      // mediumCate: mediumCateId,
+      // largeCate: largeCateId,
     });
     await this.notesRepository.insert(note);
     return note;
@@ -143,99 +143,99 @@ export class NotesService {
     return await this.notesRepository.delete(noteId);
   }
 
-  async getNotesInLargeCateByCreatedAt({ largeCateId }) {
-    return await this.notesRepository
-      .createQueryBuilder('note')
-      .select([
-        'note.id',
-        'note.content',
-        'note.createdAt',
-        'file.id',
-        'file.fileUrl',
-        'file.originalName',
-        'file.mimeType',
-        'file.encoding',
-        'file.size',
-        'large_cate.id',
-        'large_cate.name',
-      ])
-      .leftJoin('note.files', 'file')
-      .leftJoin('note.largeCate', 'large_cate')
-      .where(`note.largeCateId = ${largeCateId}`)
-      .orderBy('note.createdAt', 'DESC')
-      .getMany();
-  }
+  // async getNotesInLargeCateByCreatedAt({ largeCateId }) {
+  //   return await this.notesRepository
+  //     .createQueryBuilder('note')
+  //     .select([
+  //       'note.id',
+  //       'note.content',
+  //       'note.createdAt',
+  //       'file.id',
+  //       'file.fileUrl',
+  //       'file.originalName',
+  //       'file.mimeType',
+  //       'file.encoding',
+  //       'file.size',
+  //       'large_cate.id',
+  //       'large_cate.name',
+  //     ])
+  //     .leftJoin('note.files', 'file')
+  //     .leftJoin('note.largeCate', 'large_cate')
+  //     .where(`note.largeCateId = ${largeCateId}`)
+  //     .orderBy('note.createdAt', 'DESC')
+  //     .getMany();
+  // }
 
-  async getNotesInLargeCateByUpdatedAt({ largeCateId }) {
-    return await this.notesRepository
-      .createQueryBuilder('note')
-      .select([
-        'note.id',
-        'note.content',
-        'note.createdAt',
-        'file.id',
-        'file.fileUrl',
-        'file.originalName',
-        'file.mimeType',
-        'file.encoding',
-        'file.size',
-        'large_cate.id',
-        'large_cate.name',
-      ])
-      .leftJoin('note.files', 'file')
-      .leftJoin('note.largeCate', 'large_cate')
-      .where(`note.largeCateId = ${largeCateId}`)
-      .orderBy('note.updatedAt', 'DESC')
-      .getMany();
-  }
+  // async getNotesInLargeCateByUpdatedAt({ largeCateId }) {
+  //   return await this.notesRepository
+  //     .createQueryBuilder('note')
+  //     .select([
+  //       'note.id',
+  //       'note.content',
+  //       'note.createdAt',
+  //       'file.id',
+  //       'file.fileUrl',
+  //       'file.originalName',
+  //       'file.mimeType',
+  //       'file.encoding',
+  //       'file.size',
+  //       'large_cate.id',
+  //       'large_cate.name',
+  //     ])
+  //     .leftJoin('note.files', 'file')
+  //     .leftJoin('note.largeCate', 'large_cate')
+  //     .where(`note.largeCateId = ${largeCateId}`)
+  //     .orderBy('note.updatedAt', 'DESC')
+  //     .getMany();
+  // }
 
-  async getNotesInMediumCateByCreatedAt({ mediumCateId }) {
-    return await this.notesRepository
-      .createQueryBuilder('note')
-      .select([
-        'note.id',
-        'note.content',
-        'note.createdAt',
-        'file.id',
-        'file.fileUrl',
-        'file.originalName',
-        'file.mimeType',
-        'file.encoding',
-        'file.size',
-        'medium_cate.id',
-        'medium_cate.name',
-      ])
-      .leftJoin('note.files', 'file')
-      .leftJoin('note.mediumCate', 'medium_cate')
-      .where(`note.mediumCateId = ${mediumCateId}`)
-      .orderBy('note.createdAt', 'DESC')
-      .getMany();
-  }
+  // async getNotesInMediumCateByCreatedAt({ mediumCateId }) {
+  //   return await this.notesRepository
+  //     .createQueryBuilder('note')
+  //     .select([
+  //       'note.id',
+  //       'note.content',
+  //       'note.createdAt',
+  //       'file.id',
+  //       'file.fileUrl',
+  //       'file.originalName',
+  //       'file.mimeType',
+  //       'file.encoding',
+  //       'file.size',
+  //       'medium_cate.id',
+  //       'medium_cate.name',
+  //     ])
+  //     .leftJoin('note.files', 'file')
+  //     .leftJoin('note.mediumCate', 'medium_cate')
+  //     .where(`note.mediumCateId = ${mediumCateId}`)
+  //     .orderBy('note.createdAt', 'DESC')
+  //     .getMany();
+  // }
 
-  async getNotesInMediumCateByUpdatedAt({ mediumCateId }) {
-    return await this.notesRepository
-      .createQueryBuilder('note')
-      .select([
-        'note.id',
-        'note.content',
-        'note.createdAt',
-        'file.id',
-        'file.fileUrl',
-        'file.originalName',
-        'file.mimeType',
-        'file.encoding',
-        'file.size',
-        'medium_cate.id',
-        'medium_cate.name',
-      ])
-      .leftJoin('note.files', 'file')
-      .leftJoin('note.mediumCate', 'medium_cate')
-      .where(`note.mediumCateId = ${mediumCateId}`)
-      .orderBy('note.updatedAt', 'DESC')
-      .getMany();
-  }
+  // async getNotesInMediumCateByUpdatedAt({ mediumCateId }) {
+  //   return await this.notesRepository
+  //     .createQueryBuilder('note')
+  //     .select([
+  //       'note.id',
+  //       'note.content',
+  //       'note.createdAt',
+  //       'file.id',
+  //       'file.fileUrl',
+  //       'file.originalName',
+  //       'file.mimeType',
+  //       'file.encoding',
+  //       'file.size',
+  //       'medium_cate.id',
+  //       'medium_cate.name',
+  //     ])
+  //     .leftJoin('note.files', 'file')
+  //     .leftJoin('note.mediumCate', 'medium_cate')
+  //     .where(`note.mediumCateId = ${mediumCateId}`)
+  //     .orderBy('note.updatedAt', 'DESC')
+  //     .getMany();
+  // }
 
-  async getNotesInSmallCateByCreatedAt({ smallCateId }) {
+  async getNotesInSmallCateByCreatedAt({ cateId }) {
     return await this.notesRepository
       .createQueryBuilder('note')
       .select([
@@ -253,12 +253,12 @@ export class NotesService {
       ])
       .leftJoin('note.files', 'file')
       .leftJoin('note.smallCate', 'small_cate_id')
-      .where(`note.smallCateId = ${smallCateId}`)
+      .where(`note.smallCateId = ${cateId}`)
       .orderBy('note.createdAt', 'DESC')
       .getMany();
   }
 
-  async getNotesInSmallCateByUpdatedAt({ smallCateId }) {
+  async getNotesInSmallCateByUpdatedAt({ cateId }) {
     return await this.notesRepository
       .createQueryBuilder('note')
       .select([
@@ -276,7 +276,7 @@ export class NotesService {
       ])
       .leftJoin('note.files', 'file')
       .leftJoin('note.smallCate', 'small_cate_id')
-      .where(`note.smallCateId = ${smallCateId}`)
+      .where(`note.smallCateId = ${cateId}`)
       .orderBy('note.updatedAt', 'DESC')
       .getMany();
   }

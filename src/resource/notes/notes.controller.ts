@@ -20,9 +20,9 @@ import { NotesService } from './notes.service';
 import { FilesInterceptor } from '@nestjs/platform-express/multer';
 import { UsersService } from '../users/users.service';
 import { FilesService } from '../files/files.service';
-import { SmallCatesService } from '../small-cates/small-cates.service';
-import { MediumCatesService } from '../medium-cates/medium-cates.service';
-import { LargeCatesService } from '../large-cates/large-cates.service';
+import { CatesService } from '../cates/cates.service';
+// import { MediumCatesService } from '../medium-cates/medium-cates.service';
+// import { LargeCatesService } from '../large-cates/large-cates.service';
 
 @Controller('notes')
 export class NotesController {
@@ -30,9 +30,7 @@ export class NotesController {
     private readonly notesService: NotesService,
     private readonly usersService: UsersService,
     private readonly filesService: FilesService,
-    private readonly smallCatesService: SmallCatesService,
-    private readonly mediumCatesService: MediumCatesService,
-    private readonly largeCatesService: LargeCatesService,
+    private readonly catesService: CatesService,
   ) {}
 
   @Get()
@@ -61,29 +59,29 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Post('small-cate-id/:smallCateId')
+  @Post('cate-id/:cateId')
   @UseInterceptors(FilesInterceptor('file', 10))
   async uploadNote(
     @Req() req: Request,
     @Res() res: Response,
     @Body() createNoteBodyDTO: CreateNoteBodyDTO,
-    @Param('smallCateId', ParseIntPipe) param: number,
+    @Param('cateId', ParseIntPipe) param: number,
     @UploadedFiles()
     files: Express.MulterS3.File[],
   ) {
     // 다 긁어 오는거 잘못 된듯
     const { confirmedSmallCate } =
-      await this.smallCatesService.checkPermissionSmallCate({
+      await this.catesService.checkPermissionSmallCate({
         userId: req.user.id,
-        smallCateId: param,
+        cateId: param,
       });
 
     const newNote = await this.notesService.createNote({
       content: createNoteBodyDTO.content,
       userId: req.user.id,
-      smallCateId: param,
-      mediumCateId: confirmedSmallCate.mediumCate.id,
-      largeCateId: confirmedSmallCate.largeCate.id,
+      cateId: param,
+      // mediumCateId: confirmedSmallCate.mediumCate.id,
+      // largeCateId: confirmedSmallCate.largeCate.id,
     });
 
     if (files && files.length > 0) {
@@ -183,119 +181,119 @@ export class NotesController {
     return;
   }
 
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('wrt/large-cate-id/:largeCateId')
+  // async getNotesInLargeCateByCreatedAt(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Param('largeCateId', ParseIntPipe) param: number,
+  // ) {
+  //   await this.largeCatesService.checkPermissionLargeCate({
+  //     userId: req.user.id,
+  //     largeCateId: param,
+  //   });
+
+  //   const result = await this.notesService.getNotesInLargeCateByCreatedAt({
+  //     largeCateId: param,
+  //   });
+
+  //   res.status(200).json({ notes: result });
+  //   return;
+  // }
+
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('mod/large-cate-id/:largeCateId')
+  // async getNotesInLargeCateByUpdatedAt(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Param('largeCateId', ParseIntPipe) param: number,
+  // ) {
+  //   await this.largeCatesService.checkPermissionLargeCate({
+  //     userId: req.user.id,
+  //     largeCateId: param,
+  //   });
+
+  //   const result = await this.notesService.getNotesInLargeCateByUpdatedAt({
+  //     largeCateId: param,
+  //   });
+
+  //   res.status(200).json({ notes: result });
+  //   return;
+  // }
+
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('wrt/medium-cate-id/:mediumCateId')
+  // async getNotesInMediumCateByCreatedAt(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Param('mediumCateId', ParseIntPipe) param: number,
+  // ) {
+  //   await this.mediumCatesService.checkPermissionMediumCate({
+  //     userId: req.user.id,
+  //     mediumCateId: param,
+  //   });
+
+  //   const result = await this.notesService.getNotesInMediumCateByCreatedAt({
+  //     mediumCateId: param,
+  //   });
+
+  //   res.status(200).json({ notes: result });
+  //   return;
+  // }
+
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('mod/medium-cate-id/:mediumCateId')
+  // async getNotesInMediumCateByUpdatedAt(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  //   @Param('mediumCateId', ParseIntPipe) param: number,
+  // ) {
+  //   await this.mediumCatesService.checkPermissionMediumCate({
+  //     userId: req.user.id,
+  //     mediumCateId: param,
+  //   });
+
+  //   const result = await this.notesService.getNotesInMediumCateByUpdatedAt({
+  //     mediumCateId: param,
+  //   });
+
+  //   res.status(200).json({ notes: result });
+  //   return;
+  // }
+
   @UseGuards(AuthGuard('jwt'))
-  @Get('wrt/large-cate-id/:largeCateId')
-  async getNotesInLargeCateByCreatedAt(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Param('largeCateId', ParseIntPipe) param: number,
-  ) {
-    await this.largeCatesService.checkPermissionLargeCate({
-      userId: req.user.id,
-      largeCateId: param,
-    });
-
-    const result = await this.notesService.getNotesInLargeCateByCreatedAt({
-      largeCateId: param,
-    });
-
-    res.status(200).json({ notes: result });
-    return;
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('mod/large-cate-id/:largeCateId')
-  async getNotesInLargeCateByUpdatedAt(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Param('largeCateId', ParseIntPipe) param: number,
-  ) {
-    await this.largeCatesService.checkPermissionLargeCate({
-      userId: req.user.id,
-      largeCateId: param,
-    });
-
-    const result = await this.notesService.getNotesInLargeCateByUpdatedAt({
-      largeCateId: param,
-    });
-
-    res.status(200).json({ notes: result });
-    return;
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('wrt/medium-cate-id/:mediumCateId')
-  async getNotesInMediumCateByCreatedAt(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Param('mediumCateId', ParseIntPipe) param: number,
-  ) {
-    await this.mediumCatesService.checkPermissionMediumCate({
-      userId: req.user.id,
-      mediumCateId: param,
-    });
-
-    const result = await this.notesService.getNotesInMediumCateByCreatedAt({
-      mediumCateId: param,
-    });
-
-    res.status(200).json({ notes: result });
-    return;
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('mod/medium-cate-id/:mediumCateId')
-  async getNotesInMediumCateByUpdatedAt(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Param('mediumCateId', ParseIntPipe) param: number,
-  ) {
-    await this.mediumCatesService.checkPermissionMediumCate({
-      userId: req.user.id,
-      mediumCateId: param,
-    });
-
-    const result = await this.notesService.getNotesInMediumCateByUpdatedAt({
-      mediumCateId: param,
-    });
-
-    res.status(200).json({ notes: result });
-    return;
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('wrt/small-cate-id/:smallCateId')
+  @Get('wrt/cate-id/:cateId')
   async getNotesInSmallCateByCreatedAt(
     @Req() req: Request,
     @Res() res: Response,
-    @Param('smallCateId', ParseIntPipe) param: number,
+    @Param('cateId', ParseIntPipe) param: number,
   ) {
-    await this.smallCatesService.checkPermissionSmallCate({
+    await this.catesService.checkPermissionSmallCate({
       userId: req.user.id,
-      smallCateId: param,
+      cateId: param,
     });
 
     const result = await this.notesService.getNotesInSmallCateByCreatedAt({
-      smallCateId: param,
+      cateId: param,
     });
     res.status(200).json({ notes: result });
     return;
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('mod/small-cate-id/:smallCateId')
+  @Get('mod/cate-id/:cateId')
   async getNotesInSmallCateByUpdatedAt(
     @Req() req: Request,
     @Res() res: Response,
-    @Param('smallCateId', ParseIntPipe) param: number,
+    @Param('cateId', ParseIntPipe) param: number,
   ) {
-    await this.smallCatesService.checkPermissionSmallCate({
+    await this.catesService.checkPermissionSmallCate({
       userId: req.user.id,
-      smallCateId: param,
+      cateId: param,
     });
 
     const result = await this.notesService.getNotesInSmallCateByUpdatedAt({
-      smallCateId: param,
+      cateId: param,
     });
     res.status(200).json({ notes: result });
     return;

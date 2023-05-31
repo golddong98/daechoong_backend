@@ -17,7 +17,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         entities: [__dirname + '/../**/*.entity.{js,ts}'],
         synchronize: configService.get('DB_SYNCHRONIZE'),
         autoLoadEntities: true,
-        seeds: ['src/database/seeds/**/*.seed.ts'],
+        // seeds: ['src/database/seeds/**/*.seed.ts'],
       }),
     }),
   ],

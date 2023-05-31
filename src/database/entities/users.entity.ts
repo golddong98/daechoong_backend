@@ -1,8 +1,8 @@
-import { LargeCate } from './large-cates.entity';
+// import { LargeCate } from './large-cates.entity';
 import { Note } from './notes.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
-import { MediumCate } from './medium-cates.entity';
-import { SmallCate } from './small-cates.entity';
+// import { MediumCate } from './medium-cates.entity';
+import { Cate } from './cates.entity';
 import { File } from './files.entity';
 import { ExistIdCommon } from './existIdCommon.entity';
 
@@ -38,12 +38,12 @@ export class User extends ExistIdCommon {
   @OneToMany(() => File, (file) => file.user)
   files: Promise<File[]>;
 
-  @OneToMany(() => LargeCate, (largeCate) => largeCate.user)
-  largeCates: Promise<LargeCate[]>;
+  // @OneToMany(() => LargeCate, (largeCate) => largeCate.user)
+  // largeCates: Promise<LargeCate[]>;
 
-  @OneToMany(() => MediumCate, (mediumCate) => mediumCate.user)
-  mediumCates: Promise<MediumCate[]>;
+  // @OneToMany(() => MediumCate, (mediumCate) => mediumCate.user)
+  // mediumCates: Promise<MediumCate[]>;
 
-  @OneToMany(() => SmallCate, (smallCate) => smallCate.user)
-  smallCates: Promise<SmallCate[]>;
+  @OneToMany(() => Cate, (cate) => cate.user)
+  cates: Promise<Cate[]>;
 }

@@ -2,7 +2,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module, forwardRef } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from '../users/users.module';
-import { SmallCatesModule } from '../small-cates/small-cates.module';
+import { CatesModule } from '../cates/cates.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { multerOptionsFactory } from 'src/common/utils/multer.options';
 import { File } from 'src/database/entities/files.entity';
@@ -19,7 +19,7 @@ import { NotesModule } from '../notes/notes.module';
     }),
     TypeOrmModule.forFeature([File]),
     UsersModule,
-    SmallCatesModule,
+    CatesModule,
     // 순환모듈임시방편 하나의 모듈만 import할수있도록 바꿔야됨
     forwardRef(() => NotesModule),
   ],

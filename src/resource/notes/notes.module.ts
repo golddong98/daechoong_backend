@@ -8,9 +8,9 @@ import { MulterModule } from '@nestjs/platform-express';
 import { multerOptionsFactory } from 'src/common/utils/multer.options';
 import { Note } from 'src/database/entities/notes.entity';
 import { FilesModule } from '../files/files.module';
-import { SmallCatesModule } from '../small-cates/small-cates.module';
-import { MediumCatesModule } from '../medium-cates/medium-cates.module';
-import { LargeCatesModule } from '../large-cates/large-cates.module';
+import { CatesModule } from '../cates/cates.module';
+// import { MediumCatesModule } from '../medium-cates/medium-cates.module';
+// import { LargeCatesModule } from '../large-cates/large-cates.module';
 
 @Module({
   imports: [
@@ -22,9 +22,9 @@ import { LargeCatesModule } from '../large-cates/large-cates.module';
     TypeOrmModule.forFeature([Note]),
     UsersModule,
     FilesModule,
-    SmallCatesModule,
-    MediumCatesModule,
-    LargeCatesModule,
+    CatesModule,
+    // MediumCatesModule,
+    // LargeCatesModule,
   ],
   controllers: [NotesController],
   providers: [NotesService],
