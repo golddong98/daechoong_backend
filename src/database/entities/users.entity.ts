@@ -5,6 +5,8 @@ import { Entity, Column, OneToMany } from 'typeorm';
 import { Cate } from './cates.entity';
 import { File } from './files.entity';
 import { ExistIdCommon } from './existIdCommon.entity';
+import { TempFile } from './temp-files.entity';
+import { TempNote } from './temp-notes.entity';
 
 @Entity()
 export class User extends ExistIdCommon {
@@ -35,8 +37,14 @@ export class User extends ExistIdCommon {
   @OneToMany(() => Note, (note) => note.user)
   notes: Promise<Note[]>;
 
+  @OneToMany(() => TempNote, (tempNote) => tempNote.user)
+  tempNotes: Promise<TempNote[]>;
+
   @OneToMany(() => File, (file) => file.user)
   files: Promise<File[]>;
+
+  @OneToMany(() => TempFile, (tempFile) => tempFile.user)
+  tempFiles: Promise<TempFile[]>;
 
   // @OneToMany(() => LargeCate, (largeCate) => largeCate.user)
   // largeCates: Promise<LargeCate[]>;
