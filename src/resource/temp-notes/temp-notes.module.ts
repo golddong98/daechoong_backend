@@ -7,7 +7,7 @@ import { UsersModule } from '../users/users.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { multerOptionsFactory } from 'src/common/utils/multer.options';
 import { TempNote } from 'src/database/entities/temp-notes.entity';
-import { FilesModule } from '../files/files.module';
+import { TempFilesModule } from '../temp-files/temp-files.module';
 import { CatesModule } from '../cates/cates.module';
 // import { MediumCatesModule } from '../medium-cates/medium-cates.module';
 // import { LargeCatesModule } from '../large-cates/large-cates.module';
@@ -21,7 +21,7 @@ import { CatesModule } from '../cates/cates.module';
     }),
     TypeOrmModule.forFeature([TempNote]),
     UsersModule,
-    FilesModule,
+    TempFilesModule,
     CatesModule,
     // MediumCatesModule,
     // LargeCatesModule,
@@ -30,4 +30,4 @@ import { CatesModule } from '../cates/cates.module';
   providers: [TempNotesService],
   exports: [TempNotesService],
 })
-export class TempNoteModule {}
+export class TempNotesModule {}

@@ -12,7 +12,8 @@ import { CalendarsModule } from './calendars/calendars.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
-import { TempNoteModule } from './temp-notes/temp-notes.module';
+import { TempNotesModule } from './temp-notes/temp-notes.module';
+import { TempFilesModule } from './temp-files/temp-files.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { TempNoteModule } from './temp-notes/temp-notes.module';
     UsersModule,
     FilesModule,
     AuthModule,
-    TempNoteModule,
+    TempNotesModule,
+    TempFilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
