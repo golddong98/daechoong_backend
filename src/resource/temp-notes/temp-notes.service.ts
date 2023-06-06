@@ -5,17 +5,17 @@ import {
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Note } from '../../database/entities/notes.entity';
+import { TempNote } from '../../database/entities/temp-notes.entity';
 
 @Injectable()
 export class TempNotesService {
   constructor(
-    @InjectRepository(Note)
-    private notesRepository: Repository<Note>,
+    @InjectRepository(TempNote)
+    private tempNotesRepository: Repository<TempNote>,
   ) {}
 
-  async findAll(): Promise<Note[]> {
-    return this.notesRepository.find();
+  async findAll(): Promise<TempNote[]> {
+    return this.tempNotesRepository.find();
   }
 
   getNotes(): string {
@@ -24,7 +24,7 @@ export class TempNotesService {
 
   async checkPermissionNotes({ userId, noteId }) {
     try {
-      const confirmedNote = await this.notesRepository.findOne({
+      const confirmedNote = await this.tempNotesRepository.findOne({
         relations: ['files'],
         where: { id: noteId, user: userId },
       });
@@ -40,7 +40,7 @@ export class TempNotesService {
 
   async getNotesCatesTempNotesByCateId({ userId }) {
     try {
-      return await this.notesRepository
+      return await this.tempNotesRepository
         .createQueryBuilder('note')
         .select([
           'note.id',
@@ -64,27 +64,27 @@ export class TempNotesService {
 
   async getNotesCateNameByCateId({ cateId, userId }) {
     try {
-      return await this.notesRepository
-        .createQueryBuilder('note')
+      return await this.tempNotesRepository
+        .createQueryBuilder('temp_note')
         .select([
-          'note.id',
-          'note.content',
-          'note.createdAt',
+          'temp_note.id',
+          'temp_note.content',
+          'temp_note.createdAt',
           'file.id',
           'file.fileUrl',
           'file.originalName',
           'file.mimeType',
           'file.encoding',
           'file.size',
-          'cate_id.id',
-          'cate_id.name',
+          // 'cate_id.id',
+          // 'cate_id.name',
         ])
-        .leftJoin('note.files', 'file')
-        .leftJoin('note.cate', 'cate_id')
-        .where(`note.cateId = ${cateId}`)
-        .andWhere(`note.userId = ${userId}`)
-        .orderBy('note.createdAt', 'DESC')
-        .getMany();
+        .leftJoin('temp_note.files', 'file')
+        // .leftJoin('temp_note.cate', 'cate_id')
+        .where(`temp_note.cateId = ${cateId}`)
+        .andWhere(`temp_note.userId = ${userId}`)
+        .orderBy('temp_note.createdAt', 'DESC')
+        .getOne();
     } catch (error) {
       throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
     }
@@ -92,7 +92,7 @@ export class TempNotesService {
 
   // async getAllNotesByCreatedAt({ userId }) {
   //   try {
-  //     return await this.notesRepository
+  //     return await this.tempNotesRepository
   //       .createQueryBuilder('note')
   //       .select([
   //         'note.id',
@@ -114,27 +114,36 @@ export class TempNotesService {
   //   }
   // }
 
+  async isTempNote({ cateId }) {
+    const tempNote = await this.tempNotesRepository.findOne({ id: cateId });
+    return tempNote;
+  }
+
   // createNoteDTO type만들기, return type만들기,
-  async createNote({
-    content,
-    userId,
-    cateId,
-    // mediumCateId,
-    // largeCateId,
-  }) {
-    const note = this.notesRepository.create({
+  async createNote({ content, userId, cateId }) {
+    const note = this.tempNotesRepository.create({
       content,
       user: userId,
       cate: cateId,
       // mediumCate: mediumCateId,
       // largeCate: largeCateId,
     });
-    await this.notesRepository.insert(note);
+    await this.tempNotesRepository.insert(note);
+    // const updateCate = await this.catesRepository.findOne({ id: cateId });
+    // updateCate.isTempNote = true;
+    // return await this.catesRepository.update(cateId, updateCate);
     return note;
+    // tempNote.content = content;
+    // return await this.tempNotesRepository.update(tempNote.id, tempNote);
+  }
+
+  async updateTempNote({ tempNote, content }) {
+    tempNote.content = content;
+    return await this.tempNotesRepository.update(tempNote.id, tempNote);
   }
 
   async getOneNote({ noteId }) {
-    return await this.notesRepository
+    return await this.tempNotesRepository
       .createQueryBuilder('note')
       .select([
         'note.id',
@@ -153,10 +162,10 @@ export class TempNotesService {
   }
 
   async updateContentInNote({ noteId, updateNoteBodyDTO }) {
-    const newContentInNote = this.notesRepository.create({
+    const newContentInNote = this.tempNotesRepository.create({
       content: updateNoteBodyDTO.content,
     });
-    const updateResult = await this.notesRepository.update(
+    const updateResult = await this.tempNotesRepository.update(
       noteId,
       newContentInNote,
     );
@@ -168,11 +177,11 @@ export class TempNotesService {
   }
 
   async deleteNote({ noteId }) {
-    return await this.notesRepository.delete(noteId);
+    return await this.tempNotesRepository.delete(noteId);
   }
 
   // async getNotesInLargeCateByCreatedAt({ largeCateId }) {
-  //   return await this.notesRepository
+  //   return await this.tempNotesRepository
   //     .createQueryBuilder('note')
   //     .select([
   //       'note.id',
@@ -195,7 +204,7 @@ export class TempNotesService {
   // }
 
   // async getNotesInLargeCateByUpdatedAt({ largeCateId }) {
-  //   return await this.notesRepository
+  //   return await this.tempNotesRepository
   //     .createQueryBuilder('note')
   //     .select([
   //       'note.id',
@@ -218,7 +227,7 @@ export class TempNotesService {
   // }
 
   // async getNotesInMediumCateByCreatedAt({ mediumCateId }) {
-  //   return await this.notesRepository
+  //   return await this.tempNotesRepository
   //     .createQueryBuilder('note')
   //     .select([
   //       'note.id',
@@ -241,7 +250,7 @@ export class TempNotesService {
   // }
 
   // async getNotesInMediumCateByUpdatedAt({ mediumCateId }) {
-  //   return await this.notesRepository
+  //   return await this.tempNotesRepository
   //     .createQueryBuilder('note')
   //     .select([
   //       'note.id',
@@ -264,7 +273,7 @@ export class TempNotesService {
   // }
 
   // async getNotesInSmallCateByUpdatedAt({ cateId }) {
-  //   return await this.notesRepository
+  //   return await this.tempNotesRepository
   //     .createQueryBuilder('note')
   //     .select([
   //       'note.id',

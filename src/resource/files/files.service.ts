@@ -48,6 +48,11 @@ export class FilesService {
     }
   }
 
+  // async updateUploadFiles({ tempNote, files }) {
+  //   tempNote.content = content;
+  //   return await this.filesRepository.update(tempNote.id, tempNote);
+  // }
+
   async deleteFileInNote({ fileId }) {
     return await this.filesRepository.delete(fileId);
   }

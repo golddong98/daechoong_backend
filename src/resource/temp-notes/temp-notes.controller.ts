@@ -24,7 +24,7 @@ import { CatesService } from '../cates/cates.service';
 // import { MediumCatesService } from '../medium-cates/medium-cates.service';
 // import { LargeCatesService } from '../large-cates/large-cates.service';
 
-@Controller('notes')
+@Controller('temp-note')
 export class TempNotesController {
   constructor(
     private readonly tempNotesService: TempNotesService,
@@ -54,7 +54,7 @@ export class TempNotesController {
   @UseGuards(AuthGuard('jwt'))
   @Post('cate-id/:cateId')
   @UseInterceptors(FilesInterceptor('file', 10))
-  async uploadNote(
+  async uploadTempNote(
     @Req() req: Request,
     @Res() res: Response,
     @Body() createTempNoteBodyDTO: CreateTempNoteBodyDTO,
@@ -62,21 +62,46 @@ export class TempNotesController {
     @UploadedFiles()
     files: Express.MulterS3.File[],
   ) {
-    const newNote = await this.tempNotesService.createNote({
-      content: createTempNoteBodyDTO.content,
-      userId: req.user.id,
-      cateId: param,
-      // mediumCateId: confirmedSmallCate.mediumCate.id,
-      // largeCateId: confirmedSmallCate.largeCate.id,
-    });
-
-    if (files && files.length > 0) {
-      await this.filesService.uploadFiles({
-        noteId: newNote.id,
+    const tempNote = await this.tempNotesService.isTempNote({ cateId: param });
+    if (!tempNote) {
+      const newNote = await this.tempNotesService.createNote({
+        content: createTempNoteBodyDTO.content,
         userId: req.user.id,
-        files,
+        cateId: param,
+        // mediumCateId: confirmedSmallCate.mediumCate.id,
+        // largeCateId: confirmedSmallCate.largeCate.id,
       });
+      if (files && files.length > 0) {
+        await this.filesService.uploadFiles({
+          noteId: newNote.id,
+          userId: req.user.id,
+          files,
+        });
+      }
+    } else {
+      await this.tempNotesService.updateTempNote({
+        tempNote,
+        content: createTempNoteBodyDTO.content,
+      });
+      if (files && files.length > 0) {
+        await this.filesService.uploadFiles({
+          noteId: tempNote.id,
+          userId: req.user.id,
+          files,
+        });
+      }
     }
+    // const newNote = await this.tempNotesService.createNote({
+    //   content: createTempNoteBodyDTO.content,
+    //   userId: req.user.id,
+    //   cateId: param,
+    //   // mediumCateId: confirmedSmallCate.mediumCate.id,
+    //   // largeCateId: confirmedSmallCate.largeCate.id,
+    // });
+
+    await this.catesService.updateTempNote({
+      cateId: param,
+    });
 
     res.status(200).send();
     return;
@@ -84,7 +109,7 @@ export class TempNotesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('cate-id/:cateId')
-  async getNotesCateNameByCateId(
+  async getTempNotesCateNameByCateId(
     @Req() req: Request,
     @Res() res: Response,
     @Param('cateId', ParseIntPipe) param: number,
@@ -93,7 +118,7 @@ export class TempNotesController {
       cateId: param,
       userId: req.user.id,
     });
-    res.status(200).json({ notes: result });
+    res.status(200).json({ tempNote: result });
     return;
   }
 }

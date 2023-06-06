@@ -30,4 +30,4 @@ import { CatesModule } from '../cates/cates.module';
   providers: [TempNotesService],
   exports: [TempNotesService],
 })
-export class NotesModule {}
+export class TempNoteModule {}

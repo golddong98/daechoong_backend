@@ -32,7 +32,6 @@ export class CatesService {
       if (!confirmedCate) {
         throw new Error();
       }
-      console.log(confirmedCate);
       return { confirmedCate };
     } catch (error) {
       throw new BadRequestException('소분류를 변경할 권한이 없습니다.');
@@ -46,6 +45,12 @@ export class CatesService {
     });
     await this.catesRepository.insert(cate);
     return cate;
+  }
+
+  async updateTempNote({ cateId }) {
+    const updateCate = await this.catesRepository.findOne({ id: cateId });
+    updateCate.isTempNote = true;
+    return await this.catesRepository.update(cateId, updateCate);
   }
 
   async updateSmallCates({ smallCateId, smallCateNameUpdateDTO }) {

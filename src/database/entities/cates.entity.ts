@@ -18,6 +18,9 @@ export class Cate extends Common {
   })
   user: User;
 
+  @Column({ type: 'boolean', default: false })
+  isTempNote: boolean;
+
   // @ManyToOne(() => LargeCate, (largeCate) => largeCate.smallCates, {
   //   onDelete: 'CASCADE',
   // })
