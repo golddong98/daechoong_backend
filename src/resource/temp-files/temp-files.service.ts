@@ -27,31 +27,31 @@ export class TempFilesService {
     }
   }
 
-  //   async uploadFiles({ userId, noteId, files }) {
-  //     try {
-  //       for (const element of files) {
-  //         const file = this.tempFilesRepository.create({
-  //           originalName: element.originalname,
-  //           encoding: element.encoding,
-  //           mimeType: element.mimetype,
-  //           size: element.size,
-  //           fileUrl: element.location,
-  //           user: userId,
-  //           note: noteId,
-  //         });
+  // async uploadFiles({ userId, noteId, files }) {
+  //   try {
+  //     for (const element of files) {
+  //       const file = this.tempFilesRepository.create({
+  //         originalName: element.originalname,
+  //         encoding: element.encoding,
+  //         mimeType: element.mimetype,
+  //         size: element.size,
+  //         fileUrl: element.location,
+  //         user: userId,
+  //         note: noteId,
+  //       });
 
-  //         await this.tempFilesRepository.insert(file);
-  //       }
-  //       return await this.tempNotesService.getOneNote({ noteId });
-  //     } catch (error) {
-  //       return new BadRequestException('파일을 수정 중 오류가 났습니다.');
+  //       await this.tempFilesRepository.insert(file);
   //     }
+  //     return await this.tempNotesService.getOneNote({ noteId });
+  //   } catch (error) {
+  //     return new BadRequestException('파일을 수정 중 오류가 났습니다.');
   //   }
-
-  // async updateUploadFiles({ tempNote, files }) {
-  //   tempNote.content = content;
-  //   return await this.tempFilesRepository.update(tempNote.id, tempNote);
   // }
+
+  async updateUploadFiles({ tempNote, files, content }) {
+    tempNote.content = content;
+    return await this.tempFilesRepository.update(tempNote.id, tempNote);
+  }
 
   async deleteFileInNote({ fileId }) {
     return await this.tempFilesRepository.delete(fileId);
