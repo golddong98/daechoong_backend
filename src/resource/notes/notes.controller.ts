@@ -21,6 +21,7 @@ import { FilesInterceptor } from '@nestjs/platform-express/multer';
 import { UsersService } from '../users/users.service';
 import { FilesService } from '../files/files.service';
 import { CatesService } from '../cates/cates.service';
+import { TempNotesService } from '../temp-notes/temp-notes.service';
 // import { MediumCatesService } from '../medium-cates/medium-cates.service';
 // import { LargeCatesService } from '../large-cates/large-cates.service';
 
@@ -31,6 +32,7 @@ export class NotesController {
     private readonly usersService: UsersService,
     private readonly filesService: FilesService,
     private readonly catesService: CatesService,
+    private tempNotesService: TempNotesService,
   ) {}
 
   @Get()
@@ -82,8 +84,6 @@ export class NotesController {
       content: createNoteBodyDTO.content,
       userId: req.user.id,
       cateId: param,
-      // mediumCateId: confirmedSmallCate.mediumCate.id,
-      // largeCateId: confirmedSmallCate.largeCate.id,
     });
 
     if (files && files.length > 0) {
@@ -92,6 +92,19 @@ export class NotesController {
         userId: req.user.id,
         files,
       });
+    }
+
+    // isTempNote state change (true=>false)
+    if (confirmedCate.isTempNote) {
+      //isTempNote 상태 변경
+      await this.catesService.toggleIsTempNote({
+        cateId: param,
+      });
+      //삭제까지
+      const tempNote = await this.tempNotesService.getTempNoteByCateId({
+        cateId: param,
+      });
+      await this.tempNotesService.deleteTempNote({ tempNoteId: tempNote.id });
     }
 
     res.status(200).send();

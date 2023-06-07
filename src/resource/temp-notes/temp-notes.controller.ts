@@ -62,13 +62,18 @@ export class TempNotesController {
     @UploadedFiles()
     files: Express.MulterS3.File[],
   ) {
-    const cate = await this.catesService.getCateById({
-      cateId: param,
-    });
+    // const cate = await this.catesService.getCateById({
+    //   cateId: param,
+    // });
     // console.log(tempNote);
 
+    const { confirmedCate } = await this.catesService.checkPermissionCate({
+      userId: req.user.id,
+      cateId: param,
+    });
+
     // cate.isTempNote == true이면 즉, 임시노트가 이미 존재하면 기존 temp-note 삭제
-    if (cate.isTempNote) {
+    if (confirmedCate.isTempNote) {
       const tempNote = await this.tempNotesService.getTempNoteByCateId({
         cateId: param,
       });
@@ -92,7 +97,7 @@ export class TempNotesController {
       });
     }
     // isTempNote state change (false=>true)
-    if (!cate.isTempNote) {
+    if (!confirmedCate.isTempNote) {
       await this.catesService.toggleIsTempNote({
         cateId: param,
       });
