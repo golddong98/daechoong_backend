@@ -47,9 +47,15 @@ export class CatesService {
     return cate;
   }
 
-  async updateTempNote({ cateId }) {
+  // async changeIsTempNote({ cateId }) {
+  //   const updateCate = await this.catesRepository.findOne({ id: cateId });
+  //   updateCate.isTempNote = true;
+  //   return await this.catesRepository.update(cateId, updateCate);
+  // }
+
+  async toggleIsTempNote({ cateId }) {
     const updateCate = await this.catesRepository.findOne({ id: cateId });
-    updateCate.isTempNote = true;
+    updateCate.isTempNote = !updateCate.isTempNote; // isTempNote 값을 반전시킵니다.
     return await this.catesRepository.update(cateId, updateCate);
   }
 
@@ -75,8 +81,16 @@ export class CatesService {
     return await this.catesRepository.delete(smallCateId);
   }
 
-  async getSmallCateById({ smallCateId }) {
-    return await this.catesRepository.findOne({ id: smallCateId });
+  async getCateById({ cateId }) {
+    try {
+      const cate = await this.catesRepository.findOne({ id: cateId });
+      if (!cate) {
+        throw new Error();
+      }
+      return cate;
+    } catch (error) {
+      throw new BadRequestException('임시노트가 존재하지 않습니다.');
+    }
   }
 
   async getSmallCatesByYearAndMonth({ year, month, userId }) {

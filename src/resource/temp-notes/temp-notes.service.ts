@@ -22,6 +22,10 @@ export class TempNotesService {
     return 'Hello Notes!';
   }
 
+  getTempNoteByCateId({ cateId }) {
+    return this.tempNotesRepository.findOne({ cate: cateId });
+  }
+
   async checkPermissionNotes({ userId, noteId }) {
     try {
       const confirmedNote = await this.tempNotesRepository.findOne({
@@ -115,24 +119,31 @@ export class TempNotesService {
   // }
 
   async isTempNote({ cateId }) {
-    const tempNote = await this.tempNotesRepository.findOne({ id: cateId });
-    return tempNote;
+    try {
+      const tempNote = await this.tempNotesRepository.findOne({ id: cateId });
+      if (!tempNote) {
+        throw new Error();
+      }
+      return tempNote;
+    } catch (error) {
+      throw new BadRequestException('임시노트가 존재하지 않습니다.');
+    }
   }
 
   // createNoteDTO type만들기, return type만들기,
   async createNote({ content, userId, cateId }) {
-    const note = this.tempNotesRepository.create({
+    const tempNote = this.tempNotesRepository.create({
       content,
       user: userId,
       cate: cateId,
       // mediumCate: mediumCateId,
       // largeCate: largeCateId,
     });
-    await this.tempNotesRepository.insert(note);
+    await this.tempNotesRepository.insert(tempNote);
     // const updateCate = await this.catesRepository.findOne({ id: cateId });
     // updateCate.isTempNote = true;
     // return await this.catesRepository.update(cateId, updateCate);
-    return note;
+    return tempNote;
     // tempNote.content = content;
     // return await this.tempNotesRepository.update(tempNote.id, tempNote);
   }
@@ -142,7 +153,7 @@ export class TempNotesService {
     return await this.tempNotesRepository.update(tempNote.id, tempNote);
   }
 
-  async getOneNote({ noteId }) {
+  async getOneNote({ tempNoteId }) {
     return await this.tempNotesRepository
       .createQueryBuilder('note')
       .select([
@@ -157,27 +168,27 @@ export class TempNotesService {
         'file.size',
       ])
       .leftJoin('note.files', 'file')
-      .where(`note.id = ${noteId}`)
+      .where(`note.id = ${tempNoteId}`)
       .getOne();
   }
 
-  async updateContentInNote({ noteId, updateNoteBodyDTO }) {
+  async updateContentInNote({ tempNoteId, updateNoteBodyDTO }) {
     const newContentInNote = this.tempNotesRepository.create({
       content: updateNoteBodyDTO.content,
     });
     const updateResult = await this.tempNotesRepository.update(
-      noteId,
+      tempNoteId,
       newContentInNote,
     );
     if (updateResult.affected > 0) {
-      return this.getOneNote({ noteId });
+      return this.getOneNote({ tempNoteId });
     } else {
       throw new NotFoundException(`노트 수정 중 오류가 났습니다.`);
     }
   }
 
-  async deleteNote({ noteId }) {
-    return await this.tempNotesRepository.delete(noteId);
+  async deleteTempNote({ tempNoteId }) {
+    return await this.tempNotesRepository.delete(tempNoteId);
   }
 
   // async getNotesInLargeCateByCreatedAt({ largeCateId }) {

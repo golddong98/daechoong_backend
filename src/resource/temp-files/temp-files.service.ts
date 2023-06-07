@@ -27,28 +27,28 @@ export class TempFilesService {
     }
   }
 
-  // async uploadFiles({ userId, noteId, files }) {
-  //   try {
-  //     for (const element of files) {
-  //       const file = this.tempFilesRepository.create({
-  //         originalName: element.originalname,
-  //         encoding: element.encoding,
-  //         mimeType: element.mimetype,
-  //         size: element.size,
-  //         fileUrl: element.location,
-  //         user: userId,
-  //         note: noteId,
-  //       });
+  async uploadTempFiles({ userId, tempNoteId, files }) {
+    try {
+      for (const element of files) {
+        const file = this.tempFilesRepository.create({
+          originalName: element.originalname,
+          encoding: element.encoding,
+          mimeType: element.mimetype,
+          size: element.size,
+          fileUrl: element.location,
+          user: userId,
+          tempNote: tempNoteId,
+        });
 
-  //       await this.tempFilesRepository.insert(file);
-  //     }
-  //     return await this.tempNotesService.getOneNote({ noteId });
-  //   } catch (error) {
-  //     return new BadRequestException('파일을 수정 중 오류가 났습니다.');
-  //   }
-  // }
+        await this.tempFilesRepository.insert(file);
+      }
+      return await this.tempNotesService.getOneNote({ tempNoteId });
+    } catch (error) {
+      return new BadRequestException('파일을 수정 중 오류가 났습니다.');
+    }
+  }
 
-  async updateUploadFiles({ tempNote, files, content }) {
+  async updateUploadTempFiles({ tempNote, files, content }) {
     tempNote.content = content;
     return await this.tempFilesRepository.update(tempNote.id, tempNote);
   }
@@ -56,4 +56,36 @@ export class TempFilesService {
   async deleteFileInNote({ fileId }) {
     return await this.tempFilesRepository.delete(fileId);
   }
+
+  // async deleteNoteById(noteId: number): Promise<void> {
+  //   const note = await this.tempNotesRepository.findOne(noteId);
+  //   if (!note) {
+  //     throw new NotFoundException('No note found.');
+  //   }
+
+  //   await this.deleteFilesByNoteId(note.id); // 해당 노트와 관련된 파일들을 삭제합니다.
+  //   await this.tempNotesRepository.delete(noteId); // 노트를 삭제합니다.
+  // }
+
+  // async deleteFilesByNoteId(noteId: number): Promise<void> {
+  //   const connection = getConnection();
+  //   const queryRunner = connection.createQueryRunner();
+  //   await queryRunner.startTransaction();
+
+  //   try {
+  //     await queryRunner.query(
+  //       `
+  //     DELETE FROM "file"
+  //     WHERE "noteId" = $1
+  //     `,
+  //       [noteId],
+  //     );
+  //     await queryRunner.commitTransaction();
+  //   } catch (err) {
+  //     await queryRunner.rollbackTransaction();
+  //     throw new InternalServerErrorException();
+  //   } finally {
+  //     await queryRunner.release();
+  //   }
+  // }
 }

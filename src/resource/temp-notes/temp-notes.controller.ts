@@ -51,61 +51,56 @@ export class TempNotesController {
     return;
   }
 
-  // @UseGuards(AuthGuard('jwt'))
-  // @Post('cate-id/:cateId')
-  // @UseInterceptors(FilesInterceptor('file', 10))
-  // async uploadTempNote(
-  //   @Req() req: Request,
-  //   @Res() res: Response,
-  //   @Body() createTempNoteBodyDTO: CreateTempNoteBodyDTO,
-  //   @Param('cateId', ParseIntPipe) param: number,
-  //   @UploadedFiles()
-  //   files: Express.MulterS3.File[],
-  // ) {
-  //   const tempNote = await this.tempNotesService.isTempNote({ cateId: param });
-  //   if (!tempNote) {
-  //     const newNote = await this.tempNotesService.createNote({
-  //       content: createTempNoteBodyDTO.content,
-  //       userId: req.user.id,
-  //       cateId: param,
-  //       // mediumCateId: confirmedSmallCate.mediumCate.id,
-  //       // largeCateId: confirmedSmallCate.largeCate.id,
-  //     });
-  //     if (files && files.length > 0) {
-  //       await this.tempFilesService.uploadFiles({
-  //         noteId: newNote.id,
-  //         userId: req.user.id,
-  //         files,
-  //       });
-  //     }
-  //   } else {
-  //     await this.tempNotesService.updateTempNote({
-  //       tempNote,
-  //       content: createTempNoteBodyDTO.content,
-  //     });
-  //     if (files && files.length > 0) {
-  //       await this.tempFilesService.uploadFiles({
-  //         noteId: tempNote.id,
-  //         userId: req.user.id,
-  //         files,
-  //       });
-  //     }
-  //   }
-  //   // const newNote = await this.tempNotesService.createNote({
-  //   //   content: createTempNoteBodyDTO.content,
-  //   //   userId: req.user.id,
-  //   //   cateId: param,
-  //   //   // mediumCateId: confirmedSmallCate.mediumCate.id,
-  //   //   // largeCateId: confirmedSmallCate.largeCate.id,
-  //   // });
+  @UseGuards(AuthGuard('jwt'))
+  @Post('cate-id/:cateId')
+  @UseInterceptors(FilesInterceptor('file', 10))
+  async uploadTempNote(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() createTempNoteBodyDTO: CreateTempNoteBodyDTO,
+    @Param('cateId', ParseIntPipe) param: number,
+    @UploadedFiles()
+    files: Express.MulterS3.File[],
+  ) {
+    const cate = await this.catesService.getCateById({
+      cateId: param,
+    });
+    // console.log(tempNote);
 
-  //   await this.catesService.updateTempNote({
-  //     cateId: param,
-  //   });
+    // cate.isTempNote == true이면 즉, 임시노트가 이미 존재하면 기존 temp-note 삭제
+    if (cate.isTempNote) {
+      const tempNote = await this.tempNotesService.getTempNoteByCateId({
+        cateId: param,
+      });
+      await this.tempNotesService.deleteTempNote({ tempNoteId: tempNote.id });
+    }
+    // 해당 임시 노트를 삭제
 
-  //   res.status(200).send();
-  //   return;
-  // }
+    // content 추가
+    const newTempNote = await this.tempNotesService.createNote({
+      content: createTempNoteBodyDTO.content,
+      userId: req.user.id,
+      cateId: param,
+    });
+
+    // 파일 추가
+    if (files && files.length > 0) {
+      await this.tempFilesService.uploadTempFiles({
+        tempNoteId: newTempNote.id,
+        userId: req.user.id,
+        files,
+      });
+    }
+    // isTempNote state change (false=>true)
+    if (!cate.isTempNote) {
+      await this.catesService.toggleIsTempNote({
+        cateId: param,
+      });
+    }
+
+    res.status(200).send();
+    return;
+  }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('cate-id/:cateId')
