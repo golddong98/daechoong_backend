@@ -119,7 +119,7 @@ export class NotesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Put('content/:noteId')
+  @Put('note-id/:noteId')
   async updateContentInNote(
     @Req() req: Request,
     @Res() res: Response,
