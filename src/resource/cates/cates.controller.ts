@@ -27,10 +27,18 @@ export class CatesController {
     private readonly usersService: UsersService, // private readonly mediumCatesService: MediumCatesService,
   ) {}
 
-  // @Get()
-  // getSmallCatesTest(): string {
-  //   return this.smallCatesService.getSmallCates();
-  // }
+  @UseGuards(AuthGuard('jwt'))
+  @Get('')
+  async getNotesByCatesLatestContent(
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const result = await this.catesService.getNotesByCatesLatestContent({
+      userId: req.user.id,
+    });
+    res.status(200).json({ cates: result });
+    return;
+  }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('')

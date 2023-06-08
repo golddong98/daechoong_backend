@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 // import { range } from 'src/common/utils/functions';
 import { Cate } from 'src/database/entities/cates.entity';
 import { Repository } from 'typeorm';
+import { NotesService } from '../notes/notes.service';
 // import { MediumCatesService } from '../medium-cates/medium-cates.service';
 
 @Injectable()
@@ -14,6 +15,7 @@ export class CatesService {
   constructor(
     @InjectRepository(Cate)
     private readonly catesRepository: Repository<Cate>,
+    private readonly notesService: NotesService,
   ) {}
 
   getCates(): string {
@@ -126,13 +128,45 @@ export class CatesService {
     });
   }
 
-  //   async getAllSmallCatesByYear({ userId }) {
-  //     const smallCates = await this.catesRepository.find({
-  //       select: ['id', 'name'],
-  //       where: {
-  //         user: userId,
-  //       },
-  //     });
+  async getAllCates({ userId }) {
+    const cates = await this.catesRepository.find({
+      select: ['id', 'name'],
+      where: {
+        user: userId,
+      },
+    });
+    return cates;
+  }
+
+  async getNotesByCatesLatestContent({ userId }) {
+    const cates = await this.getAllCates({ userId });
+    const catesWithLatestNote = await Promise.all(
+      cates.map(async (cate) => {
+        const latestNote = await this.notesService.getLatestNote({
+          cateId: cate.id,
+        });
+        if (!latestNote) {
+          return {
+            cate: { id: cate.id, name: cate.name },
+            note: {
+              id: '',
+              content: '',
+              createdAt: '',
+            },
+          };
+        }
+        return {
+          cate: { id: cate.id, name: cate.name },
+          note: {
+            id: latestNote.id,
+            content: latestNote.content,
+            createdAt: latestNote.createdAt,
+          },
+        };
+      }),
+    );
+    return catesWithLatestNote;
+  }
 
   //     const smallCatesByYear: { [key: number]: Cate[] } = {};
   //     for (const smallCate of smallCates) {

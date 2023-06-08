@@ -188,6 +188,18 @@ export class NotesService {
     return await this.notesRepository.delete(noteId);
   }
 
+  async getLatestNote({ cateId }) {
+    const latestNote = await this.notesRepository
+      .createQueryBuilder('note')
+      .select(['note.id', 'note.content', 'note.createdAt'])
+      // .leftJoinAndSelect('note.cate', 'cate')
+      .where('note.cateId = :cateId', { cateId })
+      .orderBy('note.createdAt', 'DESC')
+      .take(1)
+      .getOne();
+    return latestNote;
+  }
+
   // async getNotesInLargeCateByCreatedAt({ largeCateId }) {
   //   return await this.notesRepository
   //     .createQueryBuilder('note')
