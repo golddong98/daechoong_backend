@@ -66,29 +66,26 @@ export class TempNotesService {
     }
   }
 
-  async getNotesCateNameByCateId({ cateId, userId }) {
+  async getTempNoteTempFilesByCateId({ cateId }) {
     try {
-      return await this.tempNotesRepository
+      const tempNote = await this.tempNotesRepository
         .createQueryBuilder('temp_note')
         .select([
           'temp_note.id',
           'temp_note.content',
           'temp_note.createdAt',
-          'file.id',
-          'file.fileUrl',
-          'file.originalName',
-          'file.mimeType',
-          'file.encoding',
-          'file.size',
-          // 'cate_id.id',
-          // 'cate_id.name',
+          'temp_file.id',
+          'temp_file.fileUrl',
+          'temp_file.originalName',
+          'temp_file.mimeType',
+          'temp_file.encoding',
+          'temp_file.size',
         ])
-        .leftJoin('temp_note.files', 'file')
-        // .leftJoin('temp_note.cate', 'cate_id')
-        .where(`temp_note.cateId = ${cateId}`)
-        .andWhere(`temp_note.userId = ${userId}`)
+        .leftJoin('temp_note.tempFiles', 'temp_file')
+        .where('temp_note.cateId = :cateId', { cateId })
         .orderBy('temp_note.createdAt', 'DESC')
         .getOne();
+      return tempNote;
     } catch (error) {
       throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
     }

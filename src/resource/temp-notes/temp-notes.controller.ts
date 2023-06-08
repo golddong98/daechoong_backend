@@ -109,14 +109,18 @@ export class TempNotesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('cate-id/:cateId')
-  async getTempNotesCateNameByCateId(
+  async getTempNoteTempFilesByCateId(
     @Req() req: Request,
     @Res() res: Response,
     @Param('cateId', ParseIntPipe) param: number,
   ) {
-    const result = await this.tempNotesService.getNotesCateNameByCateId({
-      cateId: param,
+    await this.catesService.checkPermissionCate({
       userId: req.user.id,
+      cateId: param,
+    });
+
+    const result = await this.tempNotesService.getTempNoteTempFilesByCateId({
+      cateId: param,
     });
     res.status(200).json({ tempNote: result });
     return;

@@ -1,7 +1,8 @@
 import { Note } from './notes.entity';
-import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne, OneToOne } from 'typeorm';
 import { Common } from './common.entity';
 import { User } from './users.entity';
+import { TempNote } from './temp-notes.entity';
 // import { MediumCate } from './medium-cates.entity';
 // import { LargeCate } from './large-cates.entity';
 
@@ -17,6 +18,9 @@ export class Cate extends Common {
     onDelete: 'CASCADE',
   })
   user: User;
+
+  @OneToOne(() => TempNote, (tempNote) => tempNote.cate)
+  tempNote: TempNote;
 
   @Column({ type: 'boolean', default: false })
   isTempNote: boolean;
