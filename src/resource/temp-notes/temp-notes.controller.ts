@@ -38,18 +38,18 @@ export class TempNotesController {
     return this.tempNotesService.getNotes();
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get('main/cate-id/:cate-id')
-  async getNotesCatesTempNotesByCateId(
-    @Req() req: Request,
-    @Res() res: Response,
-  ) {
-    const result = await this.tempNotesService.getNotesCatesTempNotesByCateId({
-      userId: req.user.id,
-    });
-    res.status(200).json({ notes: result });
-    return;
-  }
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('main/cate-id/:cate-id')
+  // async getNotesCatesTempNotesByCateId(
+  //   @Req() req: Request,
+  //   @Res() res: Response,
+  // ) {
+  //   const result = await this.tempNotesService.getNotesCatesTempNotesByCateId({
+  //     userId: req.user.id,
+  //   });
+  //   res.status(200).json({ notes: result });
+  //   return;
+  // }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('cate-id/:cateId')
@@ -109,7 +109,7 @@ export class TempNotesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('cate-id/:cateId')
-  async getTempNoteTempFilesByCateId(
+  async getTempNoteCateNameByCateId(
     @Req() req: Request,
     @Res() res: Response,
     @Param('cateId', ParseIntPipe) param: number,

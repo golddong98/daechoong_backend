@@ -48,10 +48,10 @@ export class TempFilesService {
     }
   }
 
-  async updateUploadTempFiles({ tempNote, files, content }) {
-    tempNote.content = content;
-    return await this.tempFilesRepository.update(tempNote.id, tempNote);
-  }
+  // async updateUploadTempFiles({ tempNote, files, content }) {
+  //   tempNote.content = content;
+  //   return await this.tempFilesRepository.update(tempNote.id, tempNote);
+  // }
 
   async deleteFileInNote({ fileId }) {
     return await this.tempFilesRepository.delete(fileId);

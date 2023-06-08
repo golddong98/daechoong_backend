@@ -24,6 +24,7 @@ export class CatesService {
     try {
       const confirmedCate = await this.catesRepository.findOne({
         // relations: ['mediumCate', 'largeCate'],
+        select: ['id', 'name', 'isTempNote'],
         where: {
           id: cateId,
           user: userId,

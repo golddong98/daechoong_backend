@@ -6,12 +6,14 @@ import {
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Note } from '../../database/entities/notes.entity';
+import { TempNotesService } from '../temp-notes/temp-notes.service';
 
 @Injectable()
 export class NotesService {
   constructor(
     @InjectRepository(Note)
     private notesRepository: Repository<Note>,
+    private tempNotesService: TempNotesService,
   ) {}
 
   async findAll(): Promise<Note[]> {
@@ -38,59 +40,7 @@ export class NotesService {
     }
   }
 
-  async getNotesCatesTempNotesByCateId({ userId }) {
-    try {
-      return await this.notesRepository
-        .createQueryBuilder('note')
-        .select([
-          'note.id',
-          'note.content',
-          'note.createdAt',
-          'file.id',
-          'file.fileUrl',
-          'file.originalName',
-          'file.mimeType',
-          'file.encoding',
-          'file.size',
-        ])
-        .leftJoin('note.files', 'file')
-        .where(`note.userId = ${userId}`)
-        .orderBy('note.updatedAt', 'DESC')
-        .getMany();
-    } catch (error) {
-      throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
-    }
-  }
-
-  async getNotesCateNameByCateId({ cateId, userId }) {
-    try {
-      return await this.notesRepository
-        .createQueryBuilder('note')
-        .select([
-          'note.id',
-          'note.content',
-          'note.createdAt',
-          'file.id',
-          'file.fileUrl',
-          'file.originalName',
-          'file.mimeType',
-          'file.encoding',
-          'file.size',
-          'cate_id.id',
-          'cate_id.name',
-        ])
-        .leftJoin('note.files', 'file')
-        .leftJoin('note.cate', 'cate_id')
-        .where(`note.cateId = ${cateId}`)
-        .andWhere(`note.userId = ${userId}`)
-        .orderBy('note.createdAt', 'DESC')
-        .getMany();
-    } catch (error) {
-      throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
-    }
-  }
-
-  // async getAllNotesByCreatedAt({ userId }) {
+  // async getNotesCatesTempNotesByCateId({ userId }) {
   //   try {
   //     return await this.notesRepository
   //       .createQueryBuilder('note')
@@ -107,12 +57,79 @@ export class NotesService {
   //       ])
   //       .leftJoin('note.files', 'file')
   //       .where(`note.userId = ${userId}`)
-  //       .orderBy('note.createdAt', 'DESC')
+  //       .orderBy('note.updatedAt', 'DESC')
   //       .getMany();
   //   } catch (error) {
   //     throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
   //   }
   // }
+
+  async getNotesCateNameByCateId({ cateId, userId }) {
+    try {
+      return await this.notesRepository
+        .createQueryBuilder('note')
+        .select([
+          'note.id',
+          'note.content',
+          'note.createdAt',
+          'file.id',
+          'file.fileUrl',
+          'file.originalName',
+          'file.mimeType',
+          'file.encoding',
+          'file.size',
+          'cate.id',
+          'cate.name',
+          'cate.isTempNote',
+        ])
+        .leftJoin('note.files', 'file')
+        .leftJoin('note.cate', 'cate')
+        .where(`note.cateId = ${cateId}`)
+        .andWhere(`note.userId = ${userId}`)
+        .orderBy('note.createdAt', 'DESC')
+        .getMany();
+    } catch (error) {
+      throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
+    }
+  }
+
+  async getNotesByCateId({ cateId }) {
+    try {
+      return await this.notesRepository
+        .createQueryBuilder('note')
+        .select([
+          'note.id',
+          'note.content',
+          'note.createdAt',
+          'file.id',
+          'file.fileUrl',
+          'file.originalName',
+          'file.mimeType',
+          'file.encoding',
+          'file.size',
+        ])
+        .leftJoin('note.files', 'file')
+        .where(`note.cateId = ${cateId}`)
+        .orderBy('note.createdAt', 'DESC')
+        .getMany();
+    } catch (error) {
+      throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
+    }
+  }
+
+  async getNotesTempNotesByCateId({ cateId }) {
+    try {
+      const notes = await this.getNotesByCateId({
+        cateId,
+      });
+      const tempNote = await this.tempNotesService.getTempNoteTempFilesByCateId(
+        { cateId },
+      );
+      return { notes, tempNote };
+    } catch (error) {
+      throw new BadRequestException('노트를 불러오는데 문제가 생겼습니다.');
+    }
+  }
 
   // createNoteDTO type만들기, return type만들기,
   async createNote({

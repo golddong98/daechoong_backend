@@ -35,21 +35,28 @@ export class NotesController {
     private tempNotesService: TempNotesService,
   ) {}
 
-  @Get()
-  getNotes(): string {
-    return this.notesService.getNotes();
-  }
+  // @Get()
+  // getNotes(): string {
+  //   return this.notesService.getNotes();
+  // }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('main/cate-id/:cate-id')
-  async getNotesCatesTempNotesByCateId(
+  @Get('main/cate-id/:cateId')
+  async getNotesTempNotesCateNameByCateId(
     @Req() req: Request,
     @Res() res: Response,
+    @Param('cateId', ParseIntPipe) param: number,
   ) {
-    const result = await this.notesService.getNotesCatesTempNotesByCateId({
+    const { confirmedCate } = await this.catesService.checkPermissionCate({
       userId: req.user.id,
+      cateId: param,
     });
-    res.status(200).json({ notes: result });
+
+    const { notes, tempNote } =
+      await this.notesService.getNotesTempNotesByCateId({
+        cateId: param,
+      });
+    res.status(200).json({ notes, cate: confirmedCate, tempNote });
     return;
   }
 
