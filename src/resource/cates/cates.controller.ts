@@ -9,7 +9,7 @@ import {
   Req,
   Res,
   UseGuards,
-  //   Put,
+  Put,
   //   Delete,
   //   Query,
 } from '@nestjs/common';
@@ -17,7 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from '../users/users.service';
 import { CateCreateDTO } from './dtos/cate-create.dto';
 import { Request, Response } from 'express';
-// import { SmallCateNameUpdateDTO } from './dtos/small-cate-name-update.dto';
+import { CateNameUpdateDTO } from './dtos/cate-name-update.dto';
 // import { MediumCatesService } from '../medium-cates/medium-cates.service';
 
 @Controller('cates')
@@ -55,26 +55,26 @@ export class CatesController {
     return;
   }
 
-  //   @UseGuards(AuthGuard('jwt'))
-  //   @Put('cate-id/:cateId')
-  //   async updateSmallCate(
-  //     @Req() req: Request,
-  //     @Res() res: Response,
-  //     @Param('cateId', ParseIntPipe) param: number,
-  //     @Body() smallCateNameUpdateDTO: SmallCateNameUpdateDTO,
-  //   ) {
-  //     await this.smallCatesService.checkPermissionSmallCate({
-  //       userId: req.user.id,
-  //       cateId: param,
-  //     });
+  @UseGuards(AuthGuard('jwt'))
+  @Put('cate-id/:cateId')
+  async updateSmallCate(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('cateId', ParseIntPipe) param: number,
+    @Body() cateNameUpdateDTO: CateNameUpdateDTO,
+  ) {
+    await this.catesService.checkPermissionCate({
+      userId: req.user.id,
+      cateId: param,
+    });
 
-  //     const result = await this.smallCatesService.updateSmallCates({
-  //       cateId: param,
-  //       smallCateNameUpdateDTO,
-  //     });
-  //     res.status(200).json({ smallCate: result });
-  //     return;
-  //   }
+    const result = await this.catesService.updateCate({
+      cateId: param,
+      cateName: cateNameUpdateDTO.cateName,
+    });
+    res.status(200).json({ cate: result });
+    return;
+  }
 
   //   @UseGuards(AuthGuard('jwt'))
   //   @Delete('small-cate-id/:smallCateId')

@@ -62,18 +62,15 @@ export class CatesService {
     return await this.catesRepository.update(cateId, updateCate);
   }
 
-  async updateSmallCates({ smallCateId, smallCateNameUpdateDTO }) {
-    const mediumCate = this.catesRepository.create({
-      name: smallCateNameUpdateDTO.smallCateName,
+  async updateCate({ cateId, cateName }) {
+    const newCate = this.catesRepository.create({
+      name: cateName,
     });
-    const updateResult = await this.catesRepository.update(
-      smallCateId,
-      mediumCate,
-    );
+    const updateResult = await this.catesRepository.update(cateId, newCate);
     if (updateResult.affected > 0) {
       return this.catesRepository.findOne({
         select: ['id', 'name'],
-        where: { id: smallCateId },
+        where: { id: cateId },
       });
     } else {
       throw new NotFoundException(`소분류 수정 중 오류가 났습니다.`);
