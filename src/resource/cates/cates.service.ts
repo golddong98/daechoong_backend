@@ -309,19 +309,40 @@ export class CatesService {
   async getTopCatesByUserId({ userId }) {
     const subQuery = await this.notesService.getTopCatesByUserId({ userId });
     const cateIds = subQuery.map((result) => result.cateId);
-    // return this.catesRepository
-    //   .createQueryBuilder('cate')
-    //   .where('id IN (:...cateIds)', { cateIds })
-    //   .getMany();
-
     const cates = await this.catesRepository
       .createQueryBuilder('cate')
-      .select(['cate.id as id', 'cate.name as name'])
+      .select([
+        'cate.id as id',
+        'cate.name as name',
+        'cate.createdAt as createdAt',
+      ])
       .addSelect('COUNT(note.id)', 'count')
       .leftJoin('cate.notes', 'note', 'note.deletedAt IS NULL')
       .where('cate.id IN (:...cateIds)', { cateIds })
       .groupBy('cate.id')
       .orderBy('count', 'DESC')
+      .getRawMany();
+
+    return cates;
+  }
+
+  async getCatesNoteCntByUserId({ userId }) {
+    const subQuery = await this.notesService.getCatesNoteCntByUserId({
+      userId,
+    });
+    const cateIds = subQuery.map((result) => result.cateId);
+    const cates = await this.catesRepository
+      .createQueryBuilder('cate')
+      .select([
+        'cate.id as id',
+        'cate.name as name',
+        'cate.createdAt as createdAt',
+      ])
+      .addSelect('COUNT(note.id)', 'count')
+      .leftJoin('cate.notes', 'note', 'note.deletedAt IS NULL')
+      .where('cate.id IN (:...cateIds)', { cateIds })
+      .groupBy('cate.id')
+      .orderBy('cate.createdAt', 'DESC')
       .getRawMany();
 
     return cates;

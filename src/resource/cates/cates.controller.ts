@@ -138,7 +138,11 @@ export class CatesController {
     const result = await this.catesService.getTopCatesByUserId({
       userId: req.user.id,
     });
-    res.status(200).json({ cates: result });
+
+    const result2 = await this.catesService.getCatesNoteCntByUserId({
+      userId: req.user.id,
+    });
+    res.status(200).json({ cates: { rank: result, latest: result2 } });
     return;
   }
 }

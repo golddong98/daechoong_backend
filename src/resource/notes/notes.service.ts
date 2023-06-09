@@ -233,6 +233,19 @@ export class NotesService {
     return subQuery;
   }
 
+  async getCatesNoteCntByUserId({ userId }) {
+    const subQuery = await this.notesRepository
+      .createQueryBuilder('note')
+      .select('COUNT(*)', 'count')
+      .addSelect('note.cateId', 'cateId')
+      .where('note.userId = :userId AND note.deletedAt IS NULL', { userId })
+      .groupBy('note.cateId')
+      .orderBy('count', 'DESC')
+      .getRawMany();
+
+    return subQuery;
+  }
+
   // async getNotesInLargeCateByCreatedAt({ largeCateId }) {
   //   return await this.notesRepository
   //     .createQueryBuilder('note')
