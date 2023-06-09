@@ -77,8 +77,8 @@ export class CatesService {
     }
   }
 
-  async deleteSmallCates({ smallCateId }) {
-    return await this.catesRepository.delete(smallCateId);
+  async deleteCate({ cateId }) {
+    return await this.catesRepository.delete(cateId);
   }
 
   async getCateById({ cateId }) {
@@ -163,6 +163,27 @@ export class CatesService {
       }),
     );
     return catesWithLatestNote;
+  }
+
+  async getTopCatesByUserId({ userId }) {
+    const subQuery = await this.notesService.getTopCatesByUserId({ userId });
+    const cateIds = subQuery.map((result) => result.cateId);
+    // return this.catesRepository
+    //   .createQueryBuilder('cate')
+    //   .where('id IN (:...cateIds)', { cateIds })
+    //   .getMany();
+
+    const cates = await this.catesRepository
+      .createQueryBuilder('cate')
+      .select(['cate.id', 'cate.name'])
+      .addSelect('COUNT(note.id)', 'count')
+      .leftJoin('cate.notes', 'note', 'note.deletedAt IS NULL')
+      .where('cate.id IN (:...cateIds)', { cateIds })
+      .groupBy('cate.id')
+      .orderBy('count', 'DESC')
+      .getRawMany();
+
+    return cates;
   }
 
   //     const smallCatesByYear: { [key: number]: Cate[] } = {};

@@ -10,7 +10,7 @@ import {
   Res,
   UseGuards,
   Put,
-  //   Delete,
+  Delete,
   //   Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -76,25 +76,25 @@ export class CatesController {
     return;
   }
 
-  //   @UseGuards(AuthGuard('jwt'))
-  //   @Delete('small-cate-id/:smallCateId')
-  //   async deleteSmallCate(
-  //     @Req() req: Request,
-  //     @Res() res: Response,
-  //     @Param('smallCateId', ParseIntPipe) param: number,
-  //   ) {
-  //     await this.smallCatesService.checkPermissionSmallCate({
-  //       userId: req.user.id,
-  //       smallCateId: param,
-  //     });
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('cate-id/:cateId')
+  async deleteSmallCate(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('cateId', ParseIntPipe) param: number,
+  ) {
+    await this.catesService.checkPermissionCate({
+      userId: req.user.id,
+      cateId: param,
+    });
 
-  //     await this.smallCatesService.deleteSmallCates({
-  //       smallCateId: param,
-  //     });
+    await this.catesService.deleteCate({
+      cateId: param,
+    });
 
-  //     res.status(200).send();
-  //     return;
-  //   }
+    res.status(200).send();
+    return;
+  }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('cate-id/:cateId')
@@ -132,13 +132,13 @@ export class CatesController {
   //     return;
   //   }
 
-  //   @UseGuards(AuthGuard('jwt'))
-  //   @Get('by-year')
-  //   async getAllSmallCatesByYear(@Req() req: Request, @Res() res: Response) {
-  //     const result = await this.smallCatesService.getAllSmallCatesByYear({
-  //       userId: req.user.id,
-  //     });
-  //     res.status(200).json({ smallCates: result });
-  //     return;
-  //   }
+  @UseGuards(AuthGuard('jwt'))
+  @Get('portfolio')
+  async getTopCatesByUserId(@Req() req: Request, @Res() res: Response) {
+    const result = await this.catesService.getTopCatesByUserId({
+      userId: req.user.id,
+    });
+    res.status(200).json({ cates: result });
+    return;
+  }
 }

@@ -200,6 +200,22 @@ export class NotesService {
     return latestNote;
   }
 
+  async getTopCatesByUserId({ userId }) {
+    const limit = 3;
+    const subQuery = await this.notesRepository
+      .createQueryBuilder('note')
+      .select('COUNT(*)', 'count')
+      .addSelect('note.cateId', 'cateId')
+      .where('note.userId = :userId AND note.deletedAt IS NULL', { userId })
+      .groupBy('note.cateId')
+      .orderBy('count', 'DESC')
+      .limit(limit)
+      .getRawMany();
+
+    console.log(subQuery);
+    return subQuery;
+  }
+
   // async getNotesInLargeCateByCreatedAt({ largeCateId }) {
   //   return await this.notesRepository
   //     .createQueryBuilder('note')
