@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Note } from '../../database/entities/notes.entity';
 import { TempNotesService } from '../temp-notes/temp-notes.service';
+import moment from 'moment';
 
 @Injectable()
 export class NotesService {
@@ -244,6 +245,32 @@ export class NotesService {
       .getRawMany();
 
     return subQuery;
+  }
+
+  async getNoteDates({ year, month, userId }): Promise<boolean[]> {
+    const startOfMonth = moment([year, month - 1]).startOf('month');
+    const endOfMonth = moment([year, month - 1]).endOf('month');
+
+    const notes = await this.notesRepository
+      .createQueryBuilder('note')
+      .select(['note.id as id', 'DATE(note.createdAt) as createdAt'])
+      .where(
+        'note.createdAt BETWEEN :startOfMonth AND :endOfMonth AND note.deletedAt IS NULL',
+        {
+          startOfMonth: startOfMonth.format('YYYY-MM-DD'),
+          endOfMonth: endOfMonth.format('YYYY-MM-DD'),
+        },
+      )
+      .andWhere('note.userId = :userId AND note.deletedAt IS NULL', { userId })
+      .getRawMany();
+
+    const dates = Array(endOfMonth.date()).fill(false);
+    notes.forEach(({ createdAt }) => {
+      const date = moment(createdAt).date();
+      dates[date - 1] = true;
+    });
+
+    return dates;
   }
 
   // async getNotesInLargeCateByCreatedAt({ largeCateId }) {

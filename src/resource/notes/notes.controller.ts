@@ -12,6 +12,7 @@ import {
   ParseIntPipe,
   Put,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Express, Request, Response } from 'express';
@@ -295,6 +296,23 @@ export class NotesController {
       userId: req.user.id,
     });
     res.status(200).json({ notes: result });
+    return;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('grass')
+  async getNoteDates(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Query('year') year: number,
+    @Query('month') month: number,
+  ): Promise<boolean[]> {
+    const result = await this.notesService.getNoteDates({
+      year,
+      month,
+      userId: req.user.id,
+    });
+    res.status(200).json({ grass: result });
     return;
   }
 
