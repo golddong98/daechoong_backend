@@ -135,34 +135,175 @@ export class CatesService {
     return cates;
   }
 
-  async getNotesByCatesLatestContent({ userId }) {
-    const cates = await this.getAllCates({ userId });
-    const catesWithLatestNote = await Promise.all(
-      cates.map(async (cate) => {
-        const latestNote = await this.notesService.getLatestNote({
-          cateId: cate.id,
-        });
-        if (!latestNote) {
-          return {
-            cate: { id: cate.id, name: cate.name },
-            note: {
-              id: '',
-              content: '',
-              createdAt: '',
-            },
-          };
-        }
-        return {
-          cate: { id: cate.id, name: cate.name },
-          note: {
-            id: latestNote.id,
-            content: latestNote.content,
-            createdAt: latestNote.createdAt,
-          },
-        };
-      }),
-    );
-    return catesWithLatestNote;
+  // async getNotesByCatesLatestContent({ userId }) {
+  //   const cates = await this.getAllCates({ userId });
+  //   const catesWithLatestNote = await Promise.all(
+  //     cates.map(async (cate) => {
+  //       const latestNote = await this.notesService.getLatestNote({
+  //         cateId: cate.id,
+  //       });
+  //       if (!latestNote) {
+  //         return {
+  //           cate: { id: cate.id, name: cate.name },
+  //           note: {
+  //             id: '',
+  //             content: '',
+  //             createdAt: '',
+  //           },
+  //         };
+  //       }
+  //       return {
+  //         cate: { id: cate.id, name: cate.name },
+  //         note: {
+  //           id: latestNote.id,
+  //           content: latestNote.content,
+  //           createdAt: latestNote.createdAt,
+  //         },
+  //       };
+  //     }),
+  //   );
+  //   return catesWithLatestNote;
+  // }
+
+  // async getNotesByCatesLatestContent({ userId }): Promise<any> {
+  //   const cates = await this.catesRepository
+  //     .find({ where: { user: userId, deletedAt: null } })
+  //     .then((cates) =>
+  //       Promise.all(
+  //         cates.map(async (cate) => {
+  //           const recentNotes = await this.notesService.getLatestNote({
+  //             cateId: cate.id,
+  //             userId,
+  //           });
+  //           if (!recentNotes.length) {
+  //             return {
+  //               cate: { id: cate.id, name: cate.name },
+  //               note: {
+  //                 id: '',
+  //                 content: '',
+  //                 createdAt: '',
+  //               },
+  //             };
+  //           }
+  //           return {
+  //             cate: { id: cate.id, name: cate.name },
+  //             note: {
+  //               id: recentNotes[0].id,
+  //               content: recentNotes[0].content,
+  //               createdAt: recentNotes[0].createdAt,
+  //             },
+  //           };
+  //         }),
+  //       ),
+  //     );
+  //   return cates;
+  // }
+
+  // async getNotesByCatesLatestContent({ userId }): Promise<any> {
+  //   const cates = await this.catesRepository
+  //     .createQueryBuilder('cate')
+  //     .select([
+  //       'cate.id as id',
+  //       'cate.name as name',
+  //       'note.id as noteId',
+  //       'note.content as content',
+  //       'note.createdAt as createdAt',
+  //     ])
+  //     .leftJoin('cate.notes', 'note', 'note.deletedAt IS NULL')
+  //     .where('cate.userId = :userId AND cate.deletedAt IS NULL', {
+  //       userId,
+  //     })
+  //     .orderBy('note.createdAt', 'DESC')
+  //     .getRawMany()
+  //     .then((cates) =>
+  //       cates.reduce((acc, cur) => {
+  //         const cateIdx = acc.findIndex(({ id }) => id === cur.id);
+  //         if (cateIdx !== -1) {
+  //           const noteCreatedAt = new Date(cur.createdAt);
+  //           const cateLastAtIndex =
+  //             acc[cateIdx].note.createdAt == null
+  //               ? null
+  //               : new Date(acc[cateIdx].note.createdAt);
+  //           // 현재 index의 note가 더 최신일 경우 update
+  //           if (cateLastAtIndex == null || noteCreatedAt > cateLastAtIndex) {
+  //             acc[cateIdx].note = {
+  //               id: cur.noteId,
+  //               content: cur.content,
+  //               createdAt: cur.createdAt,
+  //             };
+  //           }
+  //         } else {
+  //           acc.push({
+  //             cate: {
+  //               id: cur.id,
+  //               name: cur.name,
+  //             },
+  //             note: {
+  //               id: cur.noteId,
+  //               content: cur.content,
+  //               createdAt: cur.createdAt,
+  //             },
+  //           });
+  //         }
+  //         return acc;
+  //       }, []),
+  //     );
+  //   return cates;
+  // }
+
+  // async getNotesByCatesLatestContent({ userId }): Promise<any> {
+  //   const cates = await this.catesRepository
+  //     .createQueryBuilder('cate')
+  //     .select([
+  //       'cate.id as id',
+  //       'cate.name as name',
+  //       'MAX(note.createdAt) as latestCreatedAt',
+  //       'GROUP_CONCAT(DISTINCT note.id ORDER BY note.createdAt DESC SEPARATOR ",") as noteIds',
+  //     ])
+  //     .leftJoin('cate.notes', 'note', 'note.deletedAt IS NULL')
+  //     .where('cate.userId = :userId AND cate.deletedAt IS NULL', {
+  //       userId,
+  //     })
+  //     .groupBy('cate.id')
+  //     .getMany()
+  //     .then((cates) =>
+  //       cates.map(({ id, name, latestCreatedAt, noteIds }) => ({
+  //         cate: { id, name },
+  //         note:
+  //           noteIds && noteIds.split(',')?.[0]
+  //             ? { id: noteIds.split(',')[0], createdAt: latestCreatedAt }
+  //             : null,
+  //       })),
+  //     );
+  //   return cates;
+  // }
+
+  async getNotesByCatesLatestContent({ userId }): Promise<any> {
+    const cates = await this.catesRepository
+      .createQueryBuilder('cate')
+      .select([
+        'cate.id as id',
+        'cate.name as name',
+        'MAX(note.createdAt) as latestCreatedAt',
+        'GROUP_CONCAT(DISTINCT note.id ORDER BY note.createdAt DESC SEPARATOR ",") as noteIds',
+      ])
+      .leftJoin('cate.notes', 'note', 'note.deletedAt IS NULL')
+      .where('cate.userId = :userId AND cate.deletedAt IS NULL', {
+        userId,
+      })
+      .groupBy('cate.id')
+      .orderBy('latestCreatedAt', 'DESC')
+      .getRawMany()
+      .then((cates) =>
+        cates.map(({ id, name, latestCreatedAt, noteIds }) => ({
+          cate: { id, name },
+          note:
+            noteIds && noteIds.split(',')?.[0]
+              ? { id: noteIds.split(',')[0], latestCreatedAt }
+              : null,
+        })),
+      );
+    return cates;
   }
 
   async getTopCatesByUserId({ userId }) {
@@ -175,7 +316,7 @@ export class CatesService {
 
     const cates = await this.catesRepository
       .createQueryBuilder('cate')
-      .select(['cate.id', 'cate.name'])
+      .select(['cate.id as id', 'cate.name as name'])
       .addSelect('COUNT(note.id)', 'count')
       .leftJoin('cate.notes', 'note', 'note.deletedAt IS NULL')
       .where('cate.id IN (:...cateIds)', { cateIds })

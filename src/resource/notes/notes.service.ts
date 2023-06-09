@@ -188,16 +188,34 @@ export class NotesService {
     return await this.notesRepository.delete(noteId);
   }
 
-  async getLatestNote({ cateId }) {
-    const latestNote = await this.notesRepository
+  // async getLatestNote({ cateId }) {
+  //   const latestNote = await this.notesRepository
+  //     .createQueryBuilder('note')
+  //     .select(['note.id', 'note.content', 'note.createdAt'])
+  //     // .leftJoinAndSelect('note.cate', 'cate')
+  //     .where('note.cateId = :cateId', { cateId })
+  //     .orderBy('note.createdAt', 'DESC')
+  //     .take(1)
+  //     .getOne();
+  //   return latestNote;
+  // }
+
+  async getLatestNote({ cateId, userId }): Promise<Note[]> {
+    const notes = await this.notesRepository
       .createQueryBuilder('note')
       .select(['note.id', 'note.content', 'note.createdAt'])
-      // .leftJoinAndSelect('note.cate', 'cate')
-      .where('note.cateId = :cateId', { cateId })
+      .leftJoin('note.cate', 'cate', 'cate.id = :cateId', {
+        cateId,
+      })
+      .where(
+        'cate.userId = :userId AND note.deletedAt IS NULL AND cate.deletedAt IS NULL',
+        { userId },
+      )
       .orderBy('note.createdAt', 'DESC')
-      .take(1)
-      .getOne();
-    return latestNote;
+      .limit(1)
+      .getMany();
+
+    return notes;
   }
 
   async getTopCatesByUserId({ userId }) {
@@ -212,7 +230,6 @@ export class NotesService {
       .limit(limit)
       .getRawMany();
 
-    console.log(subQuery);
     return subQuery;
   }
 
