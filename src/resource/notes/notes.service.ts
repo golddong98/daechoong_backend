@@ -273,6 +273,64 @@ export class NotesService {
     return dates;
   }
 
+  // async getCategoryByNoteDate({ year, month, day, userId }) {
+  //   const note = await this.notesRepository
+  //     .createQueryBuilder('note')
+  //     .leftJoinAndSelect('note.cate', 'cate')
+  //     .where(
+  //       'YEAR(note.createdAt) = :year AND MONTH(note.createdAt) = :month AND DAY(note.createdAt) = :day',
+  //       {
+  //         year: year,
+  //         month: month,
+  //         day: day,
+  //       },
+  //     )
+  //     .andWhere('note.userId = :userId AND note.deletedAt IS NULL', { userId })
+  //     .getOne();
+
+  //   if (!note) {
+  //     // 노트가 없는 경우 null을 리턴합니다.
+  //     return null;
+  //   }
+
+  //   const { id, name } = note.cate;
+  //   return { id, name };
+  // }
+
+  async getCategoryByNoteDate({ year, month, day, userId }) {
+    const notes = await this.notesRepository
+      .createQueryBuilder('note')
+      .leftJoinAndSelect('note.cate', 'cate')
+      .where(
+        'YEAR(note.createdAt) = :year AND MONTH(note.createdAt) = :month AND DAY(note.createdAt) = :day',
+        {
+          year: year,
+          month: month,
+          day: day,
+        },
+      )
+      .andWhere('note.userId = :userId AND note.deletedAt IS NULL', { userId })
+      .getMany();
+
+    if (!notes || notes.length === 0) {
+      // 노트가 없는 경우 빈 배열을 리턴합니다.
+      return [];
+    }
+
+    // 노트에서 카테고리 정보를 추출합니다.
+    const categories = notes.map((note) => {
+      const { id, name } = note.cate;
+      return { id, name };
+    });
+
+    // 중복된 카테고리를 제거합니다.
+    const uniqueCategories = categories.reduce((acc, category) => {
+      return acc.find((c) => c.id === category.id) ? acc : [...acc, category];
+    }, []);
+
+    return uniqueCategories;
+  }
+
   // async getNotesInLargeCateByCreatedAt({ largeCateId }) {
   //   return await this.notesRepository
   //     .createQueryBuilder('note')

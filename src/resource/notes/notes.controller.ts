@@ -316,6 +316,25 @@ export class NotesController {
     return;
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Get('date')
+  async getCategoryByNoteDate(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Query('year') year: number,
+    @Query('month') month: number,
+    @Query('day') day: number,
+  ) {
+    const result = await this.notesService.getCategoryByNoteDate({
+      year,
+      month,
+      day,
+      userId: req.user.id,
+    });
+    res.status(200).json({ cates: result });
+    return;
+  }
+
   // @UseGuards(AuthGuard('jwt'))
   // @Get('mod/cate-id/:cateId')
   // async getNotesInCateByUpdatedAt(
