@@ -286,20 +286,21 @@ export class CatesService {
         'cate.name as name',
         'MAX(note.createdAt) as latestCreatedAt',
         'GROUP_CONCAT(DISTINCT note.id ORDER BY note.createdAt DESC SEPARATOR ",") as noteIds',
+        'note.content as content',
       ])
       .leftJoin('cate.notes', 'note', 'note.deletedAt IS NULL')
       .where('cate.userId = :userId AND cate.deletedAt IS NULL', {
         userId,
       })
-      .groupBy('cate.id')
+      .groupBy('cate.id, note.id')
       .orderBy('latestCreatedAt', 'DESC')
       .getRawMany()
       .then((cates) =>
-        cates.map(({ id, name, latestCreatedAt, noteIds }) => ({
+        cates.map(({ id, name, latestCreatedAt, noteIds, content }) => ({
           cate: { id, name },
           note:
             noteIds && noteIds.split(',')?.[0]
-              ? { id: noteIds.split(',')[0], latestCreatedAt }
+              ? { id: noteIds.split(',')[0], latestCreatedAt, content }
               : null,
         })),
       );

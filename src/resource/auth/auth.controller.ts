@@ -44,7 +44,7 @@ export class AuthController {
   //     this.authService.OAuthLogin({ req, res });
   //   }
 
-  @Get('/kakao/callback')
+  @Get('/kakaoCallback')
   @UseGuards(AuthGuard('kakao'))
   async loginKakao(
     @Req() req: Request & IOAuthUser, //
