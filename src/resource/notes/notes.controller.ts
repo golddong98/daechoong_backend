@@ -18,13 +18,20 @@ import { AuthGuard } from '@nestjs/passport';
 import { Express, Request, Response } from 'express';
 import { CreateNoteBodyDTO } from './dtos/create-note-body-dto';
 import { NotesService } from './notes.service';
-import { FilesInterceptor } from '@nestjs/platform-express/multer';
+import {
+  AnyFilesInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express/multer';
 import { UsersService } from '../users/users.service';
 import { FilesService } from '../files/files.service';
 import { CatesService } from '../cates/cates.service';
 import { TempNotesService } from '../temp-notes/temp-notes.service';
 // import { MediumCatesService } from '../medium-cates/medium-cates.service';
 // import { LargeCatesService } from '../large-cates/large-cates.service';
+
+// const interceptorList = [...Array(2).keys()].map((i) =>
+//   FilesInterceptor(`file${i}`, 1),
+// );
 
 @Controller('notes')
 export class NotesController {
@@ -73,7 +80,7 @@ export class NotesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post('cate-id/:cateId')
-  @UseInterceptors(FilesInterceptor('file', 10))
+  @UseInterceptors(AnyFilesInterceptor())
   async uploadNote(
     @Req() req: Request,
     @Res() res: Response,

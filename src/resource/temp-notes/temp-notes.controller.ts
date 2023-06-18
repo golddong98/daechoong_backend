@@ -17,7 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Express, Request, Response } from 'express';
 import { TempNotesService } from './temp-notes.service';
 import { CreateTempNoteBodyDTO } from './dtos/create-temp-note-body.dto';
-import { FilesInterceptor } from '@nestjs/platform-express/multer';
+import { AnyFilesInterceptor } from '@nestjs/platform-express/multer';
 import { UsersService } from '../users/users.service';
 import { TempFilesService } from '../temp-files/temp-files.service';
 import { CatesService } from '../cates/cates.service';
@@ -53,7 +53,7 @@ export class TempNotesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post('cate-id/:cateId')
-  @UseInterceptors(FilesInterceptor('file', 10))
+  @UseInterceptors(AnyFilesInterceptor())
   async uploadTempNote(
     @Req() req: Request,
     @Res() res: Response,
