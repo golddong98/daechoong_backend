@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { File } from 'src/database/entities/files.entity';
 import { NotesService } from '../notes/notes.service';
+// import iconv from 'iconv-lite';
 
 @Injectable()
 export class FilesService {
@@ -30,8 +31,12 @@ export class FilesService {
   async uploadFiles({ userId, noteId, files }) {
     try {
       for (const element of files) {
+        // const fileName = iconv.decode(element.originalname, 'euc-kr');
         const file = this.filesRepository.create({
-          originalName: element.originalname,
+          originalName: Buffer.from(element.originalname, 'latin1').toString(
+            'utf8',
+          ),
+          // originalName: element.originalname,
           encoding: element.encoding,
           mimeType: element.mimetype,
           size: element.size,
