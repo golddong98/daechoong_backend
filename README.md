@@ -57,6 +57,7 @@
 | Node.js  | Javascript Runtime |
 |   Nest   |   Web Framework    |
 |  MYSQL   |      Database      |
+|   AWS    |  Cloud Computing   |
 
 
 
