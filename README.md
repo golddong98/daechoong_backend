@@ -1,73 +1,71 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 대학생활 충실히 기록하자! 대충 입니다
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+ <p align="center"><img width="500"  alt="스크린샷 2021-12-09 오후 2 32 42" src="https://user-images.githubusercontent.com/93514215/150720442-e9bf2cf6-a1c2-40b4-882c-659da5679bbd.png">
+ </p>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+</br>
 
-## Description
+## 🤷 프로젝트 소개
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+<p>대학생활을 간단히 기록하고 문서와 자료를 정리하는 디지털 노트 사이트입니다.</p>
 
-## Installation
+## 🧾 와이어 프레임
 
-```bash
-$ npm install
-```
+<p>버전1</p>
 
-## Running the app
+<p align="center"float="left">
+  <img src="https://user-images.githubusercontent.com/93514215/150720749-73719830-93f1-4874-beb8-511196960687.png" />
+ <img src="https://user-images.githubusercontent.com/93514215/150720912-a543281e-4201-4d03-b9ee-4fe199c4fa42.png"  />
+  <img src="https://user-images.githubusercontent.com/93514215/150721134-d21faa1e-b99f-401f-a565-af7f4e362440.png"  />
 
-```bash
-# development
-$ npm run start
 
-# watch mode
-$ npm run start:dev
+<p>버전2 (설문조사를 통한 피드백을 받아 디자인과 서비스를 개편하였습니다)</p>
 
-# production mode
-$ npm run start:prod
-```
+<p align="center"float="left">
+  <img src="https://user-images.githubusercontent.com/93514215/150720749-73719830-93f1-4874-beb8-511196960687.png" />
+ <img src="https://user-images.githubusercontent.com/93514215/150720912-a543281e-4201-4d03-b9ee-4fe199c4fa42.png"  />
+  <img src="https://user-images.githubusercontent.com/93514215/150721134-d21faa1e-b99f-401f-a565-af7f4e362440.png"  />
 
-## Test
 
-```bash
-# unit tests
-$ npm run test
+## 🧑🏼‍💻 개발기간 및 팀원소개
 
-# e2e tests
-$ npm run test:e2e
+### 개발기간: 2023-02-01 ~ 06-01
 
-# test coverage
-$ npm run test:cov
-```
+### 개발인원: 총 2명
 
-## Support
+### Back-end
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+<p><a href="https://github.com/golddong98"><img width="180"  src="https://img.shields.io/static/v1?label=Node.js&message=Geumdong Kim&color=08CE5D&style=for-the-badge&>"/></a></p>
 
-## Stay in touch
+### Front-end
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+<p><a href="https://github.com/golddong98"><img width="180"  src="https://img.shields.io/static/v1?label=Node.js&message=Geumdong Kim&color=08CE5D&style=for-the-badge&>"/></a></p>
 
-## License
+</br>
 
-Nest is [MIT licensed](LICENSE).
+## 🔨사용한 기술 스택
+
+### 🖥 서버 아키텍처
+
+<img width="866" alt="스크린샷 2021-12-09 오후 2 32 42" src="https://user-images.githubusercontent.com/93514215/150916439-81840dfe-7729-4070-894a-b5463f96b91b.png">
+
+### 📒 Back-End 기술스택
+
+|   이름   |        설명        |
+| :------: | :----------------: |
+| Node.js  | Javascript Runtime |
+| Express  |   Web Framework    |
+|  MYSQL   |      Database      |
+| Jenkins  |       CI/CD        |
+| nGrinder |  서버 부하테스트   |
+
+
+### 🖥 DB 관계도
+
+<img width="866" alt="스크린샷 2021-12-09 오후 2 32 42" src="https://user-images.githubusercontent.com/93514215/150916439-81840dfe-7729-4070-894a-b5463f96b91b.png">
+
+<br><br>
+
+## 🏻🛠 피드백을 통한 개편과정
+
+## 💬 WHY?
